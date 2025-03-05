@@ -79,10 +79,13 @@ const config: Config = {
       animation: {
         aura: 'aura 3s ease-in-out infinite',
         shine: "shine var(--duration) infinite linear",
+        "reveal-up": "reveal-up 0.8s ease-out forwards",
+        "reveal-down": "reveal-down 0.8s ease-out forwards",
+        fadeIn: "fadeIn 0.5s ease-in forwards",
       },
       keyframes: {
         aura: {
-          '0%, 100%': { 'opacity:': '0.4' },
+          '0%, 100%': { 'opacity': '0.4' }, // 注意这里修复了 'opacity:' 的写法
           '50%': { 'opacity': '0.8' },
         },
         shine: {
@@ -95,6 +98,18 @@ const config: Config = {
           to: {
             "background-position": "0% 0%",
           },
+        },
+        "reveal-up": {
+          "0%": { opacity: "0", transform: "translateY(80%)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "reveal-down": {
+          "0%": { opacity: "0", transform: "translateY(-80%)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        fadeIn: {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
       },
     },

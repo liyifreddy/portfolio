@@ -118,7 +118,7 @@ export function DotPattern({
       {...props}
     >
       <defs>
-        <radialGradient id={`${id}-gradient`}>
+        <radialGradient cx="50%" cy="50%" id={`${id}-gradient`}>
           <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
           <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
         </radialGradient>

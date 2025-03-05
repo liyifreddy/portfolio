@@ -43,6 +43,7 @@ useEffect(() => {
         </linearGradient>
 
         <motion.radialGradient
+          cx="50%" cy="50%" 
           id="revealMaskAuto"
           gradientUnits="userSpaceOnUse"
           r="25%"

@@ -81,7 +81,7 @@ export const Tabs = ({
                   key={tab.value}
                   layout  // 保留布局动画
                   initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.5 }}
                   transition={{ duration: 0.3 }}
                   className={cn("w-full", contentClassName)}

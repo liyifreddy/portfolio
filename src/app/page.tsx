@@ -1,10 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-// import { LineShadowText } from "@/components/magicui/line-shadow-text";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { AiOutlineLinkedin, AiOutlineMail } from "react-icons/ai";
@@ -12,20 +10,19 @@ import { AutoTextEffect } from "@/components/ui/auto-text-effect";
 import { ShinyButton } from "@/components/magicui/shiny-button";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { Tabs } from "@/components/ui/tabs";
-import { projectTabs } from "@/components/project-tabs-content";
 import ProjectTabsContent from "@/components/project-tabs-content";
 import ParallaxSeparator from "@/components/parallax-separator";
 import { LinkPreview } from "@/components/ui/link-preview";
-import { 
+import {
   TechLogoGrid,
   DataSciencePieChart,
-  LanguageSkills, 
-  SkillsNetworkGraph,
   AICapabilitiesChart,
-  CreativeTools,
-  OrganizationalImpact,
-  AIGeneratedComputer
+  ProjectComplexityImpactMatrix,
+  AIResearchFocus,
+  KnowledgeGraph,
+  CoreCompetencyRadar,
+  ProfessionalExperience,
+  LanguageDesignSkills,
 } from "@/components/skill-visualization";
 import {
   IconBuildingFactory2,
@@ -36,18 +33,27 @@ import {
 // 1. 代码风格的 Hi! I am Yi Li 组件
 const CodeIntroVisual = () => {
   return (
-    <div className="flex-1 w-full bg-[#241912] rounded-lg flex items-center justify-center overflow-hidden p-4">
-      <div className="w-full font-mono text-sm md:text-base text-white text-center">
-        <div className="mt-2">
-          <span className="text-[#FF628C]">model</span>
-          <span className="text-white">.</span>
-          <span className="text-[#5EFFFF]">forward</span>
-          <span className="text-white">(</span>
-          <span className="text-[#A5FF90]">"Hi! I'm Yi Li."</span>
-          <span className="text-white">)</span>
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{
+        duration: 0.3,
+        delay: 0.2,
+      }}
+    >
+      <div className="flex-1 w-full bg-[#241912] rounded-lg flex items-center justify-center overflow-hidden p-4">
+        <div className="w-full font-mono text-sm md:text-base text-white text-center">
+          <div className="mt-2">
+            <span className="text-[#FF628C]">model</span>
+            <span className="text-white">.</span>
+            <span className="text-[#5EFFFF]">forward</span>
+            <span className="text-white">(</span>
+            <span className="text-[#A5FF90]">"Hi! I'm Yi Li."</span>
+            <span className="text-white">)</span>
+          </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -186,7 +192,7 @@ const SkillsVisual = () => {
           <motion.div
             key={i}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            whileInView={{ opacity: 1 }}
             transition={{
               duration: 0.3,
               delay: i * 0.1,
@@ -230,7 +236,7 @@ export default function Home() {
         {/* 导航栏 - 修改为页内跳转 */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="sticky top-0 left-0 right-0 z-50 p-4 pt-[2vh] border-b border-black bg-transparent"
         >
@@ -242,7 +248,7 @@ export default function Home() {
                   className="text-base md:text-xl font-bold text-black hover:text-gray-600 transition-colors font-[helvetica]"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.querySelector("#about").scrollIntoView({
+                    document.querySelector("#about")!.scrollIntoView({
                       behavior: "smooth",
                     });
                   }}
@@ -256,7 +262,7 @@ export default function Home() {
                   className="text-base md:text-xl font-bold text-black hover:text-gray-6000 transition-colors font-[helvetica]"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.querySelector("#project").scrollIntoView({
+                    document.querySelector("#project")!.scrollIntoView({
                       behavior: "smooth",
                     });
                   }}
@@ -270,7 +276,7 @@ export default function Home() {
                   className="text-base md:text-xl font-bold text-black hover:text-gray-6000 transition-colors font-[helvetica]"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.querySelector("#experience").scrollIntoView({
+                    document.querySelector("#experience")!.scrollIntoView({
                       behavior: "smooth",
                     });
                   }}
@@ -284,12 +290,12 @@ export default function Home() {
                   className="text-base md:text-xl font-bold text-black hover:text-gray-600 transition-colors font-[helvetica]"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.querySelector("#skill").scrollIntoView({
+                    document.querySelector("#skill")!.scrollIntoView({
                       behavior: "smooth",
                     });
                   }}
                 >
-                  Skill
+                  Skills
                 </Link>
               </li>
             </ul>
@@ -299,7 +305,7 @@ export default function Home() {
         {/* 右侧装饰线 */}
         <motion.div
           initial={{ height: 0 }}
-          animate={{ height: "100vh" }}
+          whileInView={{ height: "100vh" }}
           transition={{ duration: 1, ease: "easeInOut", delay: 0.3 }}
           className="md:block absolute top-0 right-[6%] w-px bg-black z-40"
         ></motion.div>
@@ -307,7 +313,7 @@ export default function Home() {
         {/* 右侧名字 - 提高z-index值 */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
+          whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
           className="md:flex absolute top-[740px] md:top-[760px] right-[calc(6%-42px)] md:right-[calc(6%-40px)] z-40"
         >
@@ -340,14 +346,14 @@ export default function Home() {
             {/* 标题部分 - 添加交错的淡入并上升动画 */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="absolute top-[3vh] md:top-[6%] left-4 md:left-16 transform -translate-y-1/2 z-20"
             >
               <div className="space-y-2 md:space-y-4 max-w-md">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
                   <SparklesText
@@ -360,7 +366,7 @@ export default function Home() {
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
                 >
                   <SparklesText
@@ -373,7 +379,7 @@ export default function Home() {
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.6 }}
                 >
                   <SparklesText
@@ -396,14 +402,14 @@ export default function Home() {
             <div className="flex justify-center items-center relative h-full z-30 py-6 left-[5vw] md:py-10">
               <motion.div
                 initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
                 className="relative flex items-end justify-center"
               >
                 {/* 机器人图片 */}
                 <motion.div
                   initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }}
                   className="absolute bottom-0 left-[-15vw] z-20"
                 >
@@ -435,15 +441,20 @@ export default function Home() {
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.9 }}
           className="absolute bottom-8 left-16 flex space-x-4 z-40"
         >
           {/* Email button */}
+          <Link
+            href="mailto:your.email@example.com"
+            target="_blank"
+          >
           <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-4 py-2">
             <AiOutlineMail className="h-5 w-5 mr-2" />
             <span>Email</span>
           </ShinyButton>
+          </Link>
 
           {/* LinkedIn button */}
           <Link
@@ -854,7 +865,7 @@ export default function Home() {
                       {/* AI-Driven Manufacturing */}
                       <motion.div
                         initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
                         className="flex items-center p-2.5 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto"
                       >
@@ -875,7 +886,7 @@ export default function Home() {
                       {/* Healthcare 4.0 */}
                       <motion.div
                         initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                         className="flex items-center p-2.5 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto"
                       >
@@ -896,7 +907,7 @@ export default function Home() {
                       {/* Human-Centered AI Systems - 修改为更贴切的名称 */}
                       <motion.div
                         initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
                         className="flex items-center p-2.5 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto"
                       >
@@ -958,14 +969,19 @@ export default function Home() {
         <div id="project" className=" text-white pt-40 pb-60 relative z-10">
           <div className="container mx-auto px-4">
             {/* 标题部分 */}
-            <div className="text-center mb-20 pb-8">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-center mb-20 pb-8"
+            >
               <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D2A554] to-[#C8954D] leading-tight py-2">
                 My Projects
               </h2>
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
                 Building solutions that make a difference
               </p>
-            </div>
+            </motion.div>
 
             {/* Tabs 组件 - 关键修改: 移除[perspective:1000px]属性和overflow-hidden */}
             <div className="relative flex flex-col max-w-9xl mx-auto w-full items-start justify-start">
@@ -1001,14 +1017,19 @@ export default function Home() {
 
         <div className="container mx-auto px-4 relative z-10">
           {/* 标题部分 */}
-          <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-center mb-16"
+          >
             <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#B08642] to-[#b97b2a] leading-tight py-2">
               My Journey
             </h2>
             <p className="text-xl text-gray-700 max-w-2xl mx-auto tracking-tight">
               Code with Compassion, Automation for Liberation
             </p>
-          </div>
+          </motion.div>
           {/* 时间轴整体容器 - 将其改为两栏独立结构 */}
           <div className="relative flex flex-col md:flex-row">
             {/* 中央时间轴线 - 在小屏幕上隐藏 */}
@@ -1024,7 +1045,12 @@ export default function Home() {
               </div>
 
               {/* Merck KGaA */}
-              <div className="relative mb-24">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="relative mb-24"
+              >
                 <div className="absolute right-[-56px] top-8 w-4 h-4 bg-[#b97b2a] border-2 border-[#B08642] rounded-full z-10"></div>
                 <div className="relative bg-white/20 backdrop-blur-sm p-6 rounded-lg shadow-sm text-right">
                   {/* 渐变时间条 */}
@@ -1069,10 +1095,15 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* NMY Mixed Reality Studio */}
-              <div className="relative mb-24">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="relative mb-24"
+              >
                 <div className="absolute right-[-56px] top-8 w-4 h-4 bg-[#b97b2a] border-2 border-[#B08642] rounded-full z-10"></div>
                 <div className="relative bg-white/20 backdrop-blur-sm p-6 rounded-lg shadow-sm text-right">
                   {/* 渐变时间条 */}
@@ -1105,10 +1136,15 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* BseTech */}
-              <div className="relative mb-24">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="relative mb-24"
+              >
                 <div className="absolute right-[-56px] top-8 w-4 h-4 bg-[#b97b2a] border-2 border-[#B08642] rounded-full z-10"></div>
                 <div className="relative bg-white/20 backdrop-blur-sm p-6 rounded-lg shadow-sm text-right">
                   {/* 渐变时间条 */}
@@ -1141,7 +1177,7 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* 右侧栏 - 教育经历 */}
@@ -1154,7 +1190,12 @@ export default function Home() {
               </div>
 
               {/* TU Darmstadt */}
-              <div className="relative mb-24">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="relative mb-24"
+              >
                 <div className="absolute left-[-56px] top-8 w-4 h-4 bg-[#b97b2a] border-2 border-[#B08642] rounded-full z-10"></div>
                 <div className="relative bg-white/20 backdrop-blur-sm p-6 rounded-lg shadow-sm">
                   {/* 渐变时间条 */}
@@ -1268,10 +1309,15 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Chongqing University */}
-              <div className="relative mb-24">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="relative mb-24"
+              >
                 <div className="absolute left-[-56px] top-8 w-4 h-4 bg-[#b97b2a] border-2 border-[#B08642] rounded-full z-10"></div>
                 <div className="relative bg-white/20 backdrop-blur-sm p-6 rounded-lg shadow-sm">
                   {/* 渐变时间条 */}
@@ -1326,95 +1372,264 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </div>
 
       {/* 第五屏 */}
-      {/* 第五屏 - 技术栈 */}
-{/* 第五屏 - 技术栈 */}
-<div
-  id="skill"
-  className="min-h-screen bg-[#0F0F18] text-white py-20 relative overflow-hidden"
->
-  {/* 背景元素 - BackgroundBeams */}
-  <div className="absolute inset-0 z-0">
-    <BackgroundBeams />
-  </div>
+      <div
+        id="skill"
+        className="min-h-screen bg-[#0F0F18] text-white py-20 relative overflow-hidden"
+      >
+        {/* 背景元素 - BackgroundBeams */}
+        <div className="absolute inset-0 z-0">
+          <BackgroundBeams />
+        </div>
 
-  <div className="container mx-auto px-4 relative z-10">
-    {/* 标题部分 */}
-    <div className="text-center mb-16">
-      <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D2A554] to-[#C8954D] leading-tight py-2">
-        Technical Arsenal
-      </h2>
-      <p className="text-xl text-gray-300 max-w-2xl mx-auto tracking-tight">
-        Crafting solutions with precision tools and innovative approaches
-      </p>
-    </div>
-    
-    {/* Bento网格 - 4列布局，注重数据可视化 */}
-    <BentoGrid className="max-w-[100vw] mx-auto grid md:grid-cols-2 lg:grid-cols-4 md:auto-rows-[minmax(300px,_auto)] gap-4">
-      {/* 1. 技术Logo网格 */}
-      <BentoGridItem
-        title="Tech Stack"
-        description={<TechLogoGrid />}
-        className="md:col-span-2 lg:col-span-2 md:row-span-1 overflow-hidden"
-      />
+        <div className="container mx-auto px-4 relative z-10">
+          {/* 标题部分 */}
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D2A554] to-[#C8954D] leading-tight py-2">
+              Technical Arsenal
+            </h2>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto tracking-tight">
+              Crafting solutions with precision tools and innovative approaches
+            </p>
+          </motion.div>
 
-      {/* 2. 数据科学饼图 */}
-      <BentoGridItem
-        title="Data Science"
-        description={<DataSciencePieChart />}
-        className="md:col-span-1 lg:col-span-1 md:row-span-1 overflow-hidden"
-      />
+          {/* Bento网格 - 数据可视化仪表盘 */}
+          <BentoGrid className="max-w-[100vw] mx-auto grid md:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 md:auto-rows-[minmax(260px,_auto)] gap-4">
+            {/* 1. 核心竞争力分析 */}
+            <BentoGridItem
+              title="Core Competencies"
+              description={<CoreCompetencyRadar />}
+              className="md:col-span-1 md:row-span-1 md:order-1 lg:order-1 overflow-hidden"
+            />
 
-      {/* 3. 语言能力 */}
-      <BentoGridItem
-        title="Language Skills"
-        description={<LanguageSkills />}
-        className="md:col-span-1 lg:col-span-1 md:row-span-1 overflow-hidden"
-      />
+            {/* 2. 项目复杂度vs影响力矩阵 */}
+            <BentoGridItem
+              title="Project Impact Matrix"
+              description={<ProjectComplexityImpactMatrix />}
+              className="md:col-span-2 md:row-span-1 md:order-3 lg:order-1 overflow-hidden"
+            />
+            {/* 3. 数据科学饼图 - 从原有组件保留但已修复 */}
+            <BentoGridItem
+              title="Data Science Expertise"
+              description={<DataSciencePieChart />}
+              className="md:col-span-1 md:row-span-1 md:order-2 lg:order-1  overflow-hidden"
+            />
 
-      {/* 4. 中央核心技能网络图 */}
-      <BentoGridItem
-        title="Skills Interconnection"
-        description={<SkillsNetworkGraph />}
-        className="md:col-span-2 md:row-span-2 lg:col-span-2 lg:row-span-2 overflow-hidden"
-      />
+            {/* 4. 技术Logo网格 - 保留原有组件 */}
+            <BentoGridItem
+              title="Tech Stack"
+              description={<TechLogoGrid />}
+              className="md:col-span-2 md:row-span-1 md:order-4 lg:order-1 overflow-hidden"
+            />
 
-      {/* 5. AI能力条形图 */}
-      <BentoGridItem
-        title="AI Capabilities"
-        description={<AICapabilitiesChart />}
-        className="md:col-span-2 lg:col-span-2 md:row-span-1 overflow-hidden"
-      />
+            {/* 4. 知识图谱 */}
+            <BentoGridItem
+              title="Knowledge Graph"
+              description={<KnowledgeGraph />}
+              className="md:col-span-1 md:row-span-1 md:order-5 lg:order-1 overflow-hidden"
+            />
 
-      {/* 6. 创意工具 */}
-      <BentoGridItem
-        title="Creative Toolbox"
-        description={<CreativeTools />}
-        className="md:col-span-1 lg:col-span-1 md:row-span-1 overflow-hidden"
-      />
+            {/* 5. AI研究热力图 */}
+            <BentoGridItem
+              title="AI Research Focus"
+              description={<AIResearchFocus />}
+              className="md:col-span-1 md:row-span-1 md:order-6 lg:order-1 overflow-hidden"
+            />
 
-      {/* 7. 组织影响力 */}
-      <BentoGridItem
-        title="Impact & Leadership"
-        description={<OrganizationalImpact />}
-        className="md:col-span-1 lg:col-span-1 md:row-span-1 overflow-hidden"
-      />
+            {/* 7. AI能力 - 从原有组件保留但已修复 */}
+            <BentoGridItem
+              title="AI Capabilities"
+              description={<AICapabilitiesChart />}
+              className="md:col-span-1 md:row-span-1 md:order-7 lg:order-1 overflow-hidden"
+            />
 
-      {/* 8. AI生成电脑图片 */}
-      <BentoGridItem
-        title="AI Creations"
-        description={<AIGeneratedComputer />}
-        className="md:col-span-1 lg:col-span-1 md:row-span-1 overflow-hidden hidden lg:block"
-      />
-    </BentoGrid>
-  </div>
-</div>
+            {/* 8. 专业领域经验 */}
+            <BentoGridItem
+              title="Professional Experience"
+              description={<ProfessionalExperience />}
+              className="md:col-span-2 md:row-span-1 md:order-9 lg:order-1 overflow-hidden"
+            />
+
+            {/* 9. 专业领域经验 */}
+            <BentoGridItem
+              title="Others"
+              description={<LanguageDesignSkills />}
+              className="md:col-span-1 md:row-span-1 md:order-8 lg:order-1 overflow-hidden"
+            />
+          </BentoGrid>
+        </div>
+      </div>
+
+      {/* 页尾 */}
+      <footer className="bg-[#0F0F18] text-white py-16 relative z-10">
+        {/* 背景元素 - 复用现有的FlickeringGrid */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="relative w-full h-full">
+            <FlickeringGrid
+              className="h-full w-full"
+              squareSize={3}
+              gridGap={6}
+              color="#D2A554"
+              maxOpacity={0.2}
+              flickerChance={0.2}
+            />
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* 左侧：页面导航 */}
+            <div>
+              <h3 className="text-xl font-bold text-[#D2A554] mb-4">
+                Navigation
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="#about"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector("#about")!.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }}
+                  >
+                    About Me
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#project"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector("#project")!.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }}
+                  >
+                    Projects
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#experience"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector("#experience")!.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }}
+                  >
+                    Experience
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#skill"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector("#skill")!.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }}
+                  >
+                    Skills
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* 中间：联系信息 */}
+            <div>
+              <h3 className="text-xl font-bold text-[#D2A554] mb-4">Contact</h3>
+              <ul className="space-y-3">
+                <li className="flex items-center">
+                  <AiOutlineMail className="mr-2 text-[#D2A554]" />
+                  <a
+                    href="mailto:your.email@example.com"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                  >
+                    liyi.freddy@gmail.com
+                  </a>
+                </li>
+                <li className="flex items-center">
+                  <AiOutlineLinkedin className="mr-2 text-[#D2A554]" />
+                  <a
+                    href="https://www.linkedin.com/in/yi-li-57b67a272/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                  >
+                    LinkedIn Profile
+                  </a>
+                </li>
+                {/* 你可以在这里添加其他社交媒体链接 */}
+              </ul>
+            </div>
+
+            {/* 右侧：致谢 */}
+            <div>
+              <h3 className="text-xl font-bold text-[#D2A554] mb-4">
+                Acknowledgements
+              </h3>
+              <p className="text-gray-300 mb-4">
+                Special thanks to Chris for the unwavering support and
+                encouragement throughout this journey.
+              </p>
+              <motion.div
+                animate={{
+                  y: [0, -5, 0],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+                className="flex items-center text-gray-300"
+              >
+                <span className="mr-2">With 💖 from</span>
+                <span className="text-[#D2A554] font-semibold">
+                  Darmstadt, Germany
+                </span>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* 分隔线 */}
+          <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center mb-4 md:mb-0">
+              <span className="text-2xl mr-2">🥨</span>
+              <p className="text-gray-400">
+                © {new Date().getFullYear()} Yi Li. All rights reserved.
+              </p>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="text-sm text-gray-500"
+            >
+              <span>AI Developer · Data Alchemist · DL Engineer</span>
+            </motion.div>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
