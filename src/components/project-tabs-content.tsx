@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import ProjectGrid from "@/components/project-grid";
 import { Project } from "@/components/project-card";
-import { cn } from "@/lib/utils";
 import { Tabs } from "@/components/ui/tabs";
 import { LinkPreview } from "@/components/ui/link-preview";
 

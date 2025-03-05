@@ -3,28 +3,18 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
-import { LogoCarousel } from "@/components/ui/logo-carousel";
 import ModifiedLogoCarousel from "@/components/ui/tech-logo-carousel";
 import {
-  IconWorld,
-  IconChartBar,
-  IconBrain,
   IconDeviceAnalytics,
-  IconCpu,
-  IconCamera,
   IconPalette,
-  IconChartDots,
   IconBulb,
   IconFlask,
   IconEye,
   IconRobot,
-  IconBinaryTree,
   IconHeartbeat,
   IconBuildingFactory,
   IconStar,
-  IconBrush,
 } from "@tabler/icons-react";
-import clsx from "clsx";
 
 // Tech Logo Grid Component using LogoCarousel
 export const TechLogoGrid = () => {
