@@ -484,10 +484,14 @@ const projectsData: Project[] = [
           >
             UKP-SQuARE
           </LinkPreview>
-          . Our code can be found in the model-api-v3 branch of the{" "}<LinkPreview
+          . Our code can be found in the model-api-v3 branch of the{" "}
+          <LinkPreview
             url="https://github.com/UKP-SQuARE/square-core/tree/model-api-v3"
             className="text-[#FD6142] hover:underline"
-          >Github repository</LinkPreview>.
+          >
+            Github repository
+          </LinkPreview>
+          .
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -597,10 +601,15 @@ const projectsData: Project[] = [
           <span className="font-semibold">endoscopy</span> images by exploring
           different OOD augmentation methods. We implemented various image
           attribute shifts and realistic artifacts to evaluate and improve OOD
-          detection methods. The code can be found on{" "} <LinkPreview
+          detection methods. The code can be found on{" "}
+          <LinkPreview
             url="https://github.com/MECLabTUDA/FrOoDo/tree/main/froodo/ood/augmentations/endoscopy"
             className="text-[#FD6142] hover:underline"
-          > GitHub</LinkPreview>.
+          >
+            {" "}
+            GitHub
+          </LinkPreview>
+          .
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -955,6 +964,203 @@ const projectsData: Project[] = [
             pro-metastatic effects of TBBPA in liver cancer.
           </li>
         </ul>
+      </div>
+    ),
+  },
+  {
+    id: "ai-powered-portfolio",
+    title: "AI-Powered Portfolio: Creating a Modern Developer Identity",
+    organization: "Personal Project",
+    timeframe: "February 2025 - March 2025",
+    supervisor: "",
+    description:
+      "Developed a comprehensive personal portfolio website that combines modern web development technologies with advanced AI image generation techniques.",
+    highlights: [
+      "Generated a personalized 3D Pixar-style avatar using Stable Diffusion 1.5 with ComfyUI workflow and IPAdapter",
+      "Built the website using Next.js, Tailwind CSS, and Framer Motion for optimized performance and engaging animations",
+      "Developed advanced UI architecture with BentoGrid pattern for flexible, modular component layout",
+      "Deployed the static website to Cloudflare Pages with automated CI/CD pipeline for efficient updates",
+    ],
+    skills: [
+      "Next.js",
+      "React",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Stable Diffusion",
+      "ComfyUI",
+      "IPAdapter",
+      "LoRA",
+      "Git",
+      "CI/CD",
+      "Cloudflare Pages",
+      "UI/UX Design",
+    ],
+    image: "/projects/portfolio.png",
+    category: "research",
+    content: (
+      <div>
+        <p className="mb-4">
+          This project combines modern{" "}
+          <span className="font-semibold">web development technologies</span>{" "}
+          with advanced{" "}
+          <span className="font-semibold">AI image generation techniques</span>{" "}
+          to create a distinctive personal brand presence. The portfolio
+          showcases both frontend development capabilities and expertise in
+          leveraging AI models for creative content generation.
+        </p>
+
+        <h3 className="text-xl font-semibold mb-2 mt-6">
+          Detailed Implementation
+        </h3>
+
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          1. AI-Generated Persona Creation
+        </h4>
+        <ul className="list-disc pl-5 space-y-2 mb-4">
+          <li>
+            Utilized Stable Diffusion 1.5 with ComfyUI workflow to generate a
+            personalized 3D Pixar-style avatar
+          </li>
+          <li>
+            Implemented IPAdapter for face feature encoding to maintain
+            consistent facial characteristics
+          </li>
+          <li>
+            Applied custom LoRA models from Civitai to enhance stylistic
+            qualities and visual coherence
+          </li>
+          <li>
+            Created a visual identity that bridges professional presentation
+            with creative personality
+          </li>
+        </ul>
+
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          2. Frontend Development
+        </h4>
+        <ul className="list-disc pl-5 space-y-2 mb-4">
+          <li>
+            Built the website using Next.js for optimized performance and
+            server-side rendering capabilities
+          </li>
+          <li>
+            Implemented responsive design principles using Tailwind CSS for
+            efficient styling
+          </li>
+          <li>
+            Enhanced user experience with sophisticated animations via Framer
+            Motion including sequenced entrance animations, parallax effects,
+            and continuous micro-interactions
+          </li>
+          <li>
+            Developed advanced UI architecture using BentoGrid pattern for
+            flexible, modular component layout
+          </li>
+          <li>
+            Integrated UI component libraries (Magic UI, Aceternity UI) for
+            polished visual elements
+          </li>
+          <li>
+            Designed interactive data visualizations to showcase skills and
+            project metrics
+          </li>
+          <li>
+            Created custom animated backgrounds (FlickeringGrid,
+            BackgroundBeams) for visual interest
+          </li>
+          <li>
+            Implemented scroll-triggered animations and view transitions with
+            IntersectionObserver pattern
+          </li>
+        </ul>
+
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          3. DevOps and Deployment
+        </h4>
+        <ul className="list-disc pl-5 space-y-2 mb-4">
+          <li>Established version control workflow using Git and GitHub</li>
+          <li>
+            Configured CI/CD pipeline for automated testing and deployment
+          </li>
+          <li>
+            Deployed the static website to Cloudflare Pages for global CDN
+            distribution
+          </li>
+          <li>
+            Optimized loading speed and performance through code splitting and
+            lazy loading
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-semibold mb-2 mt-6">
+          Challenges and Solutions
+        </h3>
+        <ul className="list-disc pl-5 space-y-2 mb-4">
+          <li>
+            Addressed performance issues with complex animations by implementing
+            selective rendering and view-based animation triggers
+          </li>
+          <li>
+            Optimized large image assets through next/image component with
+            priority loading and responsive sizing
+          </li>
+          <li>
+            Balanced visual complexity with performance through z-index layering
+            and conditional rendering
+          </li>
+          <li>
+            Implemented progressive enhancement strategy for different device
+            capabilities
+          </li>
+          <li>
+            Developed a modular component structure with abstracted
+            functionality to facilitate future updates
+          </li>
+          <li>
+            Used CSS variables and theme constants to maintain visual
+            consistency across components
+          </li>
+          <li>
+            Optimized motion animations with staggered loading and reduced
+            motion options
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-semibold mb-2 mt-6">Outcome</h3>
+        <p className="mb-4">
+          The project resulted in a distinctive personal brand presence that
+          effectively communicates technical capabilities and creative approach.
+          The website serves as both a portfolio showcase and a practical
+          demonstration of frontend development and AI application skills.
+        </p>
+
+        <h3 className="text-xl font-semibold mb-2 mt-6">Future Enhancements</h3>
+        <ul className="list-disc pl-5 space-y-2">
+          <li>Implement internationalization for multi-language support</li>
+          <li>Add a headless CMS for easier content management</li>
+          <li>Develop a blog section with technical articles</li>
+          <li>
+            Integrate more interactive elements and user engagement features
+          </li>
+        </ul>
+        <p className="mt-6">
+          Visit my{" "}
+          <LinkPreview
+            url="https://yili-dev.com/"
+            className="text-[#FD6142] hover:underline"
+          >
+            portfolio website
+          </LinkPreview>{" "}
+          to see this project in action. The complete source code is available
+          in my{" "}
+          <LinkPreview
+            url="https://github.com/liyifreddy/portfolio"
+            className="text-[#FD6142] hover:underline"
+          >
+            GitHub repository
+          </LinkPreview>
+          .
+        </p>
       </div>
     ),
   },
@@ -1529,49 +1735,72 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          During my time at NMY Mixed Reality Studio, I collaborated with VR/AR developers to build a voice-interactive assistant using large language models (LLMs) for enterprise users. The assistant was designed to answer questions based on a vector knowledge base specific to the company's business knowledge using Chroma.
+          During my time at NMY Mixed Reality Studio, I collaborated with VR/AR
+          developers to build a voice-interactive assistant using large language
+          models (LLMs) for enterprise users. The assistant was designed to
+          answer questions based on a vector knowledge base specific to the
+          company's business knowledge using Chroma.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Responsibilities and Achievements
         </h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">1. Project Proposal and Development</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          1. Project Proposal and Development
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Proposed a virtual scene where users can interact with an assistant to acquire information conversationally.
+            Proposed a virtual scene where users can interact with an assistant
+            to acquire information conversationally.
           </li>
           <li>
-            Expanded the project blueprint to include a virtual character capable of processing comprehensive information and responding with both verbal and physical actions.
+            Expanded the project blueprint to include a virtual character
+            capable of processing comprehensive information and responding with
+            both verbal and physical actions.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">2. Technical Implementation</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          2. Technical Implementation
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Utilized Llama2, LangChain, and Streamlit to create a chatbot with a fixed knowledge base.
+            Utilized Llama2, LangChain, and Streamlit to create a chatbot with a
+            fixed knowledge base.
           </li>
           <li>
-            Experimented with Vicuna 7b and Llama 2 7b models, integrating them with LangChain to achieve Knowledge Base Embedding.
+            Experimented with Vicuna 7b and Llama 2 7b models, integrating them
+            with LangChain to achieve Knowledge Base Embedding.
           </li>
           <li>
-            Developed and tested the chatbot on a system with an NVIDIA 4070ti GPU, which limited us to running 7b models.
+            Developed and tested the chatbot on a system with an NVIDIA 4070ti
+            GPU, which limited us to running 7b models.
           </li>
           <li>
-            Implemented text-to-speech functionality using Bark to enable voice interaction.
+            Implemented text-to-speech functionality using Bark to enable voice
+            interaction.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">3. Project Architecture and Strategy</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          3. Project Architecture and Strategy
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Provided strategic suggestions for the project architecture, focusing on AI components and their potential integration into VR/AR applications.
+            Provided strategic suggestions for the project architecture,
+            focusing on AI components and their potential integration into VR/AR
+            applications.
           </li>
           <li>
-            Outlined the necessary steps for defining features, estimating workloads, and determining critical functions for the development process.
+            Outlined the necessary steps for defining features, estimating
+            workloads, and determining critical functions for the development
+            process.
           </li>
           <li>
-            Suggested the team configuration for future development, emphasizing the need for expertise in robotics, VR development, and AI-boost frameworks.
+            Suggested the team configuration for future development, emphasizing
+            the need for expertise in robotics, VR development, and AI-boost
+            frameworks.
           </li>
         </ul>
 
@@ -1579,10 +1808,19 @@ const projectsData: Project[] = [
           Challenges and Insights
         </h3>
         <p className="mb-4">
-          I recognized that providing a local LLM-based assistant for enterprise users required more computational resources than we had available. An NVIDIA 4070ti and 7b models were insufficient, especially when combined with the additional load of text-to-speech conversion using Bark. The VR/AR devices' computational limitations further compounded the issue.
+          I recognized that providing a local LLM-based assistant for enterprise
+          users required more computational resources than we had available. An
+          NVIDIA 4070ti and 7b models were insufficient, especially when
+          combined with the additional load of text-to-speech conversion using
+          Bark. The VR/AR devices' computational limitations further compounded
+          the issue.
         </p>
         <p className="mb-4">
-          Given the current computational constraints, it was challenging to serve even a single user effectively, let alone multiple users simultaneously, which is essential for a viable enterprise solution. This situation raised concerns about the scalability and profitability of the solution.
+          Given the current computational constraints, it was challenging to
+          serve even a single user effectively, let alone multiple users
+          simultaneously, which is essential for a viable enterprise solution.
+          This situation raised concerns about the scalability and profitability
+          of the solution.
         </p>
       </div>
     ),
@@ -1618,93 +1856,131 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          As the co-founder and product manager of a wellness industry startup, I oversaw every step of the process from company registration to launching the initial apps. My responsibilities included market research, mobile app design, development, testing, and investor outreach.
+          As the co-founder and product manager of a wellness industry startup,
+          I oversaw every step of the process from company registration to
+          launching the initial apps. My responsibilities included market
+          research, mobile app design, development, testing, and investor
+          outreach.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Detailed Implementation
         </h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">1. Market Research and Planning</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          1. Market Research and Planning
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Conducted market research and led the marketing team on commercial visits, meeting with industry managers to gain insight into the wellness industry in Hangzhou.
+            Conducted market research and led the marketing team on commercial
+            visits, meeting with industry managers to gain insight into the
+            wellness industry in Hangzhou.
           </li>
           <li>
-            Planned user-end and to-B-end apps, designed the information architecture and user experience, and created prototypes.
+            Planned user-end and to-B-end apps, designed the information
+            architecture and user experience, and created prototypes.
           </li>
           <li>
-            Coordinated development progress among technical, design, and other team members.
+            Coordinated development progress among technical, design, and other
+            team members.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">2. Product Design and Prototyping</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          2. Product Design and Prototyping
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Designed the mobile apps and managed the development process, ensuring a seamless user experience.
+            Designed the mobile apps and managed the development process,
+            ensuring a seamless user experience.
           </li>
           <li>
-            Created detailed prototypes and wireframes to visualize the apps' design and functionality.
+            Created detailed prototypes and wireframes to visualize the apps'
+            design and functionality.
           </li>
           <li>
-            Focused on interaction design to ensure intuitive and user-friendly interfaces.
+            Focused on interaction design to ensure intuitive and user-friendly
+            interfaces.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">3. Technical Development</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          3. Technical Development
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Assisted the technical supervisor in developing an LBS location service plan.
+            Assisted the technical supervisor in developing an LBS location
+            service plan.
           </li>
           <li>
-            Investigated third-party platforms and payment tools, including BeeCloud iOS SDK, Mob ShareSDK, Mob SMS CAPTCHA SDK, and JPush iOS SDK.
+            Investigated third-party platforms and payment tools, including
+            BeeCloud iOS SDK, Mob ShareSDK, Mob SMS CAPTCHA SDK, and JPush iOS
+            SDK.
           </li>
           <li>
-            Created test samples and defined the final data formats with backend engineers.
+            Created test samples and defined the final data formats with backend
+            engineers.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">4. Product Testing and Feedback</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          4. Product Testing and Feedback
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Worked closely with customers, business owners, and technicians to refine app features and functionalities.
+            Worked closely with customers, business owners, and technicians to
+            refine app features and functionalities.
           </li>
           <li>
-            Tested the prototypes by visiting stores before launch to gather feedback and make necessary adjustments.
+            Tested the prototypes by visiting stores before launch to gather
+            feedback and make necessary adjustments.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">5. Promotion and Launch</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          5. Promotion and Launch
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Collaborated with marketers to develop a promotion plan targeting business owners.
+            Collaborated with marketers to develop a promotion plan targeting
+            business owners.
           </li>
           <li>
-            Attended startup classes and industry events, such as the Small Dining Table Startup Class and the Apsara Conference, to connect with investors and entrepreneurs and gain insights into different business models.
+            Attended startup classes and industry events, such as the Small
+            Dining Table Startup Class and the Apsara Conference, to connect
+            with investors and entrepreneurs and gain insights into different
+            business models.
           </li>
           <li>
-            Launched the Treat app and Treat for Business Owner app on the App Store China in January 2016.
+            Launched the Treat app and Treat for Business Owner app on the App
+            Store China in January 2016.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">6. Investor Outreach and Business Development</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          6. Investor Outreach and Business Development
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Met with investors and pitched the business plan, securing initial funding for the project.
+            Met with investors and pitched the business plan, securing initial
+            funding for the project.
           </li>
           <li>
-            Engaged with different managers in the wellness industry to explore potential collaborations and partnerships.
+            Engaged with different managers in the wellness industry to explore
+            potential collaborations and partnerships.
           </li>
           <li>
-            Developed and refined the business plan, incorporating feedback from industry experts and potential investors.
+            Developed and refined the business plan, incorporating feedback from
+            industry experts and potential investors.
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Project Outcome
-        </h3>
+        <h3 className="text-xl font-semibold mb-2 mt-6">Project Outcome</h3>
         <p className="mb-4">
-          The Treat app and Treat for Business Owner app were launched on the App Store China in January 2016. Despite initial success, the project was terminated later that year due to market challenges and strategic pivots.
+          The Treat app and Treat for Business Owner app were launched on the
+          App Store China in January 2016. Despite initial success, the project
+          was terminated later that year due to market challenges and strategic
+          pivots.
         </p>
       </div>
     ),
@@ -1737,7 +2013,10 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          As the co-founder and organizer of Infinitas Comedy, the first Chinese stand-up comedy club in Germany, I led the establishment and growth of the club, organizing various events and building a strong community of enthusiasts and performers.
+          As the co-founder and organizer of Infinitas Comedy, the first Chinese
+          stand-up comedy club in Germany, I led the establishment and growth of
+          the club, organizing various events and building a strong community of
+          enthusiasts and performers.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -1747,61 +2026,78 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">1. Event Organization</h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Successfully organized 8 events, including actor training sessions, script reading meetings, online webinars, and open mics.
+            Successfully organized 8 events, including actor training sessions,
+            script reading meetings, online webinars, and open mics.
           </li>
           <li>
-            Attracted approximately 40-50 participants per event, providing a platform for both new and experienced performers.
+            Attracted approximately 40-50 participants per event, providing a
+            platform for both new and experienced performers.
           </li>
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">2. Community Building</h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Established connections with leaders of Chinese stand-up comedy clubs in New York, Paris, London, Tokyo, and Silicon Valley.
+            Established connections with leaders of Chinese stand-up comedy
+            clubs in New York, Paris, London, Tokyo, and Silicon Valley.
           </li>
           <li>
-            Built the club from scratch with their help, finding free venues and equipment to provide opportunities for practice and performance.
+            Built the club from scratch with their help, finding free venues and
+            equipment to provide opportunities for practice and performance.
           </li>
           <li>
-            Led members from beginners to more experienced performers, fostering growth and transformation within the community.
+            Led members from beginners to more experienced performers, fostering
+            growth and transformation within the community.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">3. Marketing and Promotion</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          3. Marketing and Promotion
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Created social media accounts on multiple platforms, building a fan base and attracting a large audience and enthusiasts to perform.
+            Created social media accounts on multiple platforms, building a fan
+            base and attracting a large audience and enthusiasts to perform.
           </li>
           <li>
-            Designed the club's logo, initial performance posters, and tickets to promote events and enhance the club's brand identity.
+            Designed the club's logo, initial performance posters, and tickets
+            to promote events and enhance the club's brand identity.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">4. Collaboration and Networking</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          4. Collaboration and Networking
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Networked with industry leaders and other comedy clubs to gain insights and support for the club's development.
+            Networked with industry leaders and other comedy clubs to gain
+            insights and support for the club's development.
           </li>
           <li>
-            Organized collaborative events and exchanges to provide members with broader exposure and learning opportunities.
+            Organized collaborative events and exchanges to provide members with
+            broader exposure and learning opportunities.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">5. User Feedback and Improvement</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          5. User Feedback and Improvement
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Designed and conducted user surveys using Google Forms to gather feedback from participants.
+            Designed and conducted user surveys using Google Forms to gather
+            feedback from participants.
           </li>
           <li>
-            Analyzed survey results to motivate and guide stand-up comedians in improving their performances based on audience feedback.
+            Analyzed survey results to motivate and guide stand-up comedians in
+            improving their performances based on audience feedback.
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Project Outcome
-        </h3>
+        <h3 className="text-xl font-semibold mb-2 mt-6">Project Outcome</h3>
         <p className="mb-4">
-          Successfully established and grew the first Chinese stand-up comedy club in Germany, providing a platform for performers and building a strong community through effective marketing and collaboration.
+          Successfully established and grew the first Chinese stand-up comedy
+          club in Germany, providing a platform for performers and building a
+          strong community through effective marketing and collaboration.
         </p>
       </div>
     ),
@@ -1835,96 +2131,134 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          As a volunteer for the VÜCD, I have participated in numerous projects to promote cultural exchange between Chinese and German communities. I initiated and participated in the creation of Infinitas Youth, a youth organization focused on cultural and artistic activities. I established the organization's mission and values, and designed all visual identities, logos, and posters.
+          As a volunteer for the VÜCD, I have participated in numerous projects
+          to promote cultural exchange between Chinese and German communities. I
+          initiated and participated in the creation of Infinitas Youth, a youth
+          organization focused on cultural and artistic activities. I
+          established the organization's mission and values, and designed all
+          visual identities, logos, and posters.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Responsibilities and Achievements
         </h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">1. Event Planning and Organization</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          1. Event Planning and Organization
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Helped to plan and organize "China Day" during the 25th Frankfurt Euro Finance Week in 2022.
+            Helped to plan and organize "China Day" during the 25th Frankfurt
+            Euro Finance Week in 2022.
           </li>
           <li>
-            Planned Chinafest 2022 and Chinafest 2023 in Frankfurt, focusing on traditional cultural experiences.
+            Planned Chinafest 2022 and Chinafest 2023 in Frankfurt, focusing on
+            traditional cultural experiences.
           </li>
           <li>
-            Designed and organized the Infinitas Youth Arena, an experimental theater project, which included indoor concerts, Eastern aesthetic salons, dance parties, and more.
+            Designed and organized the Infinitas Youth Arena, an experimental
+            theater project, which included indoor concerts, Eastern aesthetic
+            salons, dance parties, and more.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">2. Marketing and Promotion</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          2. Marketing and Promotion
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Created social media accounts on multiple platforms to connect with potential audience.
+            Created social media accounts on multiple platforms to connect with
+            potential audience.
           </li>
           <li>
-            Designed promotional materials, including logos, posters, tickets, and social media posts to enhance the organization's brand identity.
+            Designed promotional materials, including logos, posters, tickets,
+            and social media posts to enhance the organization's brand identity.
           </li>
           <li>
             Managed targeted advertising on Meta platforms to promote events.
           </li>
           <li>
-            Used Figma, Photoshop, and Stable Diffusion generative AI to create posters and promotional brochures.
+            Used Figma, Photoshop, and Stable Diffusion generative AI to create
+            posters and promotional brochures.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">3. Concert Coordination</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          3. Concert Coordination
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Planned, organized, and coordinated a series of non-profit indoor concerts under the Infinitas Youth Arena initiative.
+            Planned, organized, and coordinated a series of non-profit indoor
+            concerts under the Infinitas Youth Arena initiative.
           </li>
           <li>
-            Managed theme selection, resource allocation, and personnel scheduling for the concerts.
+            Managed theme selection, resource allocation, and personnel
+            scheduling for the concerts.
           </li>
           <li>
-            Designed event posters, set up ticket sales on Eventbrite, and ensured financial balance between ticket revenue and expenses for musicians and venues.
+            Designed event posters, set up ticket sales on Eventbrite, and
+            ensured financial balance between ticket revenue and expenses for
+            musicians and venues.
           </li>
           <li>
-            Successfully organized 5 concerts, each attracting approximately 80 attendees.
+            Successfully organized 5 concerts, each attracting approximately 80
+            attendees.
           </li>
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">4. Chinafest 2023</h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Planned the format and theme of Chinafest, optimizing program content to enhance participant engagement and experience.
+            Planned the format and theme of Chinafest, optimizing program
+            content to enhance participant engagement and experience.
           </li>
           <li>
-            Developed a detailed sponsorship plan, including exhibition booths, and expanded sponsorship formats to secure sufficient funding for the event.
+            Developed a detailed sponsorship plan, including exhibition booths,
+            and expanded sponsorship formats to secure sufficient funding for
+            the event.
           </li>
           <li>
-            Used Stable Diffusion generative AI and Figma to create posters and promotional brochures.
+            Used Stable Diffusion generative AI and Figma to create posters and
+            promotional brochures.
           </li>
           <li>
-            Chinafest 2023 was held at Roßmarkt in Frankfurt, attracting over 100,000 participants over three days, with participation and sponsorship from more than 20 companies and organizations.
+            Chinafest 2023 was held at Roßmarkt in Frankfurt, attracting over
+            100,000 participants over three days, with participation and
+            sponsorship from more than 20 companies and organizations.
           </li>
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">5. Media Production</h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Shot and planned the <span className="font-semibold">"Infinitas Youth Interviews"</span> short video series, interviewing young and interesting people from various fields in Germany.
+            Shot and planned the{" "}
+            <span className="font-semibold">"Infinitas Youth Interviews"</span>{" "}
+            short video series, interviewing young and interesting people from
+            various fields in Germany.
           </li>
           <li>
-            Produced content that discussed diverse life experiences, philosophies, and inspirational stories.
+            Produced content that discussed diverse life experiences,
+            philosophies, and inspirational stories.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">6. Choir Participation</h4>
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          6. Choir Participation
+        </h4>
         <ul className="list-disc pl-5 space-y-2 mb-4">
           <li>
-            Sing in the baritone section of the Frankfurt Chacona Youth Choir, part of the VÜCD.
+            Sing in the baritone section of the Frankfurt Chacona Youth Choir,
+            part of the VÜCD.
           </li>
           <li>
-            Assisted in the organization of the 23rd China-Germany Cultural Exchange Night Concert at the Clara Schumann Music Hall in Frankfurt.
+            Assisted in the organization of the 23rd China-Germany Cultural
+            Exchange Night Concert at the Clara Schumann Music Hall in
+            Frankfurt.
           </li>
         </ul>
       </div>
     ),
-  }
+  },
   // 在这里添加更多项目...
 ];
 
