@@ -17,8 +17,13 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Yi Li - Portfolio",
-  description: "AI Developer, Data Alchemist, and DL Engineer",
+  title: "🐼 Yi Li - Portfolio  - AI Developer & Data Scientist",
+  description: "Personal portfolio of Yi Li, AI Developer and Data Scientist based in Germany",
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+    shortcut: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
