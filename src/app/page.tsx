@@ -1087,7 +1087,7 @@ export default function Home() {
                   </div>
                   <div className="flex justify-end mt-4">
                     <Image
-                      src="/merck.jpg"
+                      src="/merck.webp"
                       alt="Merck KGaA Logo"
                       width={150}
                       height={112}

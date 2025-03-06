@@ -40,7 +40,7 @@ const projectsData: Project[] = [
       "Linux",
       "Git",
     ],
-    image: "/projects/visual.jpg",
+    image: "/projects/visual.webp",
     category: "research",
     content: (
       <div>
@@ -1186,7 +1186,7 @@ const projectsData: Project[] = [
       "Process Optimization",
       "Collaborative Data Science",
     ],
-    image: "/projects/fred.jpg",
+    image: "/projects/fred.webp",
     category: "corporate",
     content: (
       <div>
@@ -1601,7 +1601,7 @@ const projectsData: Project[] = [
       "Time Series Analysis",
       "Pharmaceutical Manufacturing",
     ],
-    image: "/projects/parteck.jpg",
+    image: "/projects/parteck.webp",
     category: "corporate",
     content: (
       <div>
