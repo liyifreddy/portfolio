@@ -213,7 +213,15 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col text-black">
       {/* 第一屏 */}
-      <div id="home" className="h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: "#FEDFB7" }}>
+      <div id="home" className="h-screen flex flex-col relative overflow-hidden bg-[#FEDFB7] dark:bg-[#FEDFB7]" style={{ 
+    backgroundColor: "#FEDFB7",
+    // 强制锁定颜色
+    colorScheme: 'light',
+    forcedColorAdjust: 'none',
+  }}>
+    {/* 添加暗色模式覆盖层 */}
+  <div className="absolute inset-0 z-[-1] bg-[#FEDFB7] dark:bg-[#FEDFB7]" />
+    
         {/* FlickeringGrid 背景 - 放在最底层，设置明确的宽高 */}
         <div className="absolute inset-0 pointer-events-none z-10">
           <div className="relative w-full h-full">
@@ -316,10 +324,11 @@ export default function Home() {
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
-          className="md:flex absolute top-[740px] md:top-[760px] right-[calc(6%-42px)] md:right-[calc(6%-40px)] z-40"
+          // className="md:flex absolute top-[740px] md:top-[760px] right-[calc(6%-38px)] md:right-[calc(6%-40px)] z-40"
+          className="absolute right-[-1vh] md:right-[0vh] lg:right-[2vh] xl:right-[3vh]  top-[90vh] md:top-[85vh] lg:top-[85vh] xl:top-[90vh] z-40 origin-bottom-right"
         >
           <div
-            className="transform rotate-90 origin-top-right text-base md:text-base tracking-widest font-medium text-black whitespace-nowrap"
+            className="transform origin-top-right text-base md:text-base xl:text-lg tracking-widest font-medium text-black whitespace-nowrap"
             style={{
               fontFamily: "sans-serif",
               transform: "rotate(90deg) translateY(50%)",
@@ -647,7 +656,7 @@ export default function Home() {
                           </div>
                         </div>
                         <p className="text-xs text-gray-400">
-                          PyTorch, ML for Industry
+                          PyTorch, DL for Industry
                         </p>
                       </div>
 
@@ -663,7 +672,7 @@ export default function Home() {
                           </div>
                         </div>
                         <p className="text-xs text-gray-400">
-                          Pose Estimation, OpenCV, PBR
+                          Pose Estimation, OpenCV, PBR, SD
                         </p>
                       </div>
 
@@ -757,7 +766,7 @@ export default function Home() {
                           </div>
                         </div>
                         <p className="text-xs text-gray-400">
-                          Data Stack, SQL, Pandas
+                          Data Stack, SQLite, Pandas
                         </p>
                       </div>
 

@@ -126,7 +126,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
       <ModalPortal isOpen={isOpen} onClose={handleClose}>
         <div
           ref={modalRef}
-          className="w-[90%] max-w-6xl bg-[#f9f8f6] rounded-3xl p-8 relative shadow-2xl"
+          className="w-[90%] max-w-6xl bg-[#f9f8f6] rounded-3xl p-4 md:p-8 relative shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* 关闭按钮 */}
@@ -139,7 +139,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
 
           {/* 项目标题 */}
           <div className="py-6">
-            <h3 className="text-4xl font-bold text-[#614315] mb-2">
+            <h3 className="text-xl md:text-4xl font-bold text-[#614315] mb-2">
               {project.title}
             </h3>
             <p className="text-[#816334]">
@@ -160,7 +160,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
           </div>
 
           {/* 内容部分 - 添加框 */}
-          <div className="bg-[#f5f2eb] rounded-xl p-6 mb-6 text-[#333333] shadow-sm">
+          <div className="bg-[#f5f2eb] rounded-xl p-4 md:p-6 mb-6 text-[#333333] shadow-sm">
             {project.content}
           </div>
 

@@ -59,7 +59,7 @@ const projectsData: Project[] = [
         </h3>
 
         <h4 className="text-lg font-medium mb-2 mt-4">1. Model Integration</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Successfully integrated Theia encoder with SPOT framework, replacing
             the original DinoV2 backbone
@@ -81,7 +81,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Experimentation & Validation
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Conducted comprehensive experiments on Pascal VOC and COCO datasets
           </li>
@@ -102,7 +102,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Technical Infrastructure
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Designed and implemented distributed training framework on SLURM
             cluster
@@ -120,7 +120,7 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Challenges and Solutions
         </h3>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Addressed feature dimension mismatch between Theia (1024D) and SPOT
             through careful projection design
@@ -138,7 +138,7 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Currently Working On
         </h3>
-        <ul className="list-disc pl-5 space-y-2">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
             Exploring multi-modal integration with CLIP to leverage both visual
             and textual information
@@ -208,7 +208,7 @@ const projectsData: Project[] = [
         </h3>
 
         <h4 className="text-lg font-medium mb-2 mt-4">1. Data Generation</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Generated PBR data for BOP YCB objects (drill, bowl, and mug) using
             BlenderProc. This included transformation matrices, depth maps, and
@@ -227,7 +227,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">2. Image Translation</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Modified CoCosNet-v2 to perform image translation tasks, initially
             reproducing results with the DeepFashion dataset.
@@ -245,7 +245,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">3. Pose Estimation</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Utilized CosyPose, which leverages multi-view 6D object pose
             estimation, to validate the outcomes of the image translation
@@ -260,7 +260,7 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Challenges and Solutions
         </h3>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Encountered issues with account access on the Slurm cluster, leading
             to delays and necessitating the use of external ECS servers with
@@ -279,7 +279,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
-        <ul className="list-disc pl-5 space-y-2">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
             Develop a suitable approach for encoding pose information of
             objects, enabling the adaptation of CoCosNet-v2 from human datasets
@@ -344,7 +344,7 @@ const projectsData: Project[] = [
         </h3>
 
         <h4 className="text-lg font-medium mb-2 mt-4">1. Data Generation</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Utilized the MNIST-Extended (MNIST-E) and Breast Cancer Semantic
             Segmentation (BCSS) datasets for training and validation.
@@ -357,7 +357,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">2. Model Architecture</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Implemented a VAE with a segmentation decoder for initial
             experiments on the MNIST-E dataset.
@@ -376,7 +376,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Approaches and Results
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Initial experiments with VAE on the MNIST-E dataset showed promising
             results but failed to generalize well to the BCSS dataset.
@@ -399,7 +399,7 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Challenges and Solutions
         </h3>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Faced difficulties in generalizing models trained on MNIST-E to the
             BCSS dataset due to differences in data complexity.
@@ -415,7 +415,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
-        <ul className="list-disc pl-5 space-y-2">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
             Improve image synthesis quality by experimenting with different
             architectures and conditioning techniques.
@@ -500,7 +500,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. Explainability Integration
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Integrated BertViz into SQuARE to provide interactive visualizations
             of attention mechanisms in Transformer models.
@@ -512,7 +512,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">2. Behavioral Testing</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Developed a microservice to run CheckList, enabling comprehensive
             behavioral testing of QA models.
@@ -528,7 +528,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">3. Model Evaluation</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Tested multiple BERT and RoBERTa-based QA models hosted on Hugging
             Face.
@@ -540,7 +540,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Achievements</h3>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Successfully integrated explainability methods into SQuARE,
             enhancing the interpretability and trustworthiness of QA models.
@@ -556,7 +556,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
-        <ul className="list-disc pl-5 space-y-2">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
             Automate behavioral tests to streamline model evaluation processes.
           </li>
@@ -616,7 +616,7 @@ const projectsData: Project[] = [
         </h3>
 
         <h4 className="text-lg font-medium mb-2 mt-4">1. Data Augmentation</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Implemented OOD augmentations by overlaying objects such as colored
             polyps, coins, pills, and food items (e.g., corn, kidney beans) on
@@ -637,7 +637,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Model Training and Evaluation
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Trained a MobileNet classifier on the{" "}
             <span className="font-semibold">Kvasir</span> dataset to detect
@@ -653,7 +653,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Challenges and Solutions
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Addressed issues with lighting effects, object size, and overlay
             positions by aligning image lighting with object lighting and adding
@@ -668,7 +668,7 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Results and Conclusion
         </h3>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             The experiment demonstrated a significant performance drop in OOD
             scenarios, highlighting the necessity of OOD detection in endoscopy.
@@ -681,7 +681,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
-        <ul className="list-disc pl-5 space-y-2">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
             Enhance the physical realism of augmented images through
             physically-based rendering techniques.
@@ -754,7 +754,7 @@ const projectsData: Project[] = [
         </h3>
 
         <h4 className="text-lg font-medium mb-2 mt-4">1. Warning Systems</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Developed three different warning assistants: audio, vibrotactile,
             and visual warnings via AR glasses (Microsoft HoloLens 2).
@@ -771,7 +771,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">2. Experiment Setup</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Conducted experiments on a spacious outdoor track, ensuring safety
             by restricting speed and supervising the trials.
@@ -790,7 +790,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Results and Analysis
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Analyzed reaction time and accident rate using repeated measures
             ANOVA, finding significant differences between AR, audio, and
@@ -810,7 +810,7 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Challenges and Solutions
         </h3>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Addressed issues with the reliability of vibration signals by using
             high-quality vibration devices and ensuring proper synchronization
@@ -823,7 +823,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
-        <ul className="list-disc pl-5 space-y-2">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
             Expand the study to include more participants and diverse traffic
             scenarios, such as interactions with pedestrians and cyclists.
@@ -896,7 +896,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. Molecular Docking Simulations
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Conducted docking simulations to study the interaction between TBBPA
             and the TRPML1 protein.
@@ -914,7 +914,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Statistical Analysis
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Performed statistical analysis of experimental data using GraphPad
             Prism.
@@ -933,7 +933,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Collaboration and Interdisciplinary Work
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Worked with a multidisciplinary team to design and execute
             experiments.
@@ -949,7 +949,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
-        <ul className="list-disc pl-5 space-y-2">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
             Extend molecular docking studies to other potential protein targets
             involved in lysosomal exocytosis.
@@ -1015,7 +1015,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. AI-Generated Persona Creation
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Utilized Stable Diffusion 1.5 with ComfyUI workflow to generate a
             personalized 3D Pixar-style avatar
@@ -1037,7 +1037,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Frontend Development
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Built the website using Next.js for optimized performance and
             server-side rendering capabilities
@@ -1076,7 +1076,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. DevOps and Deployment
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>Established version control workflow using Git and GitHub</li>
           <li>
             Configured CI/CD pipeline for automated testing and deployment
@@ -1094,7 +1094,7 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Challenges and Solutions
         </h3>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Addressed performance issues with complex animations by implementing
             selective rendering and view-based animation triggers
@@ -1134,7 +1134,7 @@ const projectsData: Project[] = [
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Future Enhancements</h3>
-        <ul className="list-disc pl-5 space-y-2">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>Implement internationalization for multi-language support</li>
           <li>Add a headless CMS for easier content management</li>
           <li>Develop a blog section with technical articles</li>
@@ -1221,7 +1221,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. Data Extraction and Cleaning
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Used SQL to extract raw production data from Aspen servers for
             multiple pigment types.
@@ -1235,7 +1235,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Phase Identification and Analysis
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Collaborated with chemical engineering experts to establish criteria
             for identifying different production phases for each pigment type.
@@ -1249,7 +1249,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Setpoint Change Analysis
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Analyzed manual setpoint changes, including frequency and magnitude
             of changes for each pigment type.
@@ -1263,7 +1263,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           4. Process Optimization and Cost Reduction
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Based on the analysis of each product, provided tailored insights to
             optimize production processes.
@@ -1332,7 +1332,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. Data Integration and Preprocessing
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Developed a robust data pipeline to integrate multiple data sources,
             including Excel files for L- and M-semi Batch No., Raw Material Lot
@@ -1353,7 +1353,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Advanced Machine Learning Model Development
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Designed and implemented an{" "}
             <span className="font-semibold">
@@ -1383,7 +1383,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Web Application Development and Deployment
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Developed a user-friendly Streamlit web application for easy result
             interpretation and model deployment.
@@ -1405,7 +1405,7 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-semibold mb-2 mt-6">
           Outcomes and Key Learnings
         </h3>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             <span className="font-semibold">
               Significantly Improved Prediction Accuracy:
@@ -1478,7 +1478,7 @@ const projectsData: Project[] = [
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Tech Stack</h3>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             <span className="font-semibold">Backend:</span> Python 3.12,
             FastAPI, Tortoise ORM, Aerich
@@ -1508,7 +1508,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. Full-Stack Development
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Developed a responsive frontend using Vue.js 3 and Vuetify, with
             custom theming and localization.
@@ -1525,7 +1525,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Advanced UI/UX Design
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Created an interactive calendar view for reservation scheduling.
           </li>
@@ -1539,7 +1539,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Database and Data Management
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Utilized SQLite for local data storage with Tortoise ORM for
             database operations.
@@ -1553,7 +1553,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           4. Authentication and Security
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>Integrated SSO authentication using Foundry Dev Tools.</li>
           <li>
             Implemented secure token-based authentication flow and user
@@ -1564,7 +1564,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           5. DevOps and Deployment
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Created a multi-stage Dockerfile for optimized container builds.
           </li>
@@ -1620,7 +1620,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. Comprehensive Process Parameter Analysis
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Analyzed key pharmaceutical production parameters including spray
             conditions, air flow, temperatures, bed heights, and
@@ -1635,7 +1635,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Advanced Data Analysis and Preprocessing
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Utilized Python (Pandas, NumPy) for data manipulation and analysis
             of complex manufacturing data.
@@ -1649,7 +1649,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Machine Learning Model Development
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Developed and compared multiple regression models (Linear
             Regression, Random Forest, Gradient Boosting, SVR, Neural Networks,
@@ -1664,7 +1664,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           4. Model Evaluation and Process Optimization
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Evaluated models using various metrics to ensure accurate prediction
             of critical quality attributes.
@@ -1678,7 +1678,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           5. Data Visualization and Reporting
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Created interactive visualizations and dashboards using Plotly and
             Matplotlib for monitoring key process parameters and model
@@ -1689,7 +1689,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           6. Cross-Product Analysis
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Conducted comparative analysis between different Parteck products to
             identify common patterns and unique characteristics.
@@ -1748,7 +1748,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. Project Proposal and Development
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Proposed a virtual scene where users can interact with an assistant
             to acquire information conversationally.
@@ -1763,7 +1763,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Technical Implementation
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Utilized Llama2, LangChain, and Streamlit to create a chatbot with a
             fixed knowledge base.
@@ -1785,7 +1785,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Project Architecture and Strategy
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Provided strategic suggestions for the project architecture,
             focusing on AI components and their potential integration into VR/AR
@@ -1869,7 +1869,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. Market Research and Planning
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Conducted market research and led the marketing team on commercial
             visits, meeting with industry managers to gain insight into the
@@ -1888,7 +1888,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Product Design and Prototyping
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Designed the mobile apps and managed the development process,
             ensuring a seamless user experience.
@@ -1906,7 +1906,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Technical Development
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Assisted the technical supervisor in developing an LBS location
             service plan.
@@ -1925,7 +1925,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           4. Product Testing and Feedback
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Worked closely with customers, business owners, and technicians to
             refine app features and functionalities.
@@ -1939,7 +1939,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           5. Promotion and Launch
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Collaborated with marketers to develop a promotion plan targeting
             business owners.
@@ -1959,7 +1959,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           6. Investor Outreach and Business Development
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Met with investors and pitched the business plan, securing initial
             funding for the project.
@@ -2023,7 +2023,7 @@ const projectsData: Project[] = [
         </h3>
 
         <h4 className="text-lg font-medium mb-2 mt-4">1. Event Organization</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Successfully organized 8 events, including actor training sessions,
             script reading meetings, online webinars, and open mics.
@@ -2035,7 +2035,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">2. Community Building</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Established connections with leaders of Chinese stand-up comedy
             clubs in New York, Paris, London, Tokyo, and Silicon Valley.
@@ -2053,7 +2053,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Marketing and Promotion
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Created social media accounts on multiple platforms, building a fan
             base and attracting a large audience and enthusiasts to perform.
@@ -2067,7 +2067,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           4. Collaboration and Networking
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Networked with industry leaders and other comedy clubs to gain
             insights and support for the club's development.
@@ -2081,7 +2081,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           5. User Feedback and Improvement
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Designed and conducted user surveys using Google Forms to gather
             feedback from participants.
@@ -2145,7 +2145,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           1. Event Planning and Organization
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Helped to plan and organize "China Day" during the 25th Frankfurt
             Euro Finance Week in 2022.
@@ -2164,7 +2164,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           2. Marketing and Promotion
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Created social media accounts on multiple platforms to connect with
             potential audience.
@@ -2185,7 +2185,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           3. Concert Coordination
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Planned, organized, and coordinated a series of non-profit indoor
             concerts under the Infinitas Youth Arena initiative.
@@ -2206,7 +2206,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">4. Chinafest 2023</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Planned the format and theme of Chinafest, optimizing program
             content to enhance participant engagement and experience.
@@ -2228,7 +2228,7 @@ const projectsData: Project[] = [
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">5. Media Production</h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Shot and planned the{" "}
             <span className="font-semibold">"Infinitas Youth Interviews"</span>{" "}
@@ -2244,7 +2244,7 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">
           6. Choir Participation
         </h4>
-        <ul className="list-disc pl-5 space-y-2 mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 mb-4">
           <li>
             Sing in the baritone section of the Frankfurt Chacona Youth Choir,
             part of the VÜCD.
