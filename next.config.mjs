@@ -9,6 +9,7 @@ const nextConfig = {
       // 忽略构建时的ESLint错误
       ignoreDuringBuilds: true,
     },
+    output: 'export',
 };
 
 export default nextConfig;
