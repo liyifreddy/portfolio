@@ -211,9 +211,9 @@ const SkillsVisual = () => {
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col bg-[#FEDFB7] text-black">
+    <main className="flex min-h-screen flex-col text-black">
       {/* 第一屏 */}
-      <div id="home" className="h-screen flex flex-col relative overflow-hidden">
+      <div id="home" className="h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: "#FEDFB7" }}>
         {/* FlickeringGrid 背景 - 放在最底层，设置明确的宽高 */}
         <div className="absolute inset-0 pointer-events-none z-10">
           <div className="relative w-full h-full">
@@ -308,7 +308,7 @@ export default function Home() {
           initial={{ height: 0 }}
           whileInView={{ height: "100vh" }}
           transition={{ duration: 1, ease: "easeInOut", delay: 0.3 }}
-          className="md:block absolute top-0 right-[6%] w-px bg-black z-40"
+          className="md:block absolute top-0 right-[6%] border-r border-black z-40"
         ></motion.div>
 
         {/* 右侧名字 - 提高z-index值 */}
@@ -1001,7 +1001,7 @@ export default function Home() {
       {/* 第四屏 */}
       <div
         id="experience"
-        className="min-h-screen bg-[#edd9bb] text-black py-20 relative overflow-hidden"
+        className="min-h-screen bg-[#edd9bb] dark:bg-[#edd9bb] text-black py-20 relative overflow-hidden"
       >
         {/* 背景元素 - 类似第一屏的FlickeringGrid */}
         <div className="absolute inset-0 pointer-events-none z-10">
