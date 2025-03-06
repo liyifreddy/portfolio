@@ -36,4 +36,7 @@ yarn-error.log*
 next-env.d.ts
 
 # png file
-public/**/*.png
+/public/**/*.png
+/public/*.png
+/public/**/*.jpg
+/public/*.jpg
