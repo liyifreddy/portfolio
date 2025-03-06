@@ -4,6 +4,7 @@ const nextConfig = {
         domains: [
           "api.microlink.io", // Microlink Image Preview
         ],
+        unoptimized: true,
       },
     eslint: {
       // 忽略构建时的ESLint错误
