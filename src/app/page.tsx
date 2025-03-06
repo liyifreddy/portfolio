@@ -414,7 +414,7 @@ export default function Home() {
                   className="absolute bottom-0 left-[-15vw] z-20"
                 >
                   <Image
-                    src="/robot.png"
+                    src="/robot.webp"
                     alt="Robot"
                     width={180}
                     height={180}
@@ -425,7 +425,7 @@ export default function Home() {
 
                 {/* 人物图片 */}
                 <Image
-                  src="/character.png"
+                  src="/character.webp"
                   alt="Character"
                   width={700}
                   height={800}
@@ -534,7 +534,7 @@ export default function Home() {
                         </h3>
                         <div className="flex justify-left md:justify-center w-full">
                           <Image
-                            src="/industry.png"
+                            src="/industry.webp"
                             width={64}
                             height={64}
                             alt="Manufacturing icons created by Freepik - Flaticon"
@@ -564,7 +564,7 @@ export default function Home() {
                         </h3>
                         <div className="flex justify-left md:justify-center w-full">
                           <Image
-                            src="/science.png"
+                            src="/science.webp"
                             width={64}
                             height={64}
                             alt="Microscope icons created by Freepik - Flaticon"
@@ -594,7 +594,7 @@ export default function Home() {
                         </h3>
                         <div className="flex justify-left md:justify-center w-full">
                           <Image
-                            src="/user.png"
+                            src="/user.webp"
                             width={64}
                             height={64}
                             alt="Robot icons created by Freepik - Flaticon"
@@ -949,7 +949,7 @@ export default function Home() {
                       }}
                     >
                       <Image
-                        src="/computer.png"
+                        src="/computer.webp"
                         alt="AI Visualization"
                         width={200}
                         height={200}
@@ -1128,7 +1128,7 @@ export default function Home() {
                   </p>
                   <div className="flex justify-end mt-4">
                     <Image
-                      src="/nmy.png"
+                      src="/nmy.webp"
                       alt="NMY Mixed Reality Studio Logo"
                       width={150}
                       height={112}
@@ -1169,7 +1169,7 @@ export default function Home() {
                   </p>
                   <div className="flex justify-end mt-4">
                     <Image
-                      src="/treat.png"
+                      src="/treat.webp"
                       alt="Hangzhou BseTech Logo"
                       width={150}
                       height={112}
@@ -1301,7 +1301,7 @@ export default function Home() {
 
                   <div className="flex justify-start mt-4">
                     <Image
-                      src="/tudarmstadt.png"
+                      src="/tudarmstadt.webp"
                       alt="TU Darmstadt Logo"
                       width={150}
                       height={112}
@@ -1364,7 +1364,7 @@ export default function Home() {
 
                   <div className="flex justify-start mt-4">
                     <Image
-                      src="/cqupt.png"
+                      src="/cqupt.webp"
                       alt="Chongqing University Logo"
                       width={150}
                       height={112}

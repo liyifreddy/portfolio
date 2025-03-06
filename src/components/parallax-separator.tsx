@@ -45,7 +45,7 @@ const ParallaxSeparator: React.FC = () => {
         className="absolute inset-0 w-full h-[150%] top-[-25%] will-change-transform"
       >
         <Image
-          src="/table.png" 
+          src="/table.webp" 
           alt="Separator"
           fill
           sizes="100vw"

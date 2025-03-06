@@ -184,7 +184,7 @@ const projectsData: Project[] = [
       "Linux",
       "Git",
     ],
-    image: "/projects/repose0.png",
+    image: "/projects/repose0.webp",
     category: "research",
     content: (
       <div>
@@ -324,7 +324,7 @@ const projectsData: Project[] = [
       "Docker",
       "Linux",
     ],
-    image: "/projects/segdiff2.png",
+    image: "/projects/segdiff2.webp",
     category: "research",
     content: (
       <div>
@@ -459,7 +459,7 @@ const projectsData: Project[] = [
       "Scientific Writing",
       "Git",
     ],
-    image: "/projects/ukp.png",
+    image: "/projects/ukp.webp",
     category: "research",
     content: (
       <div>
@@ -591,7 +591,7 @@ const projectsData: Project[] = [
       "MobileNet",
       "Git",
     ],
-    image: "/projects/endoscopy.png",
+    image: "/projects/endoscopy.webp",
     category: "research",
     content: (
       <div>
@@ -723,7 +723,7 @@ const projectsData: Project[] = [
       "Arduino IDE",
       "Git",
     ],
-    image: "/projects/escooter.png",
+    image: "/projects/escooter.webp",
     category: "research",
     content: (
       <div>
@@ -862,7 +862,7 @@ const projectsData: Project[] = [
       "Statistical Analysis",
       "GraphPad Prism",
     ],
-    image: "/projects/tbbpa.png",
+    image: "/projects/tbbpa.webp",
     category: "research",
     content: (
       <div>
@@ -994,7 +994,7 @@ const projectsData: Project[] = [
       "Cloudflare Pages",
       "UI/UX Design",
     ],
-    image: "/projects/portfolio.png",
+    image: "/projects/portfolio.webp",
     category: "research",
     content: (
       <div>
@@ -1303,7 +1303,7 @@ const projectsData: Project[] = [
       "Data Visualization",
       "Streamlit",
     ],
-    image: "/projects/photoresist.png",
+    image: "/projects/photoresist.webp",
     category: "corporate",
     content: (
       <div>
@@ -1467,7 +1467,7 @@ const projectsData: Project[] = [
       "CI/CD",
       "Azure DevOps",
     ],
-    image: "/projects/booking.png",
+    image: "/projects/booking.webp",
     category: "corporate",
     content: (
       <div>
@@ -1729,7 +1729,7 @@ const projectsData: Project[] = [
       "Project Architecture",
       "Strategic Planning",
     ],
-    image: "/projects/llm.png",
+    image: "/projects/llm.webp",
     category: "corporate",
     content: (
       <div>
@@ -1850,7 +1850,7 @@ const projectsData: Project[] = [
       "Business Planning",
       "Investor Outreach",
     ],
-    image: "/projects/treat.png",
+    image: "/projects/treat.webp",
     category: "corporate",
     content: (
       <div>
@@ -2007,7 +2007,7 @@ const projectsData: Project[] = [
       "Collaboration",
       "User Research",
     ],
-    image: "/projects/club-logo.png",
+    image: "/projects/club-logo.webp",
     category: "social",
     content: (
       <div>
@@ -2125,7 +2125,7 @@ const projectsData: Project[] = [
       "Cultural Exchange",
       "Project Planning",
     ],
-    image: "/projects/infinitas.png",
+    image: "/projects/infinitas.webp",
     category: "social",
     content: (
       <div>
