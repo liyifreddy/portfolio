@@ -247,7 +247,7 @@ export default function Home() {
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="sticky top-0 left-0 right-0 z-50 p-4 pt-[2vh] border-b border-black bg-transparent"
+          className="sticky top-0 left-0 right-0 z-50 p-1 md:p-4 pt-[2vh] border-b border-black bg-transparent"
         >
           <div className="container mx-auto flex justify-center items-center">
             <ul className="flex flex-wrap space-x-3 md:space-x-16 justify-center">
