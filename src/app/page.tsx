@@ -325,10 +325,10 @@ export default function Home() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
           // className="md:flex absolute top-[740px] md:top-[760px] right-[calc(6%-38px)] md:right-[calc(6%-40px)] z-40"
-          className="absolute right-[-1.5vh] md:right-[0vh] lg:right-[2vh] xl:right-[3vh]  top-[92vh] md:top-[85vh] lg:top-[85vh] xl:top-[90vh] z-40 origin-bottom-right"
+          className="absolute right-[-0.5vh] md:right-[0vh] lg:right-[2vh] xl:right-[3vh]  top-[92vh] md:top-[85vh] lg:top-[85vh] xl:top-[90vh] z-40 origin-bottom-right"
         >
           <div
-            className="transform origin-top-right text-base md:text-base xl:text-lg tracking-widest font-medium text-black whitespace-nowrap"
+            className="transform origin-top-right text-xs md:text-base xl:text-lg tracking-widest font-medium text-black whitespace-nowrap"
             style={{
               fontFamily: "sans-serif",
               transform: "rotate(90deg) translateY(50%)",
