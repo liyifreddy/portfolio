@@ -406,7 +406,7 @@ export const ProjectComplexityImpactMatrix = () => {
                     </p>
                   </div>
                   {/* 提示框小三角 */}
-                  <div className="border-t-8 border-t-gray-800 border-l-8 border-l-transparent border-r-8 border-r-transparent h-0 w-0 mx-auto -mb-2"></div>
+                  <div className="border-t-8 border-t-[#a77d3b] border-l-8 border-l-transparent border-r-8 border-r-transparent h-0 w-0 mx-auto -mb-2"></div>
                 </div>
               </motion.div>
             );
