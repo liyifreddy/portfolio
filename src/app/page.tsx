@@ -13,6 +13,7 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 import ProjectTabsContent from "@/components/project-tabs-content";
 import ParallaxSeparator from "@/components/parallax-separator";
 import { LinkPreview } from "@/components/ui/link-preview";
+import { FloatingNavbar } from "@/components/my-floating-navbar";
 import {
   TechLogoGrid,
   DataSciencePieChart,
@@ -212,7 +213,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-[#FEDFB7] text-black">
       {/* 第一屏 */}
-      <div className="h-screen flex flex-col relative overflow-hidden">
+      <div id="home" className="h-screen flex flex-col relative overflow-hidden">
         {/* FlickeringGrid 背景 - 放在最底层，设置明确的宽高 */}
         <div className="absolute inset-0 pointer-events-none z-10">
           <div className="relative w-full h-full">
@@ -468,6 +469,9 @@ export default function Home() {
           </Link>
         </motion.div>
       </div>
+
+      {/* 添加浮动导航栏 */}
+      <FloatingNavbar />
 
       {/* 第二屏和第三屏的公共父容器 */}
       <div className="relative bg-[#0F0F18]">

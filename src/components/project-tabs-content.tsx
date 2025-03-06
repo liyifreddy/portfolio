@@ -1064,8 +1064,8 @@ const projectsData: Project[] = [
             project metrics
           </li>
           <li>
-            Created custom animated backgrounds (FlickeringGrid,
-            BackgroundBeams) for visual interest
+            Implemented animated backgrounds (FlickeringGrid, BackgroundBeams)
+            for visual interest
           </li>
           <li>
             Implemented scroll-triggered animations and view transitions with
