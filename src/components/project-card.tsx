@@ -78,6 +78,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
                   alt={project.title}
                   fill
                   className="object-cover"
+                  loading="lazy" // 延迟加载
                 />
               </div>
 

@@ -50,7 +50,7 @@ const ParallaxSeparator: React.FC = () => {
           fill
           sizes="100vw"
           className="object-cover object-center"
-          priority
+          loading="lazy" // 延迟加载
         />
       </div>
       

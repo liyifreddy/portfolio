@@ -8,9 +8,9 @@ import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { AiOutlineLinkedin, AiOutlineMail } from "react-icons/ai";
 import { AutoTextEffect } from "@/components/ui/auto-text-effect";
 import { ShinyButton } from "@/components/magicui/shiny-button";
-import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+// import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import ProjectTabsContent from "@/components/project-tabs-content";
+// import ProjectTabsContent from "@/components/project-tabs-content";
 import ParallaxSeparator from "@/components/parallax-separator";
 import { LinkPreview } from "@/components/ui/link-preview";
 import { FloatingNavbar } from "@/components/my-floating-navbar";
@@ -30,6 +30,14 @@ import {
   IconStethoscope,
   IconShield,
 } from "@tabler/icons-react";
+import LazyMotionComponent from '@/components/lazymotion';
+
+import dynamic from 'next/dynamic';
+const BentoGrid = dynamic(() => import('@/components/ui/bento-grid').then(mod => mod.BentoGrid), { ssr: true });
+const BentoGridItem = dynamic(() => import('@/components/ui/bento-grid').then(mod => mod.BentoGridItem), { ssr: true });
+const ProjectTabsContent = dynamic(() => import('@/components/project-tabs-content'), {
+  ssr: false
+});
 
 // 1. 代码风格的 Hi! I am Yi Li 组件
 const CodeIntroVisual = () => {
@@ -440,7 +448,7 @@ export default function Home() {
                   width={700}
                   height={800}
                   className="w-[45vw] min-w-[15rem] max-w-[32rem] max-h-[75vh] object-contain"
-                  priority
+                  priority={true} // 保留这个用于首屏关键图片
                 />
               </motion.div>
             </div>
@@ -483,6 +491,7 @@ export default function Home() {
       <FloatingNavbar />
 
       {/* 第二屏和第三屏的公共父容器 */}
+      <LazyMotionComponent>
       <div className="relative bg-[#0F0F18]">
         {/* 共享的背景光束 - 定位在父容器内 */}
         <div className="absolute inset-0 z-10 ">
@@ -552,6 +561,7 @@ export default function Home() {
                             height={64}
                             alt="Manufacturing icons created by Freepik - Flaticon"
                             className="h-22 w-22 my-2"
+                            loading="lazy" // 延迟加载
                           />
                         </div>
                       </div>
@@ -582,6 +592,7 @@ export default function Home() {
                             height={64}
                             alt="Microscope icons created by Freepik - Flaticon"
                             className="h-22 w-22 my-2"
+                            loading="lazy" // 延迟加载
                           />
                         </div>
                       </div>
@@ -612,6 +623,7 @@ export default function Home() {
                             height={64}
                             alt="Robot icons created by Freepik - Flaticon"
                             className="h-22 w-22 my-2"
+                            loading="lazy" // 延迟加载
                           />
                         </div>
                       </div>
@@ -967,6 +979,7 @@ export default function Home() {
                         width={200}
                         height={200}
                         className="rounded-lg object-contain max-h-full"
+                        loading="lazy" // 延迟加载
                       />
                     </motion.div>
                   </div>
@@ -1004,10 +1017,14 @@ export default function Home() {
         </div>
       </div>
 
+      </LazyMotionComponent>
+
       {/* 分隔图片 */}
       <ParallaxSeparator />
 
       {/* 第四屏 */}
+
+      <LazyMotionComponent>
       <div
         id="experience"
         className="min-h-screen bg-[#edd9bb] dark:bg-[#edd9bb] text-black py-20 relative overflow-hidden"
@@ -1076,7 +1093,7 @@ export default function Home() {
                     Merck KGaA, Darmstadt, Germany
                   </p>
                   <p className="text-gray-600 text-sm mb-4">
-                    Darmstadt, Hesse, Germany
+                    Darmstadt, Hessen, Germany
                   </p>
                   <p className="font-semibold text-[#B08642]">
                     Oct 2023 - Present
@@ -1105,6 +1122,7 @@ export default function Home() {
                       width={150}
                       height={112}
                       className="object-contain rounded-lg"
+                      loading="lazy" // 延迟加载
                     />
                   </div>
                 </div>
@@ -1129,7 +1147,7 @@ export default function Home() {
                     NMY Mixed Reality Studio
                   </p>
                   <p className="text-gray-600 text-sm mb-4">
-                    Frankfurt am Main, Hesse, Germany
+                    Frankfurt am Main, Hessen, Germany
                   </p>
                   <p className="font-semibold text-[#B08642]">
                     Jun 2023 - Sep 2023
@@ -1146,6 +1164,7 @@ export default function Home() {
                       width={150}
                       height={112}
                       className="object-contain rounded-lg"
+                      loading="lazy" // 延迟加载
                     />
                   </div>
                 </div>
@@ -1187,6 +1206,7 @@ export default function Home() {
                       width={150}
                       height={112}
                       className="object-contain rounded-lg"
+                      loading="lazy" // 延迟加载
                     />
                   </div>
                 </div>
@@ -1221,7 +1241,7 @@ export default function Home() {
                     Technische Universität Darmstadt
                   </p>
                   <p className="text-gray-600 text-sm mb-4">
-                    Darmstadt, Hesse, Germany
+                    Darmstadt, Hessen, Germany
                   </p>
                   <p className="font-semibold text-[#B08642]">
                     Apr 2019 - Present (Estimated Graduation Autumn 2025)
@@ -1319,6 +1339,7 @@ export default function Home() {
                       width={150}
                       height={112}
                       className="object-contain rounded-lg"
+                      loading="lazy" // 延迟加载
                     />
                   </div>
                 </div>
@@ -1382,6 +1403,7 @@ export default function Home() {
                       width={150}
                       height={112}
                       className="object-contain rounded-lg"
+                      loading="lazy" // 延迟加载
                     />
                   </div>
                 </div>
@@ -1390,8 +1412,10 @@ export default function Home() {
           </div>
         </div>
       </div>
+      </LazyMotionComponent>
 
       {/* 第五屏 */}
+      <LazyMotionComponent>
       <div
         id="skill"
         className="min-h-screen bg-[#0F0F18] text-white py-20 relative overflow-hidden"
@@ -1483,6 +1507,7 @@ export default function Home() {
           </BentoGrid>
         </div>
       </div>
+      </LazyMotionComponent>
 
       {/* 页尾 */}
       <footer className="bg-[#0F0F18] text-white py-16 relative z-10">

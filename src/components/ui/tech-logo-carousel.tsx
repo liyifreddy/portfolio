@@ -131,8 +131,6 @@ const LogoColumn: React.FC<LogoColumnProps> = React.memo(
               width={48}
               height={48}
               className="object-contain w-16 h-16 md:w-25 md:h-25"
-              priority={true}
-              loading="eager"
               // 使用简单的图像优化属性减轻大文件造成的压力
               quality={75}
             />
