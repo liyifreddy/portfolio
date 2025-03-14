@@ -2261,19 +2261,6 @@ const projectsData: Project[] = [
 // 将项目标签数据导出为一个常量
 export const projectTabs = [
   {
-    title: "Research Projects",
-    value: "research",
-    content: (
-      <div className="w-full bg-[#A67C3D]/80 backdrop-blur-sm p-8 rounded-xl">
-        <ProjectGrid
-          projects={projectsData.filter(
-            (project) => project.category === "research"
-          )}
-        />
-      </div>
-    ),
-  },
-  {
     title: "Corporate Projects",
     value: "corporate",
     content: (
@@ -2281,6 +2268,19 @@ export const projectTabs = [
         <ProjectGrid
           projects={projectsData.filter(
             (project) => project.category === "corporate"
+          )}
+        />
+      </div>
+    ),
+  },
+  {
+    title: "Research Projects",
+    value: "research",
+    content: (
+      <div className="w-full bg-[#A67C3D]/80 backdrop-blur-sm p-8 rounded-xl">
+        <ProjectGrid
+          projects={projectsData.filter(
+            (project) => project.category === "research"
           )}
         />
       </div>
