@@ -1173,7 +1173,7 @@ const projectsData: Project[] = [
       "Developed data analysis solutions to optimize production processes for various pigments, achieving significant efficiency improvements and cost reduction.",
     highlights: [
       "Surface Gernsheim Award 2024 - Efficiency Category (Merck) for outstanding contributions to the FRED 2.0 project",
-      "Extracted and analyzed large-scale production data from Aspen servers using SQL and Python",
+      "Extracted and analyzed large-scale production data from company servers using SQL and Python",
       "Implemented phase detection algorithms and setpoint change analysis to identify optimization opportunities",
       "Collaborated with chemical engineering experts to tailor analyses for each pigment type's unique production process",
       "Provided data-driven insights that contributed to improved production efficiency and cost reduction",
@@ -1194,7 +1194,7 @@ const projectsData: Project[] = [
           At Merck KGaA, I developed data analysis solutions to optimize
           production processes for various pigments, including Iriodin and
           Iriotec series. I extracted and analyzed large-scale production data
-          from Aspen servers using <span className="font-semibold">SQL</span>{" "}
+          from company servers using <span className="font-semibold">SQL</span>{" "}
           and <span className="font-semibold">Python</span>. I implemented phase
           detection algorithms and setpoint change analysis to identify
           optimization opportunities. I collaborated with chemical engineering
@@ -1335,8 +1335,7 @@ const projectsData: Project[] = [
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
             Developed a robust data pipeline to integrate multiple data sources,
-            including Excel files for L- and M-semi Batch No., Raw Material Lot
-            No., and Raw Material Quality Values, as well as PDF files
+            including Excel files for production data, as well as PDF files
             containing Raw Material Amounts.
           </li>
           <li>
@@ -1580,14 +1579,14 @@ const projectsData: Project[] = [
 
   {
     id: "merck-parteck-optimization",
-    title: "Parteck® Production Optimization",
+    title: "Life Science Production Optimization",
     organization: "Merck KGaA",
     timeframe: "December 2023 - April 2024",
     supervisor: "Micheal Schleehahn",
     description:
-      "Utilized ML techniques to optimize pharmaceutical production parameters for Parteck® products, enhancing product quality and manufacturing efficiency.",
+      "Utilized ML techniques to optimize production parameters for life science products, enhancing product quality and manufacturing efficiency.",
     highlights: [
-      "Analyzed key pharmaceutical production parameters in fluid bed processing including spray conditions, air flow, temperatures, and equipment settings",
+      "Analyzed key production parameters",
       "Implemented preprocessing techniques including various scaling methods and Box-Cox transformation for skewed data",
       "Developed and compared multiple regression models to predict and optimize process outcomes",
       "Created interactive visualizations and dashboards using Plotly and Matplotlib for monitoring parameters",
@@ -1599,7 +1598,7 @@ const projectsData: Project[] = [
       "Data Visualization",
       "Process Optimization",
       "Time Series Analysis",
-      "Pharmaceutical Manufacturing",
+      "Life Science Manufacturing",
     ],
     image: "/projects/parteck.webp",
     category: "corporate",
@@ -1607,10 +1606,10 @@ const projectsData: Project[] = [
       <div>
         <p className="mb-4">
           As part of the Data Sciences team at Merck KGaA, I worked on
-          optimizing the Parteck® production process, applying{" "}
+          optimizing a life science production process, applying{" "}
           <span className="font-semibold">machine learning</span> and{" "}
           <span className="font-semibold">data analysis</span> techniques to
-          enhance pharmaceutical manufacturing efficiency and product quality.
+          enhance manufacturing efficiency and product quality.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -1622,9 +1621,7 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Analyzed key pharmaceutical production parameters including spray
-            conditions, air flow, temperatures, bed heights, and
-            equipment-specific settings in fluid bed processing.
+            Analyzed key production parameters.
           </li>
           <li>
             Developed understanding of parameter interactions and their
@@ -1691,7 +1688,7 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Conducted comparative analysis between different Parteck products to
+            Conducted comparative analysis between different products to
             identify common patterns and unique characteristics.
           </li>
           <li>
