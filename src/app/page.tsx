@@ -163,7 +163,7 @@ const WhyItMattersVisual = () => {
           }}
           className="text-2xl md:text-3xl"
         >
-          🐻‍❄️
+          🐯
         </motion.div>
       </div>
     </div>
@@ -352,7 +352,7 @@ export default function Home() {
             <span className="mx-8 ">|</span>
             <span>
               🐼🐻ʕ<span className="mx-1"></span>• ﻌ •{" "}
-              <span className="mx-1"></span>ʔ 🐨🐻‍❄️
+              <span className="mx-1"></span>ʔ 🐨🐯
             </span>
           </div>
         </motion.div>
