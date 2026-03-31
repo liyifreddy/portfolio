@@ -17,143 +17,231 @@ const projectsData: Project[] = [
   {
     id: "visual-object-centric",
     title: "Visual Object-Centric Learning for Robot Manipulation",
-    organization: "École Centrale de Lyon & Intelligent Autonomous Systems Lab",
-    timeframe: "October 2024 - Present",
-    supervisor: "Alexandre Chapin, Liming Chen, Jan Peters",
+    organization: "TU Darmstadt (IAS Lab) × École Centrale de Lyon (LIRIS)",
+    timeframe: "October 2024 - April 2026",
+    supervisor:
+      "Prof. Jan Peters, Prof. Liming Chen, Alexandre Chapin, Alap Kshirsagar",
     description:
-      "Advancing object-centric representation learning for robotic manipulation by integrating Theia, a state-of-the-art visual encoder, with SPOT framework.",
+      "Investigated how frozen, self-supervised visual representations can be integrated into continuous robotic manipulation policies under standard hardware constraints (single RTX 2080 Ti).",
     highlights: [
-      "Successfully integrated Theia encoder with SPOT framework, replacing the original DinoV2 backbone",
-      "Developed a novel feature translation pipeline utilizing Theia's multi-model distilled knowledge",
-      "Implemented adapter layers and projection mechanisms to bridge Theia's 1024D feature space with SPOT's slot representation",
-      "Designed modular architecture for utilizing multiple translator heads (DinoV2, CLIP)",
-      "Conducted comprehensive experiments on Pascal VOC and COCO datasets",
-      "Designed and implemented distributed training framework on SLURM cluster",
+      "Achieved 68.7 ± 4.2% success rate on ManiSkill3 PickCube-v1 without end-to-end visual fine-tuning",
+      "Adapted the SPOT encoder (frozen DINO ViT-B/16 + Slot Attention) to compress dense features into object-centric slots",
+      "Designed an Autoregressive Multimodal Sequence Policy (GPT-style causal Transformer) with action chunking",
+      "Resolved the 'Last Millimeter' placement bottleneck via explicit 2D spatial grounding (+24pp improvement)",
+      "Built an offline feature caching pipeline reducing per-epoch training time from 1-2 hours to ~1-2 minutes",
+      "Conducted a structured kinematic failure taxonomy across 200 episodes to isolate grasping from placement errors",
     ],
     skills: [
       "PyTorch",
-      "Vision Transformers",
-      "Self-supervised Learning",
-      "Object-centric Learning",
+      "Slot Attention",
+      "ManiSkill3",
       "SLURM",
-      "Docker",
+      "Behavior Cloning",
+      "Imitation Learning",
+      "Embodied AI",
+      "Self-Supervised Learning",
+      "Multi-View Fusion",
+      "Spatial Grounding",
       "Linux",
-      "Git",
     ],
     image: "/projects/visual.webp",
     category: "research",
     content: (
-      <div>
-        <p className="mb-4">
-          This project aims to advance object-centric representation learning
-          for robotic manipulation by integrating Theia, a state-of-the-art
-          visual encoder, with SPOT framework. The enhanced architecture
-          leverages knowledge distilled from multiple vision foundation models
-          while maintaining strong object decomposition capabilities,
-          implemented using <span className="font-semibold">PyTorch</span> and
-          deployed on <span className="font-semibold">SLURM cluster</span>.
+      <div className="text-[#333333]">
+        <h3 className="text-xl font-bold mb-3">Overview & Problem Statement</h3>
+        <p className="mb-4 leading-relaxed">
+          State-of-the-art visuomotor policies such as ACT and Diffusion Policy
+          achieve high success rates but rely on end-to-end visual fine-tuning,
+          which requires high-end hardware (RTX 4090, 24 GB VRAM) and large
+          demonstration datasets. Frozen-encoder alternatives avoid this cost
+          but perform poorly without further architectural support (3% SR on
+          PickCube-v1 with standard BC).
+        </p>
+        <p className="mb-6 leading-relaxed">
+          This master's thesis investigates how frozen, self-supervised visual
+          representations can be integrated into continuous robotic manipulation
+          policies under standard hardware constraints. Rather than fine-tuning
+          large vision backbones end-to-end, we adapt the{" "}
+          <strong>SPOT encoder</strong> — a self-supervised model combining a
+          frozen DINO ViT-B/16 backbone with Slot Attention — as a structural
+          bottleneck that compresses dense visual features into compact
+          object-centric slot representations.{" "}
+          <strong>
+            The full pipeline runs on a single RTX 2080 Ti (11 GB VRAM).
+          </strong>{" "}
+          We identified and addressed three core bottlenecks: dimensionality and
+          memory scaling of dense VFM features, task objective misalignment, and
+          the "Last Millimeter" spatial bottleneck caused by the absence of
+          absolute 3D coordinates in 2D slot representations.
         </p>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Detailed Implementation
-        </h3>
+        <h3 className="text-xl font-bold mb-3">System Architecture</h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">1. Model Integration</h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>
-            Successfully integrated Theia encoder with SPOT framework, replacing
-            the original DinoV2 backbone
-          </li>
-          <li>
-            Developed a novel feature translation pipeline utilizing Theia's
-            multi-model distilled knowledge
-          </li>
-          <li>
-            Implemented adapter layers and projection mechanisms to bridge
-            Theia's 1024D feature space with SPOT's slot representation
-          </li>
-          <li>
-            Designed modular architecture for utilizing multiple translator
-            heads (DinoV2, CLIP)
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          2. Experimentation & Validation
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          1. Visual Perception (Frozen)
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
+          <li>Dual fixed-camera RGB setup (Base + Side camera, 224×224).</li>
           <li>
-            Conducted comprehensive experiments on Pascal VOC and COCO datasets
+            Frozen SPOT encoder: DINO ViT-B/16 backbone + Slot Attention (K=7
+            slots per camera).
           </li>
+          <li>Output: 14 object slots per timestep, each 256-dimensional.</li>
           <li>
-            Implemented evaluation metrics including mean IOU, ARI scores, and
-            object discovery metrics
-          </li>
-          <li>
-            Performed systematic ablation studies to validate architectural
-            choices
-          </li>
-          <li>
-            Analyzed feature quality through attention visualization and slot
-            assignment analysis
+            <strong>Offline feature caching</strong> reduces per-epoch training
+            time from 1–2 hours to ~1–2 minutes.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          3. Technical Infrastructure
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          2. Token Construction & Multimodal Fusion
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
+          <li>14 visual slot tokens (linear projection to 256-dim).</li>
           <li>
-            Designed and implemented distributed training framework on SLURM
-            cluster
+            1 proprioception token (7-DoF joint positions → MLP → 256-dim).
           </li>
           <li>
-            Optimized GPU memory usage through gradient checkpointing and
-            efficient batch processing
+            1 spatial goal token (2D projected goal coordinates → MLP →
+            256-dim).
           </li>
+          <li>1 learnable action token.</li>
           <li>
-            Created reproducible training pipelines with Docker containerization
-          </li>
-          <li>Developed comprehensive logging and visualization tools</li>
-        </ul>
-
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Challenges and Solutions
-        </h3>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>
-            Addressed feature dimension mismatch between Theia (1024D) and SPOT
-            through careful projection design
-          </li>
-          <li>
-            Overcame training stability issues through gradient clipping and
-            learning rate scheduling
-          </li>
-          <li>
-            Resolved memory constraints by implementing efficient batch
-            processing and model parallelism
+            <strong>Total:</strong> 17 tokens per timestep × T=5 frames = 85
+            tokens per sequence.
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Currently Working On
-        </h3>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          3. Policy Decoding (Trainable)
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
-            Exploring multi-modal integration with CLIP to leverage both visual
-            and textual information
+            <strong>Autoregressive Multimodal Sequence Policy:</strong>{" "}
+            GPT-style causal Transformer decoder (8 layers, 8 attention heads,
+            hidden dim 256).
           </li>
           <li>
-            Developing 6D pose estimation capabilities by incorporating methods
-            like FoundPose and FreeZe
+            <strong>Action Chunking:</strong> predicts H=10 step action chunks.
           </li>
           <li>
-            Implementing temporal modeling techniques for video sequence
-            understanding
+            <strong>Decoupled gripper:</strong> hard step function + separate
+            normalization for binary gripper state.
           </li>
           <li>
-            Experimenting with various object-centric architectures (SAVi++,
-            STEVE) for more robust performance
+            <strong>Action space:</strong> 7-DoF joint positions (Z-score
+            normalized) + binary gripper.
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-bold mb-3">Key Experiments and Results</h3>
+        <p className="mb-3">
+          Evaluated on ManiSkill3 PickCube-v1, held-out seed protocol, 300
+          episodes per configuration:
+        </p>
+
+        <div className="overflow-x-auto mb-6">
+          <table className="w-full text-left border-collapse min-w-[400px]">
+            <thead>
+              <tr className="border-b-2 border-[#C19A49]">
+                <th className="py-2 px-4 font-semibold">Configuration</th>
+                <th className="py-2 px-4 font-semibold text-right">
+                  Success Rate
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-gray-200">
+                <td className="py-2 px-4">Pure Visual (no goal)</td>
+                <td className="py-2 px-4 text-right">31.0 ± 2.8%</td>
+              </tr>
+              <tr className="border-b border-gray-200 bg-[#fbf3e5]/50">
+                <td className="py-2 px-4 font-medium">2D Spatial Projection</td>
+                <td className="py-2 px-4 text-right font-medium">
+                  55.0 ± 2.9%
+                </td>
+              </tr>
+              <tr className="border-b border-gray-200 bg-[#C19A49]/10">
+                <td className="py-2 px-4 font-bold text-[#816334]">
+                  SPOT-Exact-224 (best)
+                </td>
+                <td className="py-2 px-4 text-right font-bold text-[#816334]">
+                  68.7 ± 4.2%
+                </td>
+              </tr>
+              <tr className="border-b border-gray-200">
+                <td className="py-2 px-4 text-gray-500">
+                  3D Oracle (upper bound)
+                </td>
+                <td className="py-2 px-4 text-right text-gray-500">
+                  71.7 ± 4.1%
+                </td>
+              </tr>
+              <tr className="border-b border-gray-200">
+                <td className="py-2 px-4">DINO Global [CLS]</td>
+                <td className="py-2 px-4 text-right">32.6 ± 1.5%</td>
+              </tr>
+              <tr className="border-b border-gray-200">
+                <td className="py-2 px-4">DINO 14×14 Dense (T=1, H=1)</td>
+                <td className="py-2 px-4 text-right">1.0%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          Key Findings
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-6">
+          <li>
+            <strong>Explicit 2D spatial grounding</strong> resolves the Near
+            Miss placement bottleneck (+24pp over pure visual).
+          </li>
+          <li>
+            <strong>Native 224×224 rendering</strong> improves SR by 13.7pp over
+            upsampled 128×128.
+          </li>
+          <li>
+            <strong>Object-centric slot grouping</strong> outperforms all DINO
+            baselines under matched token budgets.
+          </li>
+          <li>
+            <strong>Simple token concatenation</strong> generalizes better than
+            cross-attention fusion (29pp generalization gap).
+          </li>
+          <li>
+            Heuristic loss weighting interventions (Time-Weighted, U-Shaped,
+            Dimension-Decoupled) all underperform the uniform MSE baseline.
+          </li>
+          <li>
+            <strong>Kinematic Failure Taxonomy:</strong> Structured analysis
+            across 200 episodes per configuration separates grasping failures
+            from Near Miss placement errors, proving that spatial grounding
+            resolves placement without affecting grasping.
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-bold mb-3">Technical Infrastructure</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
+          <li>
+            <strong>Simulator:</strong> ManiSkill3 (SAPIEN), Franka Panda robot,
+            PickCube-v1 and StackCube-v1.
+          </li>
+          <li>
+            <strong>Training:</strong> SLURM cluster (RTX 2080 Ti, 11 GB),
+            PyTorch, offline feature caching pipeline.
+          </li>
+          <li>
+            <strong>Dataset:</strong> 1,000 expert demonstrations, ~77,000
+            frames, chunk-based DataLoader.
+          </li>
+          <li>
+            <strong>Evaluation:</strong> Held-out seed protocol (seeds 10000+),
+            stability test (300 episodes, 3 runs).
+          </li>
+          <li>
+            <strong>Codebase:</strong> Modular pipeline separating encoder,
+            token construction, policy, and evaluation.
           </li>
         </ul>
       </div>
@@ -161,59 +249,57 @@ const projectsData: Project[] = [
   },
   {
     id: "repose-image-translation",
-    title: "Repose via Image Translation",
-    organization: "Graphisch-Interaktive Systeme (GRIS Lab)",
+    title: "Repose via Image Translation: 6D Pose & Synthetic Data",
+    organization:
+      "Fraunhofer IGD / Graphisch-Interaktive Systeme (GRIS Lab), TU Darmstadt",
     timeframe: "November 2022 - August 2023",
     supervisor: "Thomas Pöllabauer",
     description:
-      "Enhanced style consistency in 6D pose estimation by generating physically-based rendering (PBR) data and modifying image translation models.",
+      "Architected an automated synthetic data generation pipeline on a SLURM cluster and evaluated generative image translation models for industrial 6D pose estimation.",
     highlights: [
-      "Generated PBR data for BOP YCB objects using BlenderProc, including transformation matrices, depth maps, and masks.",
-      "Modified CoCosNet-v2 for image translation, training on generated PBR data and exploring PITI/DragGAN models.",
-      "Utilized CosyPose for 6D pose estimation to validate style preservation, addressing geometric consistency challenges.",
-      "Overcame technical challenges related to Slurm, Docker, and CUDA for model training and deployment.",
+      "Generated over 36,000 physically-based rendering (PBR) images of YCB objects using BlenderProc",
+      "Deployed conditional image translation models (CoCosNet-v2, DragGAN) to evaluate style-preserving transformations",
+      "Utilized CosyPose to validate multi-view 6D pose estimation consistency across generated images",
+      "Configured complex headless server environments via Docker with X11 forwarding on GPU-less login nodes",
+      "Navigated and resolved strict CUDA 11/12 version conflicts across different SLURM partitions",
+      "Identified that human-centric generative models fail zero-shot transfer on rigid industrial objects",
     ],
     skills: [
-      "Image Translation",
-      "6D Pose Estimation",
       "BlenderProc",
+      "CoCosNet-v2",
+      "CosyPose",
+      "6D Pose Estimation",
+      "PBR Data Generation",
       "PyTorch",
       "OpenCV",
-      "Slurm",
       "Docker",
-      "Linux",
-      "Git",
+      "SLURM",
     ],
     image: "/projects/repose0.webp",
     category: "research",
     content: (
-      <div>
-        <p className="mb-4">
-          This project aims to enhance the style of{" "}
-          <span className="font-semibold">6D pose estimation</span> while
+      <div className="text-[#333333]">
+        <p className="mb-6 leading-relaxed">
+          This project aims to enhance the style of 6D pose estimation while
           preserving its cues. I achieved this by generating physically-based
           rendering (PBR) data of YCB objects using BlenderProc and modifying
-          CoCosNet-v2 for{" "}
-          <span className="font-semibold">image translation</span> and CosyPose
-          for <span className="font-semibold">pose estimation</span> using{" "}
-          <span className="font-semibold">PyTorch</span> and{" "}
-          <span className="font-semibold">OpenCV</span>. The project was
-          deployed on the <span className="font-semibold">Slurm cluster</span>{" "}
-          of Fraunhofer IGD and used{" "}
-          <span className="font-semibold">Docker</span> to manage containers.
+          CoCosNet-v2 for image translation and CosyPose for pose estimation
+          using PyTorch and OpenCV. The project was deployed on the Slurm
+          cluster of Fraunhofer IGD and used Docker to manage containers.
         </p>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Detailed Implementation
-        </h3>
+        <h3 className="text-xl font-bold mb-4">Detailed Implementation</h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">1. Data Generation</h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
+          1. Data Generation
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Generated PBR data for BOP YCB objects (drill, bowl, and mug) using
-            BlenderProc. This included transformation matrices, depth maps, and
-            masks from BopToolKit under different rendering textures,
-            illumination conditions, angles, and scales.
+            Generated <strong>over 36,000</strong> PBR data images for BOP YCB
+            objects (drill, bowl, and mug) using BlenderProc. This included
+            transformation matrices, depth maps, and masks from BopToolKit under
+            different rendering textures, illumination conditions, angles, and
+            scales.
           </li>
           <li>
             Employed Blender 2.93 and BlenderProc2 to create datasets with image
@@ -226,8 +312,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">2. Image Translation</h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
+          2. Image Translation
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Modified CoCosNet-v2 to perform image translation tasks, initially
             reproducing results with the DeepFashion dataset.
@@ -242,10 +330,19 @@ const projectsData: Project[] = [
             and DragGAN, testing their capabilities in generating diverse poses
             while maintaining style consistency.
           </li>
+          <li>
+            <strong>Research Insight:</strong> Identified a key limitation:
+            human-centric generative models relying on OpenPose priors fail to
+            zero-shot transfer to rigid industrial objects lacking anatomical
+            keypoints — a finding with direct implications for industrial object
+            pose estimation pipelines.
+          </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">3. Pose Estimation</h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
+          3. Pose Estimation
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
             Utilized CosyPose, which leverages multi-view 6D object pose
             estimation, to validate the outcomes of the image translation
@@ -257,19 +354,22 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Challenges and Solutions
-        </h3>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <h3 className="text-xl font-bold mb-4">Challenges and Solutions</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
             Encountered issues with account access on the Slurm cluster, leading
             to delays and necessitating the use of external ECS servers with
             NVIDIA T4 GPUs.
           </li>
           <li>
-            Faced CUDA version conflicts and GUI-related problems, which were
-            resolved through extensive troubleshooting and configuration of
-            different libraries and environments.
+            Faced complex infrastructure bottlenecks for headless server
+            rendering:{" "}
+            <strong>
+              configured Docker containers with X11 forwarding and GLFW on
+              GPU-less login nodes
+            </strong>
+            , and resolved strict <strong>CUDA 11/12 version conflicts</strong>{" "}
+            across SLURM partitions.
           </li>
           <li>
             Dealt with the inherent complexity of integrating image translation
@@ -278,8 +378,8 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
+        <h3 className="text-xl font-bold mb-4">Future Work</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Develop a suitable approach for encoding pose information of
             objects, enabling the adaptation of CoCosNet-v2 from human datasets
@@ -1164,275 +1264,188 @@ const projectsData: Project[] = [
     ),
   },
   {
-    id: "merck-pigment-production",
-    title: "Pigment Production Optimization",
-    organization: "Merck KGaA",
-    timeframe: "Ocotober 2023 - November 2024",
-    supervisor: "Micheal Schleehahn",
-    description:
-      "Developed data analysis solutions to optimize production processes for various pigments, achieving significant efficiency improvements and cost reduction.",
-    highlights: [
-      "Surface Gernsheim Award 2024 - Efficiency Category (Merck) for outstanding contributions to the FRED 2.0 project",
-      "Extracted and analyzed large-scale production data from company servers using SQL and Python",
-      "Implemented phase detection algorithms and setpoint change analysis to identify optimization opportunities",
-      "Collaborated with chemical engineering experts to tailor analyses for each pigment type's unique production process",
-      "Provided data-driven insights that contributed to improved production efficiency and cost reduction",
-    ],
-    skills: [
-      "Python",
-      "SQL",
-      "Data Cleaning",
-      "Time Series Analysis",
-      "Process Optimization",
-      "Collaborative Data Science",
-    ],
-    image: "/projects/fred.webp",
-    category: "corporate",
-    content: (
-      <div>
-        <p className="mb-4">
-          At Merck KGaA, I developed data analysis solutions to optimize
-          production processes for various pigments, including Iriodin and
-          Iriotec series. I extracted and analyzed large-scale production data
-          from company servers using <span className="font-semibold">SQL</span>{" "}
-          and <span className="font-semibold">Python</span>. I implemented phase
-          detection algorithms and setpoint change analysis to identify
-          optimization opportunities. I collaborated with chemical engineering
-          experts to tailor analyses for each pigment type's unique production
-          process. I provided data-driven insights that contributed to improved
-          production efficiency and cost reduction across multiple product
-          lines.
-        </p>
-
-        <h3 className="text-xl font-semibold mb-2 mt-6">Recognition</h3>
-        <p className="mb-4">
-          <span className="font-semibold">
-            Surface Gernsheim Award 2024 - Efficiency Category (Merck)
-          </span>{" "}
-          - Recognized for outstanding contributions to the FRED 2.0 project,
-          achieving significant efficiency improvements and cost reduction in
-          pigment production processes at Merck, Gernsheim, Germany.
-        </p>
-
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Responsibilities and Achievements
-        </h3>
-
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          1. Data Extraction and Cleaning
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>
-            Used SQL to extract raw production data from Aspen servers for
-            multiple pigment types.
-          </li>
-          <li>
-            Developed and implemented data cleaning scripts using Python,
-            handling large datasets efficiently.
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          2. Phase Identification and Analysis
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>
-            Collaborated with chemical engineering experts to establish criteria
-            for identifying different production phases for each pigment type.
-          </li>
-          <li>
-            Implemented phase detection algorithm that identify the phases we
-            aim to optimize in the pigment production process.
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          3. Setpoint Change Analysis
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>
-            Analyzed manual setpoint changes, including frequency and magnitude
-            of changes for each pigment type.
-          </li>
-          <li>
-            Identified meaningful manual interventions and those that could be
-            avoided to optimize the production process.
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          4. Process Optimization and Cost Reduction
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>
-            Based on the analysis of each product, provided tailored insights to
-            optimize production processes.
-          </li>
-          <li>
-            Contributed to significant cost reductions in pigment production
-            through data-driven recommendations across multiple product lines.
-          </li>
-        </ul>
-      </div>
-    ),
-  },
-  {
     id: "merck-photoresist",
     title: "Photoresist Production Optimization",
-    organization: "Merck KGaA",
-    timeframe: "May 2024 - Present",
+    organization: "Merck KGaA, Darmstadt, Germany",
+    timeframe: "June 2024 - September 2025",
     supervisor: "Micheal Schleehahn",
     description:
-      "Developed a data-driven solution to optimize photoresist process in semiconductor production, improving production efficiency and product quality.",
+      "Developed a comprehensive, data-driven AI solution to optimize the photoresist blending process in semiconductor production, overcoming extreme industrial constraints.",
     highlights: [
-      "Presented at Merck Data Science Garage (January 2025) to global data science team",
-      "Developed data pipeline integrating multiple sources including Excel and PDF files",
-      "Designed and implemented extensive model search pipeline testing over 5000 combinations",
-      "Created user-friendly Streamlit web application with multilingual support",
-      "Achieved First Time Right (FTR) rate between 83% and 95% in testing",
+      "Presented to the global data science team at Merck Data Science Garage (January 2025)",
+      "Awarded the Surface Gernsheim Award 2024 (Efficiency Category) & Spot Award (MyImpact@Merck)",
+      "Evolved from a 1-step baseline to a robust 2-step decoupled architecture enforcing chemical consistency",
+      "Automated an exhaustive model search pipeline rigorously testing over 50,000 combinations",
+      "Eliminated data leakage by shifting from flawed time-series splits to randomized splits (6x performance boost)",
+      "Engineered a custom, business-oriented evaluation metric balancing statistical fit with industrial tolerances",
+      "Developed a bilingual Streamlit web app with automated multi-source data ingestion and MLOps serialization",
     ],
     skills: [
-      "Python",
-      "Pandas",
-      "NumPy",
       "Scikit-learn",
-      "XGBoost",
-      "LightGBM",
-      "Machine Learning",
+      "Gradient Boosting",
       "Feature Engineering",
-      "Data Visualization",
+      "Bootstrap Resampling",
       "Streamlit",
+      "Plotly",
+      "MLOps",
+      "Palantir Foundry",
+      "PDF-Miner",
     ],
     image: "/projects/photoresist.webp",
     category: "corporate",
     content: (
-      <div>
-        <p className="mb-4">
-          Developed a comprehensive data-driven solution to optimize the
-          photoresist process in semiconductor production at Merck KGaA. This
-          project utilized advanced data analysis, machine learning techniques,
-          and web application development to enhance production efficiency and
-          product quality.
+      <div className="text-[#333333]">
+        <p className="mb-6 leading-relaxed">
+          Presented at the{" "}
+          <strong>Merck Data Science Garage (January 2025)</strong> to the
+          global data science team. Developed a comprehensive, data-driven AI
+          solution to optimize the photoresist blending process in semiconductor
+          production. Overcoming extreme industrial constraints of small
+          datasets (~200 to 300+ samples), high-noise environments, and no GPU
+          infrastructure, the project evolved from a baseline 1-step
+          proof-of-concept into a robust 2-step model architecture. This system
+          successfully replaced manual, experience-based judgments with
+          automated predictions, significantly enhancing production efficiency
+          and product quality.
         </p>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">Recognition</h3>
-        <p className="mb-4">
-          <span className="font-semibold">
-            Presented at Merck Data Science Garage (January 2025)
-          </span>{" "}
-          to global data science team. This presentation showcased the project's
-          methodology, results, and future potential to Merck's global data
-          science community.
-        </p>
-
-        <h3 className="text-xl font-semibold mb-2 mt-6">
+        <h3 className="text-xl font-bold mb-4 mt-8">
           Key Responsibilities and Achievements
         </h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          1. Data Integration and Preprocessing
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          1. Data Integration & Preprocessing under High-Noise
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Developed a robust data pipeline to integrate multiple data sources,
-            including Excel files for production data, as well as PDF files
-            containing Raw Material Amounts.
+            Developed a robust data pipeline to integrate highly unstructured
+            industrial data, including{" "}
+            <strong>
+              Palantir Foundry databases, Excel logs, and automated PDF
+              extractions via Python PDF-Miner
+            </strong>
+            .
           </li>
           <li>
-            Implemented sophisticated data cleaning and anomaly detection
-            techniques to ensure data integrity.
+            Addressed significant data quality issues and distribution shifts by
+            implementing weighted average aggregations for duplicate
+            manufacturing batches and KNN imputation for missing values.
           </li>
           <li>
-            Conducted thorough exploratory data analysis, including PCA, to
-            understand data complexity and inform feature engineering
-            strategies.
+            Overcame low Signal-to-Noise Ratio (SNR) environments by optimizing
+            data splitting strategies,{" "}
+            <strong>
+              shifting from flawed time-series splits to randomized splits
+            </strong>
+            , eliminating data leakage and boosting model performance by 6x.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          2. Advanced Machine Learning Model Development
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          2. Advanced ML & 2-Step Architecture Evolution
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Designed and implemented an{" "}
-            <span className="font-semibold">
-              extensive and automated model search pipeline, rigorously testing
-              over 5000 different combinations
-            </span>{" "}
-            of preprocessing steps and models to identify the optimal
-            configuration.
+            Designed and executed an exhaustive, automated model search
+            pipeline, rigorously{" "}
+            <strong>testing over 50,000 combinations</strong> of preprocessing
+            steps, feature selections, and models to find the optimal
+            configuration for limited data.
           </li>
           <li>
-            Tested 704 initial combinations and expanded to{" "}
-            <span className="font-semibold">over 5000 combinations</span>{" "}
-            through automated hyperparameter tuning and model variations.
+            Evolved the system architecture from a standard 1-step model to a
+            specialized <strong>2-step v2 architecture</strong>, decoupling
+            H-SEMI and L-SEMI predictions. Implemented single-output regression
+            for H-SEMI while mathematically deriving L-SEMI to ensure strict
+            chemical ratio consistency.
           </li>
           <li>
-            Developed a custom scoring system balancing MSE and R² scores for
-            project-specific requirements.
-          </li>
-          <li>
-            Implemented and compared various regression models, including Linear
-            Regression, Ridge, Lasso, Random Forest, Gradient Boosting, SVR,
-            KNN, XGBoost, LightGBM, Bayesian Ridge, and Gaussian Process
-            Regression.
+            Evaluated a wide range of algorithms, ultimately proving that
+            well-tuned traditional models (Gradient Boosting, Ridge, Random
+            Forest) outperformed highly complex models in this specific
+            small-sample industrial context.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          3. Web Application Development and Deployment
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          3. Domain-Driven Feature Engineering
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Developed a user-friendly Streamlit web application for easy result
-            interpretation and model deployment.
+            Conquered the "curse of dimensionality" on small datasets by
+            aggressively reducing 60+ initial features to an optimal set of 5-10
+            features using SelectKBest, Lasso, and mutual information
+            regression.
           </li>
           <li>
-            Implemented features for data upload (Excel and PDF), automated data
-            processing, and model prediction.
-          </li>
-          <li>
-            Deployed the application on Uptimize App Service, ensuring
-            accessibility and scalability.
-          </li>
-          <li>
-            Developed a bilingual interface (English and Chinese) to cater to
-            diverse user groups within the organization.
+            Collaborated deeply with chemical experts to engineer
+            domain-specific features based on physical constraints (e.g., mass
+            conservation, stoichiometric ratios), proving that{" "}
+            <strong>
+              domain knowledge integration yields higher accuracy than blind
+              automated extraction
+            </strong>
+            .
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          4. Custom Evaluation Metrics & Reliability Scoring
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+          <li>
+            Engineered a custom, business-oriented scoring system balancing MSE,
+            R², and strict industrial tolerance requirements{" "}
+            <code>(0.3*MSE + 0.3*R² + 0.2*Error0.7 + 0.2*Error1.5)</code>.
+          </li>
+          <li>
+            Pioneered an improved{" "}
+            <strong>Bootstrap-based prediction confidence algorithm</strong>,
+            providing process engineers with a reliability score (standard
+            deviation of resampled predictions) for every output, rather than
+            just a point estimate.
+          </li>
+        </ul>
+
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          5. Web Application Development & MLOps Integration
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-6">
+          <li>
+            Developed a bilingual (English/Chinese){" "}
+            <strong>Streamlit web application</strong> deployed on Uptimize App
+            Service, enabling engineers to easily upload multi-format data and
+            interpret model predictions visually (Plotly).
+          </li>
+          <li>
+            Implemented MLOps best practices, including model weight persistence
+            via Joblib (saving the entire preprocessing and prediction pipeline
+            state), ensuring reproducibility and seamless future updates.
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-bold mb-3 mt-8">
           Outcomes and Key Learnings
         </h3>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-3 mb-4">
           <li>
-            <span className="font-semibold">
-              Significantly Improved Prediction Accuracy:
-            </span>{" "}
-            Top models achieved a First Time Right (FTR) rate between 83% and
-            95% in testing, improving prediction accuracy for photoresist
-            production processes.
+            <strong>Significantly Improved Prediction Accuracy:</strong>{" "}
+            Transformed baseline models with negative R² into highly reliable
+            predictors (R² of 0.60 for M-SEMI), achieving a{" "}
+            <strong>First-Time-Right (FTR) rate between 83% and 95%</strong> in
+            testing.
           </li>
           <li>
-            <span className="font-semibold">
-              Key Process Parameter Identification:
-            </span>{" "}
-            Identified critical process parameters influencing product quality,
-            providing valuable insights for optimization.
+            <strong>Data Strategy Revelation:</strong> Demonstrated that in
+            industrial AI, rigorous data preprocessing, feature engineering, and
+            proper validation splits (solving data leakage) are far more
+            critical to success than algorithm complexity.
           </li>
           <li>
-            <span className="font-semibold">
-              Feature Engineering Importance:
-            </span>{" "}
-            Confirmed the crucial role of feature engineering for accurate
-            process representation in datasets.
-          </li>
-          <li>
-            <span className="font-semibold">
-              Tools for Process Optimization:
-            </span>{" "}
-            Developed tools for ongoing process optimization and decision
-            support.
+            <strong>Team Knowledge & Governance:</strong> Established a
+            standardized AI workflow and documentation framework, significantly
+            reducing onboarding time for new team members and paving the way for
+            scalable industrial AI applications within Merck.
           </li>
         </ul>
       </div>
@@ -1440,74 +1453,76 @@ const projectsData: Project[] = [
   },
   {
     id: "merck-lab-reservation",
-    title: "Laboratory Equipment Reservation System",
-    organization: "Merck KGaA",
+    title: "Full-Stack Laboratory Equipment Reservation System",
+    organization: "Merck KGaA, Darmstadt",
     timeframe: "April 2024 - Jan 2025",
     supervisor: "Hans-Martin Körber",
     description:
-      "Developed a comprehensive full-stack web application for laboratory equipment reservation, optimizing resource management and improving utilization.",
+      "Developed a complete full-stack web application replacing an outdated calendar system, featuring Litestream AWS S3 replication and Docker CI/CD.",
     highlights: [
-      "Developed responsive frontend using Vue.js 3 and Vuetify with custom theming and localization",
-      "Built high-performance backend API using FastAPI and Tortoise ORM",
-      "Implemented database replication to AWS S3 using Litestream for data durability",
-      "Integrated SSO authentication using Foundry Dev Tools and created secure token-based authentication flow",
-      "Deployed application on AWS EC2 using Docker containers with Azure DevOps CI/CD pipelines",
+      "Built a full-stack application from scratch to replace an outdated calendar-based booking system",
+      "Developed a responsive Vue.js 3 + Vuetify frontend with custom theming and localization",
+      "Built a high-performance FastAPI + Tortoise ORM backend",
+      "Engineered database replication to AWS S3 using Litestream via Foundry",
+      "Integrated corporate SSO authentication using Palantir Foundry Dev Tools",
+      "Configured Docker deployment on AWS EC2 with Azure DevOps CI/CD pipelines",
     ],
     skills: [
       "Python",
       "FastAPI",
-      "Vue.js",
-      "Vuetify",
+      "Vue.js 3",
       "SQLite",
-      "Tortoise ORM",
-      "AWS ECR",
-      "S3",
+      "Litestream",
       "Docker",
-      "CI/CD",
+      "AWS (EC2/S3)",
       "Azure DevOps",
+      "SSO Integration",
     ],
     image: "/projects/booking.webp",
     category: "corporate",
     content: (
-      <div>
-        <p className="mb-4">
+      <div className="text-[#333333]">
+        <p className="mb-4 leading-relaxed">
           Developed a comprehensive full-stack web application for laboratory
-          equipment reservation, optimizing laboratory resource management and
-          improving equipment utilization at Merck KGaA.
+          equipment reservation,{" "}
+          <strong>
+            replacing an outdated calendar-based booking system to solve real
+            organizational bottlenecks
+          </strong>
+          , optimizing laboratory resource management and improving equipment
+          utilization at Merck KGaA.
         </p>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">Tech Stack</h3>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <h3 className="text-xl font-bold mb-3 mt-6">Tech Stack</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
-            <span className="font-semibold">Backend:</span> Python 3.12,
-            FastAPI, Tortoise ORM, Aerich
+            <strong>Backend:</strong> Python 3.12, FastAPI, Tortoise ORM, Aerich
           </li>
           <li>
-            <span className="font-semibold">Frontend:</span> Vue.js 3, Vite,
-            Vuetify, Pinia, Vue Router
+            <strong>Frontend:</strong> Vue.js 3, Vite, Vuetify, Pinia, Vue
+            Router
           </li>
           <li>
-            <span className="font-semibold">Database:</span> SQLite with
-            Litestream for replication to AWS S3 via Foundry
+            <strong>Database:</strong> SQLite with Litestream for replication to
+            AWS S3 via Foundry
           </li>
           <li>
-            <span className="font-semibold">Authentication:</span> SSO
-            integration with Foundry
+            <strong>Authentication:</strong> SSO integration with Foundry
           </li>
           <li>
-            <span className="font-semibold">Deployment:</span> Docker, AWS EC2,
-            Azure DevOps, Uptimize App Service
+            <strong>Deployment:</strong> Docker, AWS EC2, Azure DevOps, Uptimize
+            App Service
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
+        <h3 className="text-xl font-bold mb-4">
           Responsibilities and Achievements
         </h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           1. Full-Stack Development
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Developed a responsive frontend using Vue.js 3 and Vuetify, with
             custom theming and localization.
@@ -1521,10 +1536,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           2. Advanced UI/UX Design
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Created an interactive calendar view for reservation scheduling.
           </li>
@@ -1535,24 +1550,28 @@ const projectsData: Project[] = [
           <li>Implemented light and dark themes and multi-language support.</li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           3. Database and Data Management
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Utilized SQLite for local data storage with Tortoise ORM for
             database operations.
           </li>
           <li>
-            Implemented Litestream for database replication to AWS S3 bucket on
-            Foundry, ensuring data durability in a containerized environment.
+            Implemented{" "}
+            <strong>
+              Litestream for database replication to AWS S3 bucket on Foundry
+            </strong>
+            , ensuring zero-data-loss durability in a stateless containerized
+            environment.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           4. Authentication and Security
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>Integrated SSO authentication using Foundry Dev Tools.</li>
           <li>
             Implemented secure token-based authentication flow and user
@@ -1560,10 +1579,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           5. DevOps and Deployment
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Created a multi-stage Dockerfile for optimized container builds.
           </li>
@@ -1576,52 +1595,148 @@ const projectsData: Project[] = [
       </div>
     ),
   },
-
   {
-    id: "merck-parteck-optimization",
-    title: "Life Science Production Optimization",
-    organization: "Merck KGaA",
-    timeframe: "December 2023 - April 2024",
+    id: "merck-pigment-production",
+    title: "Pigment Production Optimization (FRED 2.0)",
+    organization: "Merck KGaA, Darmstadt",
+    timeframe: "October 2023 - November 2024",
     supervisor: "Micheal Schleehahn",
     description:
-      "Utilized ML techniques to optimize production parameters for life science products, enhancing product quality and manufacturing efficiency.",
+      "Award-winning project optimizing pigment manufacturing. Built asynchronous pipelines to extract fragmented legacy data and identified 'panic-driven' operator interventions.",
     highlights: [
-      "Analyzed key production parameters",
-      "Implemented preprocessing techniques including various scaling methods and Box-Cox transformation for skewed data",
-      "Developed and compared multiple regression models to predict and optimize process outcomes",
-      "Created interactive visualizations and dashboards using Plotly and Matplotlib for monitoring parameters",
+      "Won the Surface Gernsheim Award 2024 (Efficiency Category) for outstanding process optimization",
+      "Engineered an asynchronous Python pipeline to synchronize fragmented time-series data across legacy Aspen servers",
+      "Navigated dozens of scattered database tables to accurately locate sensors and production phases per batch",
+      "Developed custom phase detection algorithms tailored to specific pigment types (Iriodin, Iriotec series)",
+      "Proved that reducing 'panic-driven' manual pH adjustments significantly improved yield stability",
+      "Provided data-driven evidence that existing sensor and control systems were inherently robust",
     ],
     skills: [
       "Python",
-      "Machine Learning",
-      "Statistical Analysis",
-      "Data Visualization",
-      "Process Optimization",
+      "SQL",
+      "Aspen Data Extraction",
       "Time Series Analysis",
-      "Life Science Manufacturing",
+      "Phase Detection",
+      "Process Optimization",
+      "Collaborative Data Science",
+    ],
+    image: "/projects/fred.webp",
+    category: "corporate",
+    content: (
+      <div className="text-[#333333]">
+        <p className="mb-4 leading-relaxed">
+          <strong>
+            Recognized with the Surface Gernsheim Award 2024 (Efficiency
+            Category)
+          </strong>
+          , this project (FRED 2.0) achieved significant efficiency improvements
+          and cost reduction in pigment production processes at Merck,
+          Gernsheim, Germany. The solution optimized the manufacturing of
+          various pigments, including the Iriodin and Iriotec series.
+        </p>
+
+        <h3 className="text-xl font-bold mb-3 mt-6">
+          Core Challenges & Implementation
+        </h3>
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          1. Legacy Data Pipeline Engineering
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+          <li>
+            Engineered an asynchronous Python pipeline to extract and
+            synchronize fragmented time-series sensor data from legacy Aspen
+            database servers.
+          </li>
+          <li>
+            The core data challenge was navigating dozens of scattered tables to
+            locate the correct sensors, production phases, and time windows for
+            each batch. This required deep collaboration with chemical engineers
+            to translate chemical process logic into SQL/Python extraction
+            logic.
+          </li>
+        </ul>
+
+        <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
+          2. Phase Identification & Setpoint Analysis
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+          <li>
+            Developed phase detection algorithms tailored to each pigment type's
+            unique production characteristics, automatically isolating the
+            specific phases targeted for optimization.
+          </li>
+          <li>
+            Analyzed manual setpoint adjustments—including frequency, magnitude,
+            and timing—to distinguish meaningful interventions from{" "}
+            <strong>unnecessary, panic-driven adjustments</strong>.
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-bold mb-3 mt-6">Business Impact</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+          <li>
+            Provided data-driven evidence that the underlying sensor and control
+            systems were inherently robust, and that excessive manual
+            intervention (e.g., reactive pH adjustments triggering multi-hour
+            stabilization cycles) was counterproductive.
+          </li>
+          <li>
+            Demonstrated that targeted reduction of unnecessary interventions
+            directly improved yield stability, reduced production downtime, and
+            lowered operator burden, leading to significant cost savings.
+          </li>
+        </ul>
+      </div>
+    ),
+  },
+  {
+    id: "merck-parteck-optimization",
+    title: "Pharmaceutical Production Optimization (Parteck®)",
+    organization: "Merck KGaA, Darmstadt",
+    timeframe: "December 2023 - April 2024",
+    supervisor: "Micheal Schleehahn",
+    description:
+      "Optimized life science production processes for Parteck excipients, utilizing NGBoost for uncertainty quantification and process optimization.",
+    highlights: [
+      "Analyzed key pharmaceutical production parameters (spray conditions, air flow, bed heights)",
+      "Applied Box-Cox transformations and multiple scaling methods for skewed manufacturing data",
+      "Developed and compared Linear Regression, Random Forest, Gradient Boosting, SVR, Neural Networks, and PLS",
+      "Implemented NGBoost to provide calibrated confidence intervals alongside predictions",
+      "Created interactive Plotly dashboards for monitoring key process parameters",
+      "Conducted cross-product comparative analysis to identify shared patterns across multiple product lines",
+    ],
+    skills: [
+      "Python",
+      "NGBoost",
+      "Machine Learning",
+      "Uncertainty Quantification",
+      "Statistical Analysis",
+      "Fluid Bed Processing",
+      "Pharmaceutical Manufacturing",
     ],
     image: "/projects/parteck.webp",
     category: "corporate",
     content: (
-      <div>
-        <p className="mb-4">
+      <div className="text-[#333333]">
+        <p className="mb-6 leading-relaxed">
           As part of the Data Sciences team at Merck KGaA, I worked on
-          optimizing a life science production process, applying{" "}
-          <span className="font-semibold">machine learning</span> and{" "}
-          <span className="font-semibold">data analysis</span> techniques to
-          enhance manufacturing efficiency and product quality.
+          optimizing a life science production process (specifically fluid bed
+          processing of Parteck® excipients), applying machine learning and data
+          analysis techniques to enhance manufacturing efficiency and product
+          quality.
         </p>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
+        <h3 className="text-xl font-bold mb-4">
           Responsibilities and Achievements
         </h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           1. Comprehensive Process Parameter Analysis
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Analyzed key production parameters.
+            Analyzed key production parameters including spray conditions, air
+            flow, temperatures, bed heights, and equipment-specific settings.
           </li>
           <li>
             Developed understanding of parameter interactions and their
@@ -1629,10 +1744,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           2. Advanced Data Analysis and Preprocessing
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Utilized Python (Pandas, NumPy) for data manipulation and analysis
             of complex manufacturing data.
@@ -1643,25 +1758,32 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           3. Machine Learning Model Development
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Developed and compared multiple regression models (Linear
             Regression, Random Forest, Gradient Boosting, SVR, Neural Networks,
             PLS Regression) to predict and optimize process outcomes.
           </li>
           <li>
-            Implemented ensemble methods and NGBoost for improved accuracy and
-            uncertainty quantification.
+            Implemented ensemble methods and <strong>NGBoost</strong> for
+            improved accuracy and uncertainty quantification—providing
+            calibrated confidence intervals that enabled process engineers to
+            assess{" "}
+            <strong>
+              when to trust automated recommendations and when manual oversight
+              is warranted
+            </strong>
+            .
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           4. Model Evaluation and Process Optimization
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Evaluated models using various metrics to ensure accurate prediction
             of critical quality attributes.
@@ -1672,10 +1794,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           5. Data Visualization and Reporting
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Created interactive visualizations and dashboards using Plotly and
             Matplotlib for monitoring key process parameters and model
@@ -1683,10 +1805,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           6. Cross-Product Analysis
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Conducted comparative analysis between different products to
             identify common patterns and unique characteristics.
@@ -1699,7 +1821,6 @@ const projectsData: Project[] = [
       </div>
     ),
   },
-
   {
     id: "nmy-llm-assistant",
     title: "Voice-Interactive LLM Assistant",
@@ -1707,30 +1828,29 @@ const projectsData: Project[] = [
     timeframe: "June 2023 - September 2023",
     supervisor: "Peter Eschler",
     description:
-      "Collaborated with VR/AR developers to build a voice-interactive assistant using large language models for enterprise users in virtual reality environments.",
+      "Developed an LLM-powered enterprise VR/AR assistant prototype and provided strategic architectural analysis on hardware scalability bottlenecks.",
     highlights: [
-      "Proposed virtual scene for conversational information acquisition with an assistant",
-      "Utilized Llama2, LangChain, and Streamlit to create a chatbot with knowledge base embedding",
-      "Experimented with Vicuna 7b and Llama 2 7b models integrated with LangChain",
-      "Implemented text-to-speech functionality using Bark for voice interaction",
-      "Provided strategic suggestions for project architecture and AI component integration",
+      "Built a voice-interactive chatbot using LLaMA 2, LangChain, and ChromaDB for knowledge base embedding",
+      "Implemented text-to-speech functionality using Bark to enable voice interaction in VR",
+      "Developed and tested the pipeline locally on an NVIDIA 4070Ti GPU with 7B open-source models",
+      "Identified critical scalability constraints: available hardware was insufficient for multi-user inference with TTS overhead",
+      "Provided pragmatic architectural recommendations that led to a mutual agreement to conclude the engagement",
     ],
     skills: [
       "Open LLMs",
-      "Llama2",
+      "LLaMA 2",
       "LangChain",
-      "Knowledge Base Embedding",
-      "Chroma",
+      "ChromaDB",
       "Streamlit",
-      "Bark",
-      "Project Architecture",
+      "Bark TTS",
+      "VR/AR Architecture",
       "Strategic Planning",
     ],
     image: "/projects/llm.webp",
     category: "corporate",
     content: (
-      <div>
-        <p className="mb-4">
+      <div className="text-[#333333]">
+        <p className="mb-6 leading-relaxed">
           During my time at NMY Mixed Reality Studio, I collaborated with VR/AR
           developers to build a voice-interactive assistant using large language
           models (LLMs) for enterprise users. The assistant was designed to
@@ -1738,14 +1858,14 @@ const projectsData: Project[] = [
           company's business knowledge using Chroma.
         </p>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
+        <h3 className="text-xl font-bold mb-4">
           Responsibilities and Achievements
         </h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           1. Project Proposal and Development
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Proposed a virtual scene where users can interact with an assistant
             to acquire information conversationally.
@@ -1757,32 +1877,33 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           2. Technical Implementation
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Utilized Llama2, LangChain, and Streamlit to create a chatbot with a
-            fixed knowledge base.
+            Utilized <strong>LLaMA 2, LangChain, and Streamlit</strong> to
+            create a chatbot with a fixed knowledge base.
           </li>
           <li>
-            Experimented with Vicuna 7b and Llama 2 7b models, integrating them
+            Experimented with Vicuna 7b and LLaMA 2 7b models, integrating them
             with LangChain to achieve Knowledge Base Embedding.
           </li>
           <li>
-            Developed and tested the chatbot on a system with an NVIDIA 4070ti
-            GPU, which limited us to running 7b models.
+            Developed and tested the chatbot on a system with an{" "}
+            <strong>NVIDIA 4070ti GPU</strong>, which limited us to running 7b
+            models.
           </li>
           <li>
-            Implemented text-to-speech functionality using Bark to enable voice
-            interaction.
+            Implemented text-to-speech functionality using <strong>Bark</strong>{" "}
+            to enable voice interaction.
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           3. Project Architecture and Strategy
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
             Provided strategic suggestions for the project architecture,
             focusing on AI components and their potential integration into VR/AR
@@ -1800,10 +1921,8 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Challenges and Insights
-        </h3>
-        <p className="mb-4">
+        <h3 className="text-xl font-bold mb-4">Challenges and Insights</h3>
+        <p className="mb-4 leading-relaxed">
           I recognized that providing a local LLM-based assistant for enterprise
           users required more computational resources than we had available. An
           NVIDIA 4070ti and 7b models were insufficient, especially when
@@ -1811,47 +1930,57 @@ const projectsData: Project[] = [
           Bark. The VR/AR devices' computational limitations further compounded
           the issue.
         </p>
-        <p className="mb-4">
+        <p className="mb-4 leading-relaxed">
           Given the current computational constraints, it was challenging to
           serve even a single user effectively, let alone multiple users
           simultaneously, which is essential for a viable enterprise solution.
           This situation raised concerns about the scalability and profitability
-          of the solution.
+          of the solution,{" "}
+          <strong>
+            as it seemed to turn into a hardware-selling model benefiting GPU
+            manufacturers like NVIDIA rather than a sustainable software
+            service.
+          </strong>
+        </p>
+        <p className="mb-4 leading-relaxed">
+          <strong>Career Insight:</strong> Applying pragmatic technical
+          judgment, I identified these fundamental scalability constraints
+          early. This transparent architectural assessment led to a mutual
+          agreement to conclude the engagement, underscoring my focus on
+          delivering technically feasible and commercially sound AI solutions
+          rather than chasing unscalable hype.
         </p>
       </div>
     ),
   },
   {
     id: "startup-bsetech",
-    title: "Wellness Industry Mobile Apps",
+    title: "Co-founder & Product Lead: Wellness Industry Startup",
     organization: "Hangzhou BseTech Co.,Ltd.",
     timeframe: "October 2015 - January 2016",
     supervisor: "Bancheng Zhou",
     description:
-      "As co-founder and product manager, oversaw every step from company registration to launching initial apps for the wellness industry.",
+      "Led product strategy from 0 to 1, successfully negotiating a ¥2M angel investment and launching two consumer and B2B mobile apps on the App Store.",
     highlights: [
-      "Conducted market research and led commercial visits with industry managers to gain insights into the wellness industry",
-      "Designed mobile apps and managed development process, creating detailed prototypes and wireframes",
-      "Assisted technical supervisor in developing LBS location service plan and investigated third-party platforms",
-      "Tested prototypes by visiting stores before launch to gather feedback and make adjustments",
-      "Launched Treat app and Treat for Business Owner app on the App Store China in January 2016",
+      "Negotiated a ¥2M angel investment at 20% equity dilution with Shanghai-based VC (Youtang Capital)",
+      "Led product strategy from company registration to dual App Store launches",
+      "Independently designed information architecture, UX/UI flows, and prototypes",
+      "Coordinated cross-functional execution across technical, design, and marketing teams",
+      "Managed third-party SDK integrations (BeeCloud, Mob ShareSDK, JPush) and defined API formats",
     ],
     skills: [
-      "Mobile App",
-      "LBS",
-      "SDK Integration",
-      "Prototype",
-      "Interaction Design",
-      "UE Design",
-      "Market Research",
-      "Business Planning",
-      "Investor Outreach",
+      "Product Management",
+      "Investor Relations",
+      "UX/UI Design",
+      "App Store Launch",
+      "Business Strategy",
+      "Cross-functional Leadership",
     ],
     image: "/projects/treat.webp",
     category: "corporate",
     content: (
-      <div>
-        <p className="mb-4">
+      <div className="text-[#333333]">
+        <p className="mb-6 leading-relaxed">
           As the co-founder and product manager of a wellness industry startup,
           I oversaw every step of the process from company registration to
           launching the initial apps. My responsibilities included market
@@ -1859,14 +1988,12 @@ const projectsData: Project[] = [
           outreach.
         </p>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Detailed Implementation
-        </h3>
+        <h3 className="text-xl font-bold mb-4">Detailed Implementation</h3>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           1. Market Research and Planning
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Conducted market research and led the marketing team on commercial
             visits, meeting with industry managers to gain insight into the
@@ -1882,10 +2009,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           2. Product Design and Prototyping
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Designed the mobile apps and managed the development process,
             ensuring a seamless user experience.
@@ -1900,10 +2027,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           3. Technical Development
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Assisted the technical supervisor in developing an LBS location
             service plan.
@@ -1919,10 +2046,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           4. Product Testing and Feedback
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Worked closely with customers, business owners, and technicians to
             refine app features and functionalities.
@@ -1933,10 +2060,10 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           5. Promotion and Launch
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
             Collaborated with marketers to develop a promotion plan targeting
             business owners.
@@ -1953,13 +2080,17 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h4 className="text-lg font-medium mb-2 mt-4">
+        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
           6. Investor Outreach and Business Development
         </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
-            Met with investors and pitched the business plan, securing initial
-            funding for the project.
+            Met with investors and pitched the business plan, successfully{" "}
+            <strong>
+              negotiating and securing a ¥2,000,000 RMB angel investment at 20%
+              equity dilution with Shanghai-based VC (Youtang Capital)
+            </strong>
+            .
           </li>
           <li>
             Engaged with different managers in the wellness industry to explore
@@ -1971,13 +2102,32 @@ const projectsData: Project[] = [
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">Project Outcome</h3>
-        <p className="mb-4">
+        <h3 className="text-xl font-bold mb-2">Project Outcome</h3>
+        <p className="mb-6 leading-relaxed">
           The Treat app and Treat for Business Owner app were launched on the
           App Store China in January 2016. Despite initial success, the project
           was terminated later that year due to market challenges and strategic
           pivots.
         </p>
+
+        <div className="bg-[#fbf3e5]/60 p-5 rounded-lg border-l-4 border-[#C19A49]">
+          <h4 className="text-lg font-bold mb-2 text-[#534021]">
+            Key Insight & Career Pivot
+          </h4>
+          <p className="text-sm md:text-base leading-relaxed text-[#333333]">
+            This journey proved my ability to transform a technical concept into
+            a commercial entity and handle high-level investor negotiations.
+            However, successfully pushing the project to a multi-million
+            valuation during its funding window made me realize that{" "}
+            <strong>
+              the future moats of tech businesses will not lie in basic app
+              functionality, but in the depth of their core algorithms and AI
+              capabilities
+            </strong>
+            . This foundational insight directly drove my decision to exit and
+            pivot towards deep learning and advanced computer vision research.
+          </p>
+        </div>
       </div>
     ),
   },
@@ -2267,7 +2417,7 @@ export const projectTabs = [
       <div className="w-full bg-[#A67C3D]/90 backdrop-blur-sm p-8 rounded-xl">
         <ProjectGrid
           projects={projectsData.filter(
-            (project) => project.category === "corporate"
+            (project) => project.category === "corporate",
           )}
         />
       </div>
@@ -2280,7 +2430,7 @@ export const projectTabs = [
       <div className="w-full bg-[#A67C3D]/80 backdrop-blur-sm p-8 rounded-xl">
         <ProjectGrid
           projects={projectsData.filter(
-            (project) => project.category === "research"
+            (project) => project.category === "research",
           )}
         />
       </div>
@@ -2293,7 +2443,7 @@ export const projectTabs = [
       <div className="w-full bg-[#A67C3D]/90 backdrop-blur-sm p-8 rounded-xl">
         <ProjectGrid
           projects={projectsData.filter(
-            (project) => project.category === "social"
+            (project) => project.category === "social",
           )}
         />
       </div>
