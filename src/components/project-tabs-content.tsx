@@ -24,12 +24,12 @@ const projectsData: Project[] = [
     description:
       "Investigated how frozen, self-supervised visual representations can be integrated into continuous robotic manipulation policies under standard hardware constraints (single RTX 2080 Ti).",
     highlights: [
-      "Achieved 68.7 ± 4.2% success rate on ManiSkill3 PickCube-v1 without end-to-end visual fine-tuning",
-      "Adapted the SPOT encoder (frozen DINO ViT-B/16 + Slot Attention) to compress dense features into object-centric slots",
-      "Designed an Autoregressive Multimodal Sequence Policy (GPT-style causal Transformer) with action chunking",
-      "Resolved the 'Last Millimeter' placement bottleneck via explicit 2D spatial grounding (+24pp improvement)",
-      "Built an offline feature caching pipeline reducing per-epoch training time from 1-2 hours to ~1-2 minutes",
-      "Conducted a structured kinematic failure taxonomy across 200 episodes to isolate grasping from placement errors",
+      "Structure beats capacity: object-centric slots generalize +22.4pp over dense DINO features (55.0% vs 32.6% SR) under matched conditions, same policy",
+      "Reached 68.7 ± 4.2% SR on ManiSkill3 PickCube-v1, within 3pp of a privileged 3D-oracle bound, on a single RTX 2080 Ti with no encoder fine-tuning",
+      "Adapted the SPOT encoder (frozen DINO ViT-B/16 + Slot Attention) as a structural bottleneck compressing dense features into object-centric slots",
+      "Explicit 2D spatial grounding (from a known 3D target) cut Near-Miss placement failures from 31% to 2.5%, resolving the 'last-millimeter' bottleneck",
+      "Built an automated kinematic failure taxonomy separating spatial-precision (Near-Miss) from object-tracking (No-Grasp) failures; transfers across tasks",
+      "Offline feature caching pipeline reduced per-epoch training from ~1-2 hours to ~1-2 minutes",
     ],
     skills: [
       "PyTorch",
@@ -136,8 +136,9 @@ const projectsData: Project[] = [
 
         <h3 className="text-xl font-bold mb-3">Key Experiments and Results</h3>
         <p className="mb-3">
-          Evaluated on ManiSkill3 PickCube-v1, held-out seed protocol, 300
-          episodes per configuration:
+          Evaluated on ManiSkill3 PickCube-v1 under a held-out-seed protocol
+          (train seeds 0–9,999, eval seeds ≥10,000), best checkpoint over
+          3×300 episodes:
         </p>
 
         <div className="overflow-x-auto mb-6">
@@ -194,30 +195,38 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-6">
           <li>
-            <strong>Explicit 2D spatial grounding</strong> resolves the Near
-            Miss placement bottleneck (+24pp over pure visual).
+            <strong>Structure beats capacity:</strong> object-centric slot
+            grouping outperforms all DINO baselines under matched token budgets
+            (+22.4pp), while a 16×-larger dense patch grid gives no gain — the
+            driver is representational structure, not token count.
           </li>
           <li>
-            <strong>Native 224×224 rendering</strong> improves SR by 13.7pp over
-            upsampled 128×128.
+            <strong>Explicit 2D spatial grounding</strong> (derived from a known
+            3D target, not self-supervised) resolves the Near-Miss placement
+            bottleneck, cutting Near-Miss failures from 31% to 2.5%.
           </li>
           <li>
-            <strong>Object-centric slot grouping</strong> outperforms all DINO
-            baselines under matched token budgets.
+            <strong>Native 224×224 rendering</strong> removes an upsampling
+            artifact and adds a further +10pp, lifting the full system to 68.7%.
           </li>
           <li>
-            <strong>Simple token concatenation</strong> generalizes better than
-            cross-attention fusion (29pp generalization gap).
+            <strong>Capacity does not transfer:</strong> token concatenation and
+            bidirectional cross-attention reach the same held-out SR, but
+            cross-attention shows a ~29pp train-to-test gap — its extra
+            parameters overfit the training trajectories rather than learning
+            genuine cross-modal structure.
           </li>
           <li>
-            Heuristic loss weighting interventions (Time-Weighted, U-Shaped,
+            Heuristic loss-weighting schemes (Time-Weighted, U-Shaped,
             Dimension-Decoupled) all underperform the uniform MSE baseline.
           </li>
           <li>
-            <strong>Kinematic Failure Taxonomy:</strong> Structured analysis
-            across 200 episodes per configuration separates grasping failures
-            from Near Miss placement errors, proving that spatial grounding
-            resolves placement without affecting grasping.
+            <strong>Kinematic Failure Taxonomy:</strong> an automated,
+            encoder-agnostic analysis across 200 episodes per configuration
+            separates grasping failures from Near-Miss placement errors, turning
+            a binary success rate into evidence-driven diagnostics — and
+            transfers unchanged to StackCube-v1, where it isolates occlusion as
+            the dominant bottleneck.
           </li>
         </ul>
 
@@ -1276,7 +1285,7 @@ const projectsData: Project[] = [
       "Awarded the Surface Gernsheim Award 2024 (Efficiency Category) & Spot Award (MyImpact@Merck)",
       "Evolved from a 1-step baseline to a robust 2-step decoupled architecture enforcing chemical consistency",
       "Automated an exhaustive model search pipeline rigorously testing over 50,000 combinations",
-      "Eliminated data leakage by shifting from flawed time-series splits to randomized splits (6x performance boost)",
+      "Eliminated data leakage by correcting a flawed time-series split, the single largest driver of the accuracy gain",
       "Engineered a custom, business-oriented evaluation metric balancing statistical fit with industrial tolerances",
       "Developed a bilingual Streamlit web app with automated multi-source data ingestion and MLOps serialization",
     ],
@@ -1828,7 +1837,7 @@ const projectsData: Project[] = [
     timeframe: "June 2023 - September 2023",
     supervisor: "Peter Eschler",
     description:
-      "Developed an LLM-powered enterprise VR/AR assistant prototype and provided strategic architectural analysis on hardware scalability bottlenecks.",
+      "Built a knowledge-base voice assistant prototype (RAG) intended for enterprise VR/AR use, and delivered a pragmatic hardware-scalability assessment that concluded the engagement.",
     highlights: [
       "Built a voice-interactive chatbot using LLaMA 2, LangChain, and ChromaDB for knowledge base embedding",
       "Implemented text-to-speech functionality using Bark to enable voice interaction in VR",

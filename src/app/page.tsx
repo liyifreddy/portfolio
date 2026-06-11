@@ -1090,9 +1090,10 @@ export default function Home() {
                     </p>
                     <p className="text-gray-800 my-4">
                       Focusing on AI and deep learning with specialization in
-                      computer vision and MLsystems. Research on industrial
-                      applications of computer vision and explainable AI. GPA:
-                      2.2 (German scale).
+                      computer vision and ML systems. Research on object-centric
+                      visual representations and industrial applications of
+                      computer vision. Thesis grade 1.3 (sehr gut); GPA 2.03
+                      (German scale). General examination completed Apr 2026.
                     </p>
 
                     {/* Core courses as tags */}
@@ -1109,7 +1110,7 @@ export default function Home() {
                           "Statistical ML",
                           "Probabilistic Graphical Models",
                           "DL for Medical Imaging",
-                          "Continuous ML",
+                          "Continual ML",
                           "NLP and the Web",
                           "Foundations of Language Technology",
                           "Deep Learning for NLP",
