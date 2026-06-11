@@ -17,8 +17,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "🐼 Yi Li - Portfolio  - AI Developer & Data Scientist",
-  description: "Personal portfolio of Yi Li, AI Developer and Data Scientist based in Germany",
+  title: "🐼 Yi Li - Portfolio  - Deep Learning Engineer · Computer Vision & Robotics",
+  description: "Personal portfolio of Yi Li, Deep Learning Engineer in Computer Vision & Robotics, based in Germany",
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
