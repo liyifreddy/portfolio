@@ -20,17 +20,6 @@ import ParallaxSeparator from "@/components/parallax-separator";
 import { LinkPreview } from "@/components/ui/link-preview";
 import { FloatingNavbar } from "@/components/my-floating-navbar";
 import {
-  TechLogoGrid,
-  DataSciencePieChart,
-  AICapabilitiesChart,
-  ProjectComplexityImpactMatrix,
-  AIResearchFocus,
-  KnowledgeGraph,
-  CoreCompetencyRadar,
-  ProfessionalExperience,
-  LanguageDesignSkills,
-} from "@/components/skill-visualization";
-import {
   IconBuildingFactory2,
   IconStethoscope,
   IconShield,
@@ -51,10 +40,91 @@ const BentoGridItem = dynamic(
 );
 const ProjectTabsContent = dynamic(
   () => import("@/components/project-tabs-content"),
+);
+
+// 第 5 屏可视化组件：懒加载，避免进入首屏主包；固定高度骨架防 CLS
+const CoreCompetencyRadar = dynamic(
+  () => import("@/components/skill-visualization").then((m) => m.CoreCompetencyRadar),
   {
     ssr: false,
+    loading: () => (
+      <div className="h-[260px] animate-pulse rounded-lg bg-white/5" />
+    ),
   },
 );
+const ProjectComplexityImpactMatrix = dynamic(
+  () => import("@/components/skill-visualization").then((m) => m.ProjectComplexityImpactMatrix),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] animate-pulse rounded-lg bg-white/5" />
+    ),
+  },
+);
+const DataSciencePieChart = dynamic(
+  () => import("@/components/skill-visualization").then((m) => m.DataSciencePieChart),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] animate-pulse rounded-lg bg-white/5" />
+    ),
+  },
+);
+const TechLogoGrid = dynamic(
+  () => import("@/components/skill-visualization").then((m) => m.TechLogoGrid),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] animate-pulse rounded-lg bg-white/5" />
+    ),
+  },
+);
+const KnowledgeGraph = dynamic(
+  () => import("@/components/skill-visualization").then((m) => m.KnowledgeGraph),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] animate-pulse rounded-lg bg-white/5" />
+    ),
+  },
+);
+const AIResearchFocus = dynamic(
+  () => import("@/components/skill-visualization").then((m) => m.AIResearchFocus),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] animate-pulse rounded-lg bg-white/5" />
+    ),
+  },
+);
+const AICapabilitiesChart = dynamic(
+  () => import("@/components/skill-visualization").then((m) => m.AICapabilitiesChart),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] animate-pulse rounded-lg bg-white/5" />
+    ),
+  },
+);
+const ProfessionalExperience = dynamic(
+  () => import("@/components/skill-visualization").then((m) => m.ProfessionalExperience),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] animate-pulse rounded-lg bg-white/5" />
+    ),
+  },
+);
+const LanguageDesignSkills = dynamic(
+  () => import("@/components/skill-visualization").then((m) => m.LanguageDesignSkills),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[260px] animate-pulse rounded-lg bg-white/5" />
+    ),
+  },
+);
+
 
 // 1. 代码风格的 Hi! I am Yi Li 组件
 const CodeIntroVisual = () => {

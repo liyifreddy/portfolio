@@ -699,11 +699,12 @@ export const KnowledgeGraph = () => {
 
           return (
             <motion.div
+                        key={node.name}
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1}}
                         transition={{ duration: 0.5, delay: 0.3 }}
                         >
-            <React.Fragment key={node.name}>
+            <React.Fragment>
               {/* 连接线 */}
               <div
                 className="absolute left-1/2 top-1/2 w-[2px] bg-gradient-to-b from-[#B08642] to-[#D7B672]/30 z-10"
