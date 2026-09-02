@@ -7,7 +7,8 @@ import {
   IconUser, 
   IconDeviceDesktop, 
   IconSchool, 
-  IconTools 
+  IconTools,
+  IconFileText
 } from "@tabler/icons-react";
 
 export function FloatingNavbar() {
@@ -26,6 +27,11 @@ export function FloatingNavbar() {
       name: "Projects",
       link: "#project",
       icon: <IconDeviceDesktop className="h-4 w-4 text-gray-300 hover:text-[#D2A554]" />,
+    },
+    {
+      name: "Publications",
+      link: "#publications",
+      icon: <IconFileText className="h-4 w-4 text-gray-300 hover:text-[#D2A554]" />,
     },
     {
       name: "Experience",

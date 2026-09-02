@@ -5,7 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
-import { AiOutlineLinkedin, AiOutlineMail } from "react-icons/ai";
+import {
+  AiOutlineGithub,
+  AiOutlineLinkedin,
+  AiOutlineMail,
+} from "react-icons/ai";
+import { SiGooglescholar } from "react-icons/si";
 import { AutoTextEffect } from "@/components/ui/auto-text-effect";
 import { ShinyButton } from "@/components/magicui/shiny-button";
 // import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
@@ -29,7 +34,9 @@ import {
   IconBuildingFactory2,
   IconStethoscope,
   IconShield,
-  IconRobot, IconCode
+  IconRobot, IconCode,
+  IconSchool,
+  IconFileText
 } from "@tabler/icons-react";
 import LazyMotionComponent from "@/components/lazymotion";
 
@@ -272,11 +279,11 @@ export default function Home() {
           className="sticky top-0 left-0 right-0 z-50 p-1 md:p-4 pt-[2vh] border-b border-black bg-transparent"
         >
           <div className="container mx-auto flex justify-center items-center">
-            <ul className="flex flex-wrap space-x-3 md:space-x-16 justify-center">
+            <ul className="flex flex-wrap gap-x-3 gap-y-1 md:gap-x-16 justify-center">
               <li>
                 <Link
                   href="#about"
-                  className="text-base md:text-xl font-bold text-black hover:text-gray-600 transition-colors font-[helvetica]"
+                  className="text-sm sm:text-base md:text-xl font-bold text-black hover:text-gray-600 transition-colors font-[helvetica]"
                   onClick={(e) => {
                     e.preventDefault();
                     document.querySelector("#about")!.scrollIntoView({
@@ -290,7 +297,7 @@ export default function Home() {
               <li>
                 <Link
                   href="#project"
-                  className="text-base md:text-xl font-bold text-black hover:text-gray-6000 transition-colors font-[helvetica]"
+                  className="text-sm sm:text-base md:text-xl font-bold text-black hover:text-gray-600 transition-colors font-[helvetica]"
                   onClick={(e) => {
                     e.preventDefault();
                     document.querySelector("#project")!.scrollIntoView({
@@ -303,8 +310,22 @@ export default function Home() {
               </li>
               <li>
                 <Link
+                  href="#publications"
+                  className="text-sm sm:text-base md:text-xl font-bold text-black hover:text-gray-600 transition-colors font-[helvetica]"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.querySelector("#publications")!.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }}
+                >
+                  Publications
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="#experience"
-                  className="text-base md:text-xl font-bold text-black hover:text-gray-6000 transition-colors font-[helvetica]"
+                  className="text-sm sm:text-base md:text-xl font-bold text-black hover:text-gray-600 transition-colors font-[helvetica]"
                   onClick={(e) => {
                     e.preventDefault();
                     document.querySelector("#experience")!.scrollIntoView({
@@ -318,7 +339,7 @@ export default function Home() {
               <li>
                 <Link
                   href="#skill"
-                  className="text-base md:text-xl font-bold text-black hover:text-gray-600 transition-colors font-[helvetica]"
+                  className="text-sm sm:text-base md:text-xl font-bold text-black hover:text-gray-600 transition-colors font-[helvetica]"
                   onClick={(e) => {
                     e.preventDefault();
                     document.querySelector("#skill")!.scrollIntoView({
@@ -402,7 +423,7 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: 0.4 }}
                 >
                   <SparklesText
-                    text="&lt;Vision & Robotics&gt;"
+                    text="&lt;Embodied AI&gt;"
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-thin text-black whitespace-nowrap"
                     sparklesCount={6}
                     colors={{ first: "#FFC353", second: "#E43C30" }}
@@ -415,12 +436,25 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: 0.6 }}
                 >
                   <SparklesText
-                    text="&lt;Full-Stack AI&gt;"
+                    text="&lt;Object-Centric AI&gt;"
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-thin text-black whitespace-nowrap"
                     sparklesCount={8}
                     colors={{ first: "#FFC353", second: "#E43C30" }}
                   />
                 </motion.div>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.8 }}
+                  className="max-w-md pt-2 text-sm md:text-base leading-relaxed text-black/70"
+                >
+                  I work on structured visual representations for robots &mdash;
+                  why grouping the world into objects buys generalization that
+                  raw capacity does not. M.Sc. TU Darmstadt (IAS Lab &times;
+                  LIRIS). First-author paper at the RSS 2026 workshop{" "}
+                  <em>From Perception to Action</em>.
+                </motion.p>
               </div>
             </motion.div>
 
@@ -475,21 +509,49 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.9 }}
-          className="absolute bottom-8 left-16 flex space-x-4 z-40"
+          className="absolute bottom-8 left-4 right-4 md:left-16 md:right-auto flex flex-wrap gap-2 md:gap-4 z-40"
         >
           {/* Email button */}
-          <Link href="mailto:your.email@example.com" target="_blank">
-            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-4 py-2">
+          <Link href="mailto:liyi.freddy@gmail.com">
+            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
               <AiOutlineMail className="h-5 w-5 mr-2" />
               <span>Email</span>
             </ShinyButton>
           </Link>
 
           {/* LinkedIn button */}
-          <Link href="https://www.linkedin.com/in/yi-li-dev/" target="_blank">
-            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-4 py-2">
+          <Link
+            href="https://www.linkedin.com/in/yi-li-dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
               <AiOutlineLinkedin className="h-5 w-5 mr-2" />
               <span>LinkedIn</span>
+            </ShinyButton>
+          </Link>
+
+          {/* Google Scholar button */}
+          <Link
+            href="https://scholar.google.com/citations?user=Ffr3i_YAAAAJ"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
+              <SiGooglescholar className="h-5 w-5 mr-2" />
+              <span>Scholar</span>
+            </ShinyButton>
+          </Link>
+
+          {/* GitHub button */}
+          <Link
+            href="https://github.com/liyifreddy"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
+              <AiOutlineGithub className="h-5 w-5 mr-2" />
+              <span>GitHub</span>
             </ShinyButton>
           </Link>
         </motion.div>
@@ -567,7 +629,7 @@ export default function Home() {
           </div>
         </div>
         <p className="text-base leading-relaxed text-gray-800">
-          Transforming noisy industrial data into production-ready AI. I optimized manufacturing processes at Merck, boosting first-time-right yield and earning the company's 2024 Efficiency Award.
+          Turning noisy industrial data into production-ready AI. At Merck I raised first-time-right rates in semiconductor photoresist blending, and rebuilt a pigment-line analytics pipeline that won the 2024 Surface Gernsheim Efficiency Award.
         </p>
       </div>
 
@@ -619,7 +681,6 @@ export default function Home() {
           <h4 className="text-sm font-bold flex items-center">
             <span className="inline-block w-2 h-2 bg-[#C19A49] rounded-full mr-2"></span>Deep Learning
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#C19A49] h-1.5 rounded-full w-[95%]"></div></div>
           <p className="text-xs text-gray-400">PyTorch, Imitation Learning</p>
         </div>
 
@@ -627,7 +688,6 @@ export default function Home() {
           <h4 className="text-sm font-bold flex items-center">
             <span className="inline-block w-2 h-2 bg-[#B08642] rounded-full mr-2"></span>CV & Robotics
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#B08642] h-1.5 rounded-full w-[90%]"></div></div>
           <p className="text-xs text-gray-400">Embodied AI, DINO, 6D Pose</p>
         </div>
 
@@ -635,7 +695,6 @@ export default function Home() {
           <h4 className="text-sm font-bold flex items-center">
             <span className="inline-block w-2 h-2 bg-[#D2A554] rounded-full mr-2"></span>Generative AI
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#D2A554] h-1.5 rounded-full w-[88%]"></div></div>
           <p className="text-xs text-gray-400">Diffusion Models, VAE, ComfyUI</p>
         </div>
       </div>
@@ -648,7 +707,6 @@ export default function Home() {
           <h4 className="text-sm font-bold flex items-center">
             <span className="inline-block w-2 h-2 bg-[#C8954D] rounded-full mr-2"></span>Frontend
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#C8954D] h-1.5 rounded-full w-[80%]"></div></div>
           <p className="text-xs text-gray-400">Vue.js, Next.js, Tailwind CSS</p>
         </div>
 
@@ -656,7 +714,6 @@ export default function Home() {
           <h4 className="text-sm font-bold flex items-center">
             <span className="inline-block w-2 h-2 bg-[#B7873D] rounded-full mr-2"></span>Backend
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#B7873D] h-1.5 rounded-full w-[85%]"></div></div>
           <p className="text-xs text-gray-400">FastAPI, Python, RESTful APIs</p>
         </div>
 
@@ -664,7 +721,6 @@ export default function Home() {
           <h4 className="text-sm font-bold flex items-center">
             <span className="inline-block w-2 h-2 bg-[#D7B672] rounded-full mr-2"></span>HPC & DevOps
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#D7B672] h-1.5 rounded-full w-[85%]"></div></div>
           <p className="text-xs text-gray-400">SLURM, Docker, AWS, Linux</p>
         </div>
       </div>
@@ -677,7 +733,6 @@ export default function Home() {
           <h4 className="text-sm font-bold flex items-center">
             <span className="inline-block w-2 h-2 bg-[#A67C3D] rounded-full mr-2"></span>Processing & ML
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#A67C3D] h-1.5 rounded-full w-[92%]"></div></div>
           <p className="text-xs text-gray-400">Pandas, XGBoost, Scikit-learn</p>
         </div>
 
@@ -685,7 +740,6 @@ export default function Home() {
           <h4 className="text-sm font-bold flex items-center">
             <span className="inline-block w-2 h-2 bg-[#BF9146] rounded-full mr-2"></span>Interactive Viz
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#BF9146] h-1.5 rounded-full w-[85%]"></div></div>
           <p className="text-xs text-gray-400">Streamlit, Plotly, BertViz</p>
         </div>
       </div>
@@ -698,16 +752,14 @@ export default function Home() {
           <h4 className="text-sm font-bold flex items-center">
             <span className="inline-block w-2 h-2 bg-[#BF9146] rounded-full mr-2"></span>NLP & XAI
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#BF9146] h-1.5 rounded-full w-[82%]"></div></div>
           <p className="text-xs text-gray-400">LangChain, Hugging Face, XAI</p>
         </div>
 
         <div className="space-y-1">
           <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#C19A49] rounded-full mr-2"></span>Cross-Domain
+            <span className="inline-block w-2 h-2 bg-[#C19A49] rounded-full mr-2"></span>Research Practice
           </h4>
-          <div className="w-full bg-gray-700 rounded-full h-1.5"><div className="bg-[#C19A49] h-1.5 rounded-full w-[80%]"></div></div>
-          <p className="text-xs text-gray-400">Technical PM, UX/UI, Collaboration</p>
+          <p className="text-xs text-gray-400">Ablation design, failure taxonomies, reproducibility</p>
         </div>
       </div>
 
@@ -760,11 +812,11 @@ export default function Home() {
         {/* Tier 1: Industrial AI */}
         <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="flex items-center p-2.5 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto">
           <div className="mr-3 p-1.5 bg-[#fbf3e5] rounded-full shrink-0">
-            <IconBuildingFactory2 className="h-4 w-4 text-[#B08642]" />
+            <IconSchool className="h-4 w-4 text-[#B08642]" />
           </div>
           <div className="min-w-0">
-            <h4 className="text-base font-semibold text-[#B08642] truncate">Industrial AI</h4>
-            <p className="text-xs text-gray-600 line-clamp-2">Semiconductor, chemical optimization, predictive ML</p>
+            <h4 className="text-base font-semibold text-[#B08642] truncate">PhD Positions</h4>
+            <p className="text-xs text-gray-600 line-clamp-2">Embodied AI, object-centric representations, visuomotor policies</p>
           </div>
         </motion.div>
 
@@ -774,8 +826,8 @@ export default function Home() {
             <IconRobot className="h-4 w-4 text-[#B08642]" />
           </div>
           <div className="min-w-0">
-            <h4 className="text-base font-semibold text-[#B08642] truncate">Robotics & Vision</h4>
-            <p className="text-xs text-gray-600 line-clamp-2">Embodied AI, representation learning, 6D pose estimation</p>
+            <h4 className="text-base font-semibold text-[#B08642] truncate">Industrial Research</h4>
+            <p className="text-xs text-gray-600 line-clamp-2">Robot perception and manipulation, representation learning, robustness under shift</p>
           </div>
         </motion.div>
 
@@ -785,8 +837,8 @@ export default function Home() {
             <IconCode className="h-4 w-4 text-[#B08642]" />
           </div>
           <div className="min-w-0">
-            <h4 className="text-base font-semibold text-[#B08642] truncate">Applied AI Systems</h4>
-            <p className="text-xs text-gray-600 line-clamp-2">Full-stack MLOps, LLM integration, explainable AI</p>
+            <h4 className="text-base font-semibold text-[#B08642] truncate">Research to Systems</h4>
+            <p className="text-xs text-gray-600 line-clamp-2">Getting research to run on real hardware: training pipelines, HPC, full-stack delivery</p>
           </div>
         </motion.div>
       </div>
@@ -857,6 +909,189 @@ export default function Home() {
           </div>
         </div>
       </LazyMotionComponent>
+
+      {/* Publications 屏 */}
+      <div
+        id="publications"
+        className="bg-[#0F0F18] text-white py-24 relative z-10 overflow-hidden"
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="relative w-full h-full">
+            <FlickeringGrid
+              className="h-full w-full"
+              squareSize={3}
+              gridGap={6}
+              color="#D2A554"
+              maxOpacity={0.2}
+              flickerChance={0.2}
+            />
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#D2A554] to-[#C8954D] leading-tight py-2">
+              Publications
+            </h2>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              Peer-reviewed work and the thesis behind it
+            </p>
+          </motion.div>
+
+          <ul className="max-w-4xl mx-auto space-y-6">
+            {/* 1 — RSS 2026 Workshop */}
+            <motion.li
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.05 }}
+              className="rounded-xl border border-white/10 bg-white/[0.03] p-6"
+            >
+              <div className="mb-3 flex flex-wrap gap-2">
+                <span className="rounded-full border border-[#D2A554]/40 bg-[#D2A554]/10 px-3 py-1 text-xs font-semibold text-[#D2A554]">
+                  First author
+                </span>
+                <span className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+                  Accepted
+                </span>
+              </div>
+              <h3 className="text-lg md:text-xl font-bold leading-snug text-white">
+                More Structure, Not More Capacity: Object-Centric
+                Representations for Visuomotor Imitation Learning
+              </h3>
+              <p className="mt-2 text-sm text-gray-300">
+                Yi Li, Alexandre Chapin, Liming Chen, Jan Peters, Alap
+                Kshirsagar
+              </p>
+              <p className="mt-1 text-sm text-gray-400">
+                RSS 2026 Workshop <em>From Perception to Action</em> &middot;
+                poster &middot; non-archival
+              </p>
+              <p className="mt-2 text-sm text-gray-400">
+                arXiv:{" "}
+                <a
+                  href="https://arxiv.org/abs/2607.09825"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#D2A554] underline underline-offset-4 hover:text-[#E5BE73] transition-colors"
+                >
+                  2607.09825
+                </a>
+              </p>
+            </motion.li>
+
+            {/* 2 — ACM CHI 2022 */}
+            <motion.li
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="rounded-xl border border-white/10 bg-white/[0.03] p-6"
+            >
+              <div className="mb-3 flex flex-wrap gap-2">
+                <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-semibold text-gray-300">
+                  Co-author
+                </span>
+              </div>
+              <h3 className="text-lg md:text-xl font-bold leading-snug text-white">
+                E-ScootAR: Exploring Unimodal Warnings for E-Scooter Riders in
+                Augmented Reality
+              </h3>
+              <p className="mt-2 text-sm text-gray-400">
+                ACM CHI 2022 Extended Abstracts &middot; DOI{" "}
+                <a
+                  href="https://doi.org/10.1145/3491101.3519831"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#D2A554] underline underline-offset-4 hover:text-[#E5BE73] transition-colors"
+                >
+                  10.1145/3491101.3519831
+                </a>
+              </p>
+            </motion.li>
+
+            {/* 3 — Ecotoxicology and Environmental Safety, 2020 */}
+            <motion.li
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="rounded-xl border border-white/10 bg-white/[0.03] p-6"
+            >
+              <div className="mb-3 flex flex-wrap gap-2">
+                <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-semibold text-gray-300">
+                  Co-author
+                </span>
+              </div>
+              <h3 className="text-lg md:text-xl font-bold leading-snug text-white">
+                TBBPA promotes migration and invasion in hepatocellular
+                carcinoma
+              </h3>
+              <p className="mt-2 text-sm text-gray-300">
+                Contributed molecular docking (AutoDock / PyMOL) and statistical
+                analysis
+              </p>
+              <p className="mt-1 text-sm text-gray-400">
+                Ecotoxicology and Environmental Safety, 2020 &middot; DOI{" "}
+                <a
+                  href="https://doi.org/10.1016/j.ecoenv.2020.110255"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#D2A554] underline underline-offset-4 hover:text-[#E5BE73] transition-colors"
+                >
+                  10.1016/j.ecoenv.2020.110255
+                </a>
+              </p>
+            </motion.li>
+
+            {/* 4 — M.Sc. Thesis */}
+            <motion.li
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="rounded-xl border border-white/10 bg-white/[0.03] p-6"
+            >
+              <h3 className="text-lg md:text-xl font-bold leading-snug text-white">
+                Self-Supervised Learning of a Visual Object-Centric
+                Representation for Robotic Manipulation
+              </h3>
+              <p className="mt-2 text-sm text-gray-400">
+                M.Sc. thesis, TU Darmstadt, 2026 &middot; Reviewers: Prof. Jan
+                Peters, Prof. Liming Chen &middot; Supervisors: Alap Kshirsagar,
+                Alexandre Chapin
+              </p>
+              <p className="mt-1 text-sm text-gray-300">Grade 1.3 (sehr gut)</p>
+            </motion.li>
+          </ul>
+
+          <div className="max-w-4xl mx-auto mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <a
+              href="https://scholar.google.com/citations?user=Ffr3i_YAAAAJ"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-gray-300 hover:text-[#D2A554] transition-colors"
+            >
+              <SiGooglescholar className="mr-2 text-[#D2A554]" />
+              Google Scholar
+            </a>
+            <p className="text-gray-400">
+              Tailored CV on request &mdash;{" "}
+              <a
+                href="mailto:liyi.freddy@gmail.com"
+                className="text-[#D2A554] underline underline-offset-4 hover:text-[#E5BE73] transition-colors"
+              >
+                liyi.freddy@gmail.com
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* 分隔图片 */}
       <ParallaxSeparator />
@@ -994,10 +1229,12 @@ export default function Home() {
                       Jun 2023 - Sep 2023
                     </p>
                     <p className="text-gray-800 my-4">
-                      Built an LLM-powered voice-interactive assistant for
-                      enterprise VR/AR using LLaMA 2, LangChain, and ChromaDB.
-                      Implemented text-to-speech with Bark and provided
-                      strategic AI-VR integration roadmaps.
+                      Built a retrieval-augmented voice assistant prototype
+                      (LLaMA 2 + LangChain + ChromaDB, Bark TTS) over an
+                      internal knowledge base. A hardware feasibility
+                      assessment showed local multi-user inference exceeded the
+                      available compute; I handed that scalability finding to
+                      the team.
                     </p>
                     <div className="flex justify-end mt-4">
                       <Image
@@ -1089,11 +1326,11 @@ export default function Home() {
                       Apr 2019 - Apr 2026
                     </p>
                     <p className="text-gray-800 my-4">
-                      Focusing on AI and deep learning with specialization in
-                      computer vision and ML systems. Research on object-centric
-                      visual representations and industrial applications of
-                      computer vision. Thesis grade 1.3 (sehr gut); GPA 2.03
-                      (German scale). General examination completed Apr 2026.
+                      Focus on AI and deep learning, specializing in computer
+                      vision and ML systems. Minor in Entrepreneurship &
+                      Innovation. Master's thesis on object-centric visual
+                      representations for robotic manipulation, graded 1.3
+                      (sehr gut), defended April 2026.
                     </p>
 
                     {/* Core courses as tags */}
@@ -1213,10 +1450,10 @@ export default function Home() {
                       Sep 2012 - Jul 2016
                     </p>
                     <p className="text-gray-800 my-4">
-                      Focused on computer science fundamentals with early
-                      exploration of machine learning. Ranked 1st in the
-                      department in freshman year. Received RMB 8000 scholarship
-                      for academic excellence. GPA 2.3 (German scale)
+                      Sino-Canadian joint program. Computer science
+                      fundamentals with early exploration of machine learning.
+                      Ranked 1st in the department in freshman year; awarded an
+                      RMB 8,000 scholarship for academic excellence.
                     </p>
 
                     {/* Campus activities */}
@@ -1409,6 +1646,20 @@ export default function Home() {
                 </li>
                 <li>
                   <Link
+                    href="#publications"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector("#publications")!.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }}
+                  >
+                    Publications
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     href="#experience"
                     className="text-gray-300 hover:text-[#D2A554] transition-colors"
                     onClick={(e) => {
@@ -1445,7 +1696,7 @@ export default function Home() {
                 <li className="flex items-center">
                   <AiOutlineMail className="mr-2 text-[#D2A554]" />
                   <a
-                    href="mailto:your.email@example.com"
+                    href="mailto:liyi.freddy@gmail.com"
                     className="text-gray-300 hover:text-[#D2A554] transition-colors"
                   >
                     liyi.freddy@gmail.com
@@ -1459,10 +1710,35 @@ export default function Home() {
                     rel="noopener noreferrer"
                     className="text-gray-300 hover:text-[#D2A554] transition-colors"
                   >
-                    LinkedIn Profile
+                    linkedin.com/in/yi-li-dev
                   </a>
                 </li>
-                {/* 你可以在这里添加其他社交媒体链接 */}
+                <li className="flex items-center">
+                  <SiGooglescholar className="mr-2 text-[#D2A554]" />
+                  <a
+                    href="https://scholar.google.com/citations?user=Ffr3i_YAAAAJ"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                  >
+                    Google Scholar
+                  </a>
+                </li>
+                <li className="flex items-center">
+                  <AiOutlineGithub className="mr-2 text-[#D2A554]" />
+                  <a
+                    href="https://github.com/liyifreddy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                  >
+                    github.com/liyifreddy
+                  </a>
+                </li>
+                <li className="flex items-center">
+                  <IconFileText className="mr-2 h-4 w-4 text-[#D2A554]" />
+                  <span className="text-gray-300">CV on request</span>
+                </li>
               </ul>
             </div>
 
@@ -1510,7 +1786,7 @@ export default function Home() {
               className="text-sm text-gray-500"
             >
               <span>
-                Deep Learning Engineer· Vision & Robotics · Full-Stack AI
+                Embodied AI · Object-Centric Representations · Robot Learning
               </span>
             </motion.div>
           </div>
