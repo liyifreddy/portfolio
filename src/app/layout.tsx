@@ -57,10 +57,8 @@ const personJsonLd = {
       name: "Chongqing University of Post and Telecommunications",
     },
   ],
-  sameAs: [
-    "https://www.linkedin.com/in/yi-li-dev/",
-    "https://github.com/liyifreddy",
-  ],
+  // TODO: GitHub profile 目前是空的，等有内容了再加回 "https://github.com/liyifreddy"
+  sameAs: ["https://www.linkedin.com/in/yi-li-dev/"],
 };
 
 export default function RootLayout({
