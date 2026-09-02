@@ -43,3 +43,6 @@ yarn-error.log*
 
 # og image 需要提交（上面的 png 规则会误伤）
 !/public/og.png
+
+# 内部执行文档 / 草稿 —— 仓库是公开的，这些不入库
+docs/
