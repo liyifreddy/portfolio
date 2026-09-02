@@ -19,6 +19,7 @@
 # misc
 .DS_Store
 *.pem
+*.report.html
 
 # debug
 npm-debug.log*
@@ -33,10 +34,12 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
 # png file
 /public/**/*.png
 /public/*.png
 /public/**/*.jpg
 /public/*.jpg
+
+# og image 需要提交（上面的 png 规则会误伤）
+!/public/og.png

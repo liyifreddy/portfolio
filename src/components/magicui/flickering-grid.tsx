@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 import React, {
   useCallback,
@@ -35,6 +36,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  const prefersReducedMotion = useReducedMotion();
 
   const memoizedColor = useMemo(() => {
     const toRGBA = (color: string) => {
@@ -123,7 +125,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     if (!ctx) return;
 
     let animationFrameId: number;
-    let gridParams: ReturnType<typeof setupCanvas>;
+    let gridParams!: ReturnType<typeof setupCanvas>;
 
     const updateCanvasSize = () => {
       const newWidth = width || container.clientWidth;
@@ -169,7 +171,18 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
     intersectionObserver.observe(canvas);
 
-    if (isInView) {
+    if (prefersReducedMotion) {
+      // 静态一帧，不起 rAF 循环
+      drawGrid(
+        ctx,
+        canvas.width,
+        canvas.height,
+        gridParams.cols,
+        gridParams.rows,
+        gridParams.squares,
+        gridParams.dpr,
+      );
+    } else if (isInView) {
       animationFrameId = requestAnimationFrame(animate);
     }
 
@@ -178,7 +191,15 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
     };
-  }, [setupCanvas, updateSquares, drawGrid, width, height, isInView]);
+  }, [
+    setupCanvas,
+    updateSquares,
+    drawGrid,
+    width,
+    height,
+    isInView,
+    prefersReducedMotion,
+  ]);
 
   return (
     <div

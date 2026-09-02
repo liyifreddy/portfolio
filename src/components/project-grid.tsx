@@ -2,7 +2,7 @@
 
 import React from "react";
 import ProjectCard, { Project } from "@/components/project-card";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 interface ProjectGridProps {
   projects: Project[];
