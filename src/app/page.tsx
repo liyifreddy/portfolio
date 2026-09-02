@@ -1070,7 +1070,8 @@ export default function Home() {
                 </span>
               </div>
               <h3 className="text-lg md:text-xl font-bold leading-snug text-white">
-                TBBPA promotes migration and invasion in hepatocellular
+                TBBPA regulates calcium-mediated lysosomal exocytosis and
+                thereby promotes invasion and migration in hepatocellular
                 carcinoma
               </h3>
               <p className="mt-2 text-sm text-gray-300">
@@ -1202,7 +1203,7 @@ export default function Home() {
                     <div className="absolute top-0 right-0 h-1 w-full bg-gradient-to-r from-[#D7B672] to-[#B08642] rounded-t-lg"></div>
 
                     <h4 className="text-lg font-bold text-[#B08642]">
-                      Working Student on Data Science
+                      Working Student, Data Sciences
                     </h4>
                     <p className="text-gray-700 font-medium">
                       Merck KGaA, Darmstadt, Germany
@@ -1221,7 +1222,7 @@ export default function Home() {
 
     <div>
       <p className="font-bold text-[#8B4513]">🏆 Surface Gernsheim Award 2024 (Efficiency)</p>
-      <p className="font-bold text-[#8B4513]">🏆 Spot Award (MyImpact@Merck)</p>
+      <p className="font-bold text-[#8B4513]">🏆 Spot Award 2025 (MyImpact@Merck)</p>
     </div>
     <p className="text-gray-700 leading-relaxed">
       <span className="font-semibold text-black">Core Projects:</span> Photoresist formulation prediction (ML pipeline + Streamlit) · Pigment production optimization (FRED 2.0) · Pharmaceutical parameter regression · Full-stack lab reservation system (Vue.js + FastAPI + AWS).
@@ -1258,7 +1259,7 @@ export default function Home() {
                     <div className="absolute top-0 right-0 h-1 w-full bg-gradient-to-r from-[#D7B672] to-[#B08642] rounded-t-lg"></div>
 
                     <h4 className="text-lg font-bold text-[#B08642]">
-                      Working Student on LLMs
+                      Working Student, AI/VR
                     </h4>
                     <p className="text-gray-700 font-medium">
                       NMY Mixed Reality Studio
@@ -1355,7 +1356,7 @@ export default function Home() {
                     <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-l from-[#D7B672] to-[#B08642] rounded-t-lg"></div>
 
                     <h4 className="text-lg font-bold text-[#B08642]">
-                      Master of Science - MS, Computer Science
+                      M.Sc. Computer Science
                     </h4>
                     <p className="text-gray-700 font-medium">
                       Technische Universität Darmstadt
@@ -1479,7 +1480,7 @@ export default function Home() {
                     <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-l from-[#D7B672] to-[#B08642] rounded-t-lg"></div>
 
                     <h4 className="text-lg font-bold text-[#B08642]">
-                      Bachelor of Science - BS, Computer Science
+                      B.Sc. Computer Science
                     </h4>
                     <p className="text-gray-700 font-medium">
                       Chongqing University of Post and Telecommunications
