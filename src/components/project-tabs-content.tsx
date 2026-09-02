@@ -16,18 +16,19 @@ type Tab = {
 const projectsData: Project[] = [
   {
     id: "visual-object-centric",
-    title: "Visual Object-Centric Learning for Robot Manipulation",
+    title:
+      "Self-Supervised Learning of a Visual Object-Centric Representation for Robotic Manipulation",
     organization: "TU Darmstadt (IAS Lab) × École Centrale de Lyon (LIRIS)",
     timeframe: "October 2024 - April 2026",
     supervisor:
       "Prof. Jan Peters, Prof. Liming Chen, Alexandre Chapin, Alap Kshirsagar",
     description:
-      "Investigated how frozen, self-supervised visual representations can be integrated into continuous robotic manipulation policies under standard hardware constraints (single RTX 2080 Ti).",
+      "M.Sc. thesis, TU Darmstadt — submitted 23 March 2026, defended 17 April 2026, graded 1.3 (sehr gut). Investigated how frozen, self-supervised visual representations can be integrated into continuous robotic manipulation policies under standard hardware constraints (single RTX 2080 Ti).",
     highlights: [
-      "Structure beats capacity: object-centric slots generalize +22.4pp over dense DINO features (55.0% vs 32.6% SR) under matched conditions, same policy",
+      "Structure beats capacity: object-centric slots generalize +22.4pp over the strongest DINO baseline (55.0% vs 32.6% for global [CLS]) under matched conditions, same policy, no fine-tuning",
       "Reached 68.7 ± 4.2% SR on ManiSkill3 PickCube-v1, within 3pp of a privileged 3D-oracle bound, on a single RTX 2080 Ti with no encoder fine-tuning",
       "Adapted the SPOT encoder (frozen DINO ViT-B/16 + Slot Attention) as a structural bottleneck compressing dense features into object-centric slots",
-      "Explicit 2D spatial grounding (from a known 3D target) cut Near-Miss placement failures from 31% to 2.5%, resolving the 'last-millimeter' bottleneck",
+      "Failure taxonomy identified Near-Miss placement — not grasping — as the dominant failure mode under the pure-visual condition; a deployable 2D spatial anchor plus native-resolution rendering lifted success from 31.0% to 68.7%",
       "Built an automated kinematic failure taxonomy separating spatial-precision (Near-Miss) from object-tracking (No-Grasp) failures; transfers across tasks",
       "Offline feature caching pipeline reduced per-epoch training from ~1-2 hours to ~1-2 minutes",
     ],
@@ -183,12 +184,27 @@ const projectsData: Project[] = [
                 <td className="py-2 px-4 text-right">32.6 ± 1.5%</td>
               </tr>
               <tr className="border-b border-gray-200">
-                <td className="py-2 px-4">DINO 14×14 Dense (T=1, H=1)</td>
-                <td className="py-2 px-4 text-right">1.0%</td>
+                <td className="py-2 px-4">DINO 4×4 patches (32 tokens)</td>
+                <td className="py-2 px-4 text-right">31.7 ± 3.0%</td>
+              </tr>
+              <tr className="border-b border-gray-200">
+                <td className="py-2 px-4 text-gray-500">
+                  DINO 14×14 dense — memory-forced to T=1, H=1
+                </td>
+                <td className="py-2 px-4 text-right text-gray-500">1.0%</td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        <p className="mb-6 text-sm leading-relaxed text-gray-600">
+          Two caveats I report rather than exploit. The 14×14 dense row is not
+          evidence about token count: an 11 GB memory budget forced T=1 and
+          H=1, stripping the temporal context every other row keeps. The honest
+          token-count argument is the 4×4 grid — 16× the tokens of global
+          [CLS], statistically indistinguishable success rate. Token budget is
+          not what drives the gap; representational structure is.
+        </p>
 
         <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
           Key Findings
@@ -201,9 +217,15 @@ const projectsData: Project[] = [
             driver is representational structure, not token count.
           </li>
           <li>
-            <strong>Explicit 2D spatial grounding</strong> (derived from a known
-            3D target, not self-supervised) resolves the Near-Miss placement
-            bottleneck, cutting Near-Miss failures from 31% to 2.5%.
+            <strong>Explicit 2D spatial grounding</strong> (projected from a
+            known 3D target, and therefore privileged rather than
+            self-supervised) targets the Near-Miss placement bottleneck.
+            Near-Miss failures fall from 31.0% under the pure-visual condition
+            to 21.0% with the deployable 2D anchor, and reach 2.5% only under a
+            privileged 3D goal. No-Grasp failures stay in the same range across
+            all three conditions (15 / 15 / 24 per 200 episodes) — spatial
+            grounding fixes placement, not object tracking. The two bottlenecks
+            need different fixes.
           </li>
           <li>
             <strong>Native 224×224 rendering</strong> removes an upsampling
@@ -217,8 +239,12 @@ const projectsData: Project[] = [
             genuine cross-modal structure.
           </li>
           <li>
-            Heuristic loss-weighting schemes (Time-Weighted, U-Shaped,
-            Dimension-Decoupled) all underperform the uniform MSE baseline.
+            <strong>Generic transforms ignore physical semantics:</strong> one
+            global Z-score across the full 9-DoF action vector collapses
+            success to 0% — finger joints (σ ≈ 0.011) and arm joints (σ ≈ 0.21)
+            differ by roughly 100× in scale, so the normalization amplifies
+            gripper noise into the gradient. Restricting normalization to the 7
+            arm joints restores 31%.
           </li>
           <li>
             <strong>Kinematic Failure Taxonomy:</strong> an automated,
@@ -1277,7 +1303,7 @@ const projectsData: Project[] = [
     title: "Photoresist Production Optimization",
     organization: "Merck KGaA, Darmstadt, Germany",
     timeframe: "June 2024 - September 2025",
-    supervisor: "Micheal Schleehahn",
+    supervisor: "Michael Schleehahn",
     description:
       "Developed a comprehensive, data-driven AI solution to optimize the photoresist blending process in semiconductor production, overcoming extreme industrial constraints.",
     highlights: [
@@ -1341,12 +1367,13 @@ const projectsData: Project[] = [
             manufacturing batches and KNN imputation for missing values.
           </li>
           <li>
-            Overcame low Signal-to-Noise Ratio (SNR) environments by optimizing
-            data splitting strategies,{" "}
+            Overcame low Signal-to-Noise Ratio (SNR) environments by correcting
+            the validation protocol,{" "}
             <strong>
-              shifting from flawed time-series splits to randomized splits
+              replacing a flawed time-series split with a randomized split
             </strong>
-            , eliminating data leakage and boosting model performance by 6x.
+            . Eliminating this data leakage was the single largest driver of the
+            accuracy gain — larger than any change of algorithm.
           </li>
         </ul>
 
@@ -1609,7 +1636,7 @@ const projectsData: Project[] = [
     title: "Pigment Production Optimization (FRED 2.0)",
     organization: "Merck KGaA, Darmstadt",
     timeframe: "October 2023 - November 2024",
-    supervisor: "Micheal Schleehahn",
+    supervisor: "Michael Schleehahn",
     description:
       "Award-winning project optimizing pigment manufacturing. Built asynchronous pipelines to extract fragmented legacy data and identified 'panic-driven' operator interventions.",
     highlights: [
@@ -1693,138 +1720,6 @@ const projectsData: Project[] = [
             Demonstrated that targeted reduction of unnecessary interventions
             directly improved yield stability, reduced production downtime, and
             lowered operator burden, leading to significant cost savings.
-          </li>
-        </ul>
-      </div>
-    ),
-  },
-  {
-    id: "merck-parteck-optimization",
-    title: "Pharmaceutical Production Optimization (Parteck®)",
-    organization: "Merck KGaA, Darmstadt",
-    timeframe: "December 2023 - April 2024",
-    supervisor: "Micheal Schleehahn",
-    description:
-      "Optimized life science production processes for Parteck excipients, utilizing NGBoost for uncertainty quantification and process optimization.",
-    highlights: [
-      "Analyzed key pharmaceutical production parameters (spray conditions, air flow, bed heights)",
-      "Applied Box-Cox transformations and multiple scaling methods for skewed manufacturing data",
-      "Developed and compared Linear Regression, Random Forest, Gradient Boosting, SVR, Neural Networks, and PLS",
-      "Implemented NGBoost to provide calibrated confidence intervals alongside predictions",
-      "Created interactive Plotly dashboards for monitoring key process parameters",
-      "Conducted cross-product comparative analysis to identify shared patterns across multiple product lines",
-    ],
-    skills: [
-      "Python",
-      "NGBoost",
-      "Machine Learning",
-      "Uncertainty Quantification",
-      "Statistical Analysis",
-      "Fluid Bed Processing",
-      "Pharmaceutical Manufacturing",
-    ],
-    image: "/projects/parteck.webp",
-    category: "corporate",
-    content: (
-      <div className="text-[#333333]">
-        <p className="mb-6 leading-relaxed">
-          As part of the Data Sciences team at Merck KGaA, I worked on
-          optimizing a life science production process (specifically fluid bed
-          processing of Parteck® excipients), applying machine learning and data
-          analysis techniques to enhance manufacturing efficiency and product
-          quality.
-        </p>
-
-        <h3 className="text-xl font-bold mb-4">
-          Responsibilities and Achievements
-        </h3>
-
-        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
-          1. Comprehensive Process Parameter Analysis
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
-          <li>
-            Analyzed key production parameters including spray conditions, air
-            flow, temperatures, bed heights, and equipment-specific settings.
-          </li>
-          <li>
-            Developed understanding of parameter interactions and their
-            influence on product quality.
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
-          2. Advanced Data Analysis and Preprocessing
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
-          <li>
-            Utilized Python (Pandas, NumPy) for data manipulation and analysis
-            of complex manufacturing data.
-          </li>
-          <li>
-            Implemented preprocessing techniques including various scaling
-            methods and Box-Cox transformation for skewed data.
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
-          3. Machine Learning Model Development
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
-          <li>
-            Developed and compared multiple regression models (Linear
-            Regression, Random Forest, Gradient Boosting, SVR, Neural Networks,
-            PLS Regression) to predict and optimize process outcomes.
-          </li>
-          <li>
-            Implemented ensemble methods and <strong>NGBoost</strong> for
-            improved accuracy and uncertainty quantification—providing
-            calibrated confidence intervals that enabled process engineers to
-            assess{" "}
-            <strong>
-              when to trust automated recommendations and when manual oversight
-              is warranted
-            </strong>
-            .
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
-          4. Model Evaluation and Process Optimization
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
-          <li>
-            Evaluated models using various metrics to ensure accurate prediction
-            of critical quality attributes.
-          </li>
-          <li>
-            Optimized model hyperparameters and provided data-driven insights
-            for process improvements.
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
-          5. Data Visualization and Reporting
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
-          <li>
-            Created interactive visualizations and dashboards using Plotly and
-            Matplotlib for monitoring key process parameters and model
-            predictions.
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-semibold mb-2 text-[#816334]">
-          6. Cross-Product Analysis
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
-          <li>
-            Conducted comparative analysis between different products to
-            identify common patterns and unique characteristics.
-          </li>
-          <li>
-            Explored unified modeling approaches applicable across multiple
-            product lines.
           </li>
         </ul>
       </div>
@@ -2420,19 +2315,6 @@ const projectsData: Project[] = [
 // 将项目标签数据导出为一个常量
 export const projectTabs = [
   {
-    title: "Corporate Projects",
-    value: "corporate",
-    content: (
-      <div className="w-full bg-[#A67C3D]/90 backdrop-blur-sm p-8 rounded-xl">
-        <ProjectGrid
-          projects={projectsData.filter(
-            (project) => project.category === "corporate",
-          )}
-        />
-      </div>
-    ),
-  },
-  {
     title: "Research Projects",
     value: "research",
     content: (
@@ -2440,6 +2322,19 @@ export const projectTabs = [
         <ProjectGrid
           projects={projectsData.filter(
             (project) => project.category === "research",
+          )}
+        />
+      </div>
+    ),
+  },
+  {
+    title: "Industry Projects",
+    value: "corporate",
+    content: (
+      <div className="w-full bg-[#A67C3D]/90 backdrop-blur-sm p-8 rounded-xl">
+        <ProjectGrid
+          projects={projectsData.filter(
+            (project) => project.category === "corporate",
           )}
         />
       </div>
