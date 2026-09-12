@@ -979,8 +979,7 @@ const projectsData: Project[] = [
   },
   {
     id: "tbbpa-liver-cancer",
-    title:
-      "TBBPA regulates calcium-mediated lysosomal exocytosis and thereby promotes invasion and migration in hepatocellular carcinoma",
+    title: "Molecular Docking Study of TBBPA in Liver Cancer",
     organization: "Institutes of Biomedical Sciences, Shanxi University",
     timeframe: "March 2018 - November 2018",
     supervisor: "Zhuoyu Li",
@@ -1101,203 +1100,6 @@ const projectsData: Project[] = [
             pro-metastatic effects of TBBPA in liver cancer.
           </li>
         </ul>
-      </div>
-    ),
-  },
-  {
-    id: "ai-powered-portfolio",
-    title: "AI-Powered Portfolio: Creating a Modern Developer Identity",
-    organization: "Personal Project",
-    timeframe: "February 2025 - March 2025",
-    supervisor: "",
-    description:
-      "Developed a comprehensive personal portfolio website that combines modern web development technologies with advanced AI image generation techniques.",
-    highlights: [
-      "Generated a personalized 3D Pixar-style avatar using Stable Diffusion 1.5 with ComfyUI workflow and IPAdapter",
-      "Built the website using Next.js, Tailwind CSS, and Framer Motion for optimized performance and engaging animations",
-      "Developed advanced UI architecture with BentoGrid pattern for flexible, modular component layout",
-      "Deployed the static website to Cloudflare Pages with automated CI/CD pipeline for efficient updates",
-    ],
-    skills: [
-      "Next.js",
-      "React",
-      "Tailwind CSS",
-      "Framer Motion",
-      "Stable Diffusion",
-      "ComfyUI",
-      "IPAdapter",
-      "LoRA",
-      "Git",
-      "CI/CD",
-      "Cloudflare Pages",
-      "UI/UX Design",
-    ],
-    image: "/projects/portfolio.webp",
-    category: "research",
-    content: (
-      <div>
-        <p className="mb-4">
-          This project combines modern{" "}
-          <span className="font-semibold">web development technologies</span>{" "}
-          with advanced{" "}
-          <span className="font-semibold">AI image generation techniques</span>{" "}
-          to create a distinctive personal brand presence. The portfolio
-          showcases both frontend development capabilities and expertise in
-          leveraging AI models for creative content generation.
-        </p>
-
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Detailed Implementation
-        </h3>
-
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          1. AI-Generated Persona Creation
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>
-            Utilized Stable Diffusion 1.5 with ComfyUI workflow to generate a
-            personalized 3D Pixar-style avatar
-          </li>
-          <li>
-            Implemented IPAdapter for face feature encoding to maintain
-            consistent facial characteristics
-          </li>
-          <li>
-            Applied custom LoRA models from Civitai to enhance stylistic
-            qualities and visual coherence
-          </li>
-          <li>
-            Created a visual identity that bridges professional presentation
-            with creative personality
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          2. Frontend Development
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>
-            Built the website using Next.js for optimized performance and
-            server-side rendering capabilities
-          </li>
-          <li>
-            Implemented responsive design principles using Tailwind CSS for
-            efficient styling
-          </li>
-          <li>
-            Enhanced user experience with sophisticated animations via Framer
-            Motion including sequenced entrance animations, parallax effects,
-            and continuous micro-interactions
-          </li>
-          <li>
-            Developed advanced UI architecture using BentoGrid pattern for
-            flexible, modular component layout
-          </li>
-          <li>
-            Integrated UI component libraries (Magic UI, Aceternity UI) for
-            polished visual elements
-          </li>
-          <li>
-            Designed interactive data visualizations to showcase skills and
-            project metrics
-          </li>
-          <li>
-            Implemented animated backgrounds (FlickeringGrid, BackgroundBeams)
-            for visual interest
-          </li>
-          <li>
-            Implemented scroll-triggered animations and view transitions with
-            IntersectionObserver pattern
-          </li>
-        </ul>
-
-        <h4 className="text-lg font-medium mb-2 mt-4">
-          3. DevOps and Deployment
-        </h4>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>Established version control workflow using Git and GitHub</li>
-          <li>
-            Configured CI/CD pipeline for automated testing and deployment
-          </li>
-          <li>
-            Deployed the static website to Cloudflare Pages for global CDN
-            distribution
-          </li>
-          <li>
-            Optimized loading speed and performance through code splitting and
-            lazy loading
-          </li>
-        </ul>
-
-        <h3 className="text-xl font-semibold mb-2 mt-6">
-          Challenges and Solutions
-        </h3>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
-          <li>
-            Addressed performance issues with complex animations by implementing
-            selective rendering and view-based animation triggers
-          </li>
-          <li>
-            Optimized large image assets through next/image component with
-            priority loading and responsive sizing
-          </li>
-          <li>
-            Balanced visual complexity with performance through z-index layering
-            and conditional rendering
-          </li>
-          <li>
-            Implemented progressive enhancement strategy for different device
-            capabilities
-          </li>
-          <li>
-            Developed a modular component structure with abstracted
-            functionality to facilitate future updates
-          </li>
-          <li>
-            Used CSS variables and theme constants to maintain visual
-            consistency across components
-          </li>
-          <li>
-            Optimized motion animations with staggered loading and reduced
-            motion options
-          </li>
-        </ul>
-
-        <h3 className="text-xl font-semibold mb-2 mt-6">Outcome</h3>
-        <p className="mb-4">
-          The project resulted in a distinctive personal brand presence that
-          effectively communicates technical capabilities and creative approach.
-          The website serves as both a portfolio showcase and a practical
-          demonstration of frontend development and AI application skills.
-        </p>
-
-        <h3 className="text-xl font-semibold mb-2 mt-6">Future Enhancements</h3>
-        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
-          <li>Implement internationalization for multi-language support</li>
-          <li>Add a headless CMS for easier content management</li>
-          <li>Develop a blog section with technical articles</li>
-          <li>
-            Integrate more interactive elements and user engagement features
-          </li>
-        </ul>
-        <p className="mt-6">
-          Visit my{" "}
-          <LinkPreview
-            url="https://yili-dev.com/"
-            className="text-[#FD6142] hover:underline"
-          >
-            portfolio website
-          </LinkPreview>{" "}
-          to see this project in action. The complete source code is available
-          in my{" "}
-          <LinkPreview
-            url="https://github.com/liyifreddy/portfolio"
-            className="text-[#FD6142] hover:underline"
-          >
-            GitHub repository
-          </LinkPreview>
-          .
-        </p>
       </div>
     ),
   },
@@ -2167,6 +1969,203 @@ const projectsData: Project[] = [
             pivot towards deep learning and advanced computer vision research.
           </p>
         </div>
+      </div>
+    ),
+  },
+  {
+    id: "ai-powered-portfolio",
+    title: "AI-Powered Portfolio: Creating a Modern Developer Identity",
+    organization: "Personal Project",
+    timeframe: "February 2025 - March 2025",
+    supervisor: "",
+    description:
+      "Developed a comprehensive personal portfolio website that combines modern web development technologies with advanced AI image generation techniques.",
+    highlights: [
+      "Generated a personalized 3D Pixar-style avatar using Stable Diffusion 1.5 with ComfyUI workflow and IPAdapter",
+      "Built the website using Next.js, Tailwind CSS, and Framer Motion for optimized performance and engaging animations",
+      "Developed advanced UI architecture with BentoGrid pattern for flexible, modular component layout",
+      "Deployed the static website to Cloudflare Pages with automated CI/CD pipeline for efficient updates",
+    ],
+    skills: [
+      "Next.js",
+      "React",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Stable Diffusion",
+      "ComfyUI",
+      "IPAdapter",
+      "LoRA",
+      "Git",
+      "CI/CD",
+      "Cloudflare Pages",
+      "UI/UX Design",
+    ],
+    image: "/projects/portfolio.webp",
+    category: "corporate",
+    content: (
+      <div>
+        <p className="mb-4">
+          This project combines modern{" "}
+          <span className="font-semibold">web development technologies</span>{" "}
+          with advanced{" "}
+          <span className="font-semibold">AI image generation techniques</span>{" "}
+          to create a distinctive personal brand presence. The portfolio
+          showcases both frontend development capabilities and expertise in
+          leveraging AI models for creative content generation.
+        </p>
+
+        <h3 className="text-xl font-semibold mb-2 mt-6">
+          Detailed Implementation
+        </h3>
+
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          1. AI-Generated Persona Creation
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+          <li>
+            Utilized Stable Diffusion 1.5 with ComfyUI workflow to generate a
+            personalized 3D Pixar-style avatar
+          </li>
+          <li>
+            Implemented IPAdapter for face feature encoding to maintain
+            consistent facial characteristics
+          </li>
+          <li>
+            Applied custom LoRA models from Civitai to enhance stylistic
+            qualities and visual coherence
+          </li>
+          <li>
+            Created a visual identity that bridges professional presentation
+            with creative personality
+          </li>
+        </ul>
+
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          2. Frontend Development
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+          <li>
+            Built the website using Next.js for optimized performance and
+            server-side rendering capabilities
+          </li>
+          <li>
+            Implemented responsive design principles using Tailwind CSS for
+            efficient styling
+          </li>
+          <li>
+            Enhanced user experience with sophisticated animations via Framer
+            Motion including sequenced entrance animations, parallax effects,
+            and continuous micro-interactions
+          </li>
+          <li>
+            Developed advanced UI architecture using BentoGrid pattern for
+            flexible, modular component layout
+          </li>
+          <li>
+            Integrated UI component libraries (Magic UI, Aceternity UI) for
+            polished visual elements
+          </li>
+          <li>
+            Designed interactive data visualizations to showcase skills and
+            project metrics
+          </li>
+          <li>
+            Implemented animated backgrounds (FlickeringGrid, BackgroundBeams)
+            for visual interest
+          </li>
+          <li>
+            Implemented scroll-triggered animations and view transitions with
+            IntersectionObserver pattern
+          </li>
+        </ul>
+
+        <h4 className="text-lg font-medium mb-2 mt-4">
+          3. DevOps and Deployment
+        </h4>
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+          <li>Established version control workflow using Git and GitHub</li>
+          <li>
+            Configured CI/CD pipeline for automated testing and deployment
+          </li>
+          <li>
+            Deployed the static website to Cloudflare Pages for global CDN
+            distribution
+          </li>
+          <li>
+            Optimized loading speed and performance through code splitting and
+            lazy loading
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-semibold mb-2 mt-6">
+          Challenges and Solutions
+        </h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
+          <li>
+            Addressed performance issues with complex animations by implementing
+            selective rendering and view-based animation triggers
+          </li>
+          <li>
+            Optimized large image assets through next/image component with
+            priority loading and responsive sizing
+          </li>
+          <li>
+            Balanced visual complexity with performance through z-index layering
+            and conditional rendering
+          </li>
+          <li>
+            Implemented progressive enhancement strategy for different device
+            capabilities
+          </li>
+          <li>
+            Developed a modular component structure with abstracted
+            functionality to facilitate future updates
+          </li>
+          <li>
+            Used CSS variables and theme constants to maintain visual
+            consistency across components
+          </li>
+          <li>
+            Optimized motion animations with staggered loading and reduced
+            motion options
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-semibold mb-2 mt-6">Outcome</h3>
+        <p className="mb-4">
+          The project resulted in a distinctive personal brand presence that
+          effectively communicates technical capabilities and creative approach.
+          The website serves as both a portfolio showcase and a practical
+          demonstration of frontend development and AI application skills.
+        </p>
+
+        <h3 className="text-xl font-semibold mb-2 mt-6">Future Enhancements</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
+          <li>Implement internationalization for multi-language support</li>
+          <li>Add a headless CMS for easier content management</li>
+          <li>Develop a blog section with technical articles</li>
+          <li>
+            Integrate more interactive elements and user engagement features
+          </li>
+        </ul>
+        <p className="mt-6">
+          Visit my{" "}
+          <LinkPreview
+            url="https://yili-dev.com/"
+            className="text-[#FD6142] hover:underline"
+          >
+            portfolio website
+          </LinkPreview>{" "}
+          to see this project in action. The complete source code is available
+          in my{" "}
+          <LinkPreview
+            url="https://github.com/liyifreddy/portfolio"
+            className="text-[#FD6142] hover:underline"
+          >
+            GitHub repository
+          </LinkPreview>
+          .
+        </p>
       </div>
     ),
   },

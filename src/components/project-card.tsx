@@ -9,6 +9,12 @@ import ModalPortal from "@/components/modal-portal";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 import { Card } from "@/components/ui/card";
 
+// 卡片上只显示前几个标签，多的不显示也不计数 —— 完整列表在 modal 里。
+// 各项目标签数在 6–13 之间，卡片如果全显示会被标签撑高、和同行卡片错位。
+// 标签宽度不一，光限个数还是会有卡片溢出到第三行，所以容器再按两行高度
+// (24px 标签 + 8px gap + 24px = 56px) 截断：第三行整行不显示，不会截半个标签。
+const CARD_SKILL_LIMIT = 8;
+
 // 项目类型定义
 export type Project = {
   id: string;
@@ -57,19 +63,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             ease: "easeOut",
           },
         }}
-        className="w-full cursor-pointer"
+        className="w-full h-full cursor-pointer"
         onClick={() => setIsOpen(true)}
       >
-        <Card className="border-0 overflow-hidden">
+        <Card className="border-0 overflow-hidden h-full">
           <MagicCard
-            className="h-full rounded-xl overflow-hidden bg-background"
+            className="h-full rounded-xl overflow-hidden bg-background [&>div:last-child]:h-full"
             gradientFrom="#C19A49"  // 金色
             gradientTo="#B08642"    // 暗金色
             gradientColor="#FED5A6" // 浅金色悬停效果
             gradientOpacity={0.3}   // 适当降低透明度
             gradientSize={150}
           >
-            <div className="relative z-10 bg-[#161006]/90">
+            <div className="relative z-10 bg-[#161006]/90 h-full">
             <div className="flex flex-col h-full">
               {/* 上半部分是图片 */}
               <div className="w-full h-48 relative">
@@ -83,7 +89,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
               </div>
 
               {/* 下半部分是内容 */}
-              <div className="p-5 flex-grow">
+              <div className="p-5 flex-grow flex flex-col">
                 {/* 标题 */}
                 <h3 className="text-xl font-bold text-white mb-1">
                   {project.title}
@@ -101,8 +107,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
                 </p>
 
                 {/* 技术标签 */}
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {project.skills.slice(0, 20).map((skill, idx) => (
+                <div className="flex flex-wrap gap-2 mt-auto max-h-[56px] overflow-hidden">
+                  {project.skills.slice(0, CARD_SKILL_LIMIT).map((skill, idx) => (
                     <span
                       key={idx}
                       className="text-xs px-2 py-1 rounded-full bg-[#C19A49]/30 text-[#FED5A6]"
@@ -110,11 +116,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
                       #{skill}
                     </span>
                   ))}
-                  {project.skills.length > 20 && (
-                    <span className="text-xs px-2 py-1 rounded-full bg-[#C19A49]/30 text-[#FED5A6]">
-                      +{project.skills.length - 20}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>

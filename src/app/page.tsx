@@ -23,7 +23,7 @@ import {
   IconBuildingFactory2,
   IconStethoscope,
   IconShield,
-  IconRobot, IconCode,
+  IconRobot,
   IconSchool,
   IconFileText
 } from "@tabler/icons-react";
@@ -569,10 +569,10 @@ export default function Home() {
           className="absolute bottom-8 left-4 right-4 md:left-16 md:right-auto flex flex-wrap gap-2 md:gap-4 z-40"
         >
           {/* Email button */}
-          <Link href="mailto:liyi.freddy@gmail.com">
-            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
-              <AiOutlineMail className="h-5 w-5 mr-2" />
-              <span>Email</span>
+          <Link href="mailto:liyi.freddy@gmail.com" aria-label="Email">
+            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-2.5 sm:px-3 md:px-4 py-2">
+              <AiOutlineMail className="h-5 w-5 sm:mr-2" />
+              <span className="hidden sm:inline">Email</span>
             </ShinyButton>
           </Link>
 
@@ -581,10 +581,11 @@ export default function Home() {
             href="https://www.linkedin.com/in/yi-li-dev/"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="LinkedIn"
           >
-            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
-              <AiOutlineLinkedin className="h-5 w-5 mr-2" />
-              <span>LinkedIn</span>
+            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-2.5 sm:px-3 md:px-4 py-2">
+              <AiOutlineLinkedin className="h-5 w-5 sm:mr-2" />
+              <span className="hidden sm:inline">LinkedIn</span>
             </ShinyButton>
           </Link>
 
@@ -593,10 +594,11 @@ export default function Home() {
             href="https://scholar.google.com/citations?user=Ffr3i_YAAAAJ"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Google Scholar"
           >
-            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
-              <SiGooglescholar className="h-5 w-5 mr-2" />
-              <span>Scholar</span>
+            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-2.5 sm:px-3 md:px-4 py-2">
+              <SiGooglescholar className="h-5 w-5 sm:mr-2" />
+              <span className="hidden sm:inline">Scholar</span>
             </ShinyButton>
           </Link>
 
@@ -605,10 +607,11 @@ export default function Home() {
             href="https://github.com/liyifreddy"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="GitHub"
           >
-            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
-              <AiOutlineGithub className="h-5 w-5 mr-2" />
-              <span>GitHub</span>
+            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-2.5 sm:px-3 md:px-4 py-2">
+              <AiOutlineGithub className="h-5 w-5 sm:mr-2" />
+              <span className="hidden sm:inline">GitHub</span>
             </ShinyButton>
           </Link>
         </motion.div>
@@ -686,7 +689,7 @@ export default function Home() {
           </div>
         </div>
         <p className="text-base leading-relaxed text-gray-800">
-          Turning noisy industrial data into production-ready AI. At Merck I raised first-time-right rates in semiconductor photoresist blending, and rebuilt a pigment-line analytics pipeline that won the 2024 Surface Gernsheim Efficiency Award.
+          Turning industrial data into production-ready AI. At Merck I raised first-time-right rates in photoresist blending and rebuilt a pigment-line pipeline that won the 2024 Surface Gernsheim Efficiency Award.
         </p>
       </div>
 
@@ -861,41 +864,41 @@ export default function Home() {
   title="What's Next"
   description={
     <div className="h-full p-4 flex flex-col">
-      <p className="text-base mb-4">
+      <p className="text-base mb-2">
         Seeking <span className="text-black/70 font-semibold">immediate opportunities</span> in:
       </p>
 
       <div className="space-y-1 flex-grow">
         {/* Tier 1: Industrial AI */}
-        <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="flex items-center p-2.5 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto">
+        <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="flex items-center p-2 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto">
           <div className="mr-3 p-1.5 bg-[#fbf3e5] rounded-full shrink-0">
             <IconSchool className="h-4 w-4 text-[#B08642]" />
           </div>
           <div className="min-w-0">
             <h4 className="text-base font-semibold text-[#B08642] truncate">PhD Positions</h4>
-            <p className="text-xs text-gray-600 line-clamp-2">Embodied AI, object-centric representations, visuomotor policies</p>
+            <p className="text-xs text-gray-600 line-clamp-2">Self-supervised and object-centric representations, robustness under shift</p>
           </div>
         </motion.div>
 
         {/* Tier 2: Robotics & Vision */}
-        <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="flex items-center p-2.5 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto">
+        <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="flex items-center p-2 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto">
           <div className="mr-3 p-1.5 bg-[#fbf3e5] rounded-full shrink-0">
             <IconRobot className="h-4 w-4 text-[#B08642]" />
           </div>
           <div className="min-w-0">
             <h4 className="text-base font-semibold text-[#B08642] truncate">Industrial Research</h4>
-            <p className="text-xs text-gray-600 line-clamp-2">Robot perception and manipulation, representation learning, robustness under shift</p>
+            <p className="text-xs text-gray-600 line-clamp-2">Robot perception and manipulation, representation learning under shift</p>
           </div>
         </motion.div>
 
-        {/* Tier 3: Applied AI Systems */}
-        <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.3 }} className="flex items-center p-2.5 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto">
+        {/* Tier 3: Vision & Medical Imaging */}
+        <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.3 }} className="flex items-center p-2 rounded-md bg-gray-200/20 border-l-2 border-[#B08642] h-auto">
           <div className="mr-3 p-1.5 bg-[#fbf3e5] rounded-full shrink-0">
-            <IconCode className="h-4 w-4 text-[#B08642]" />
+            <IconStethoscope className="h-4 w-4 text-[#B08642]" />
           </div>
           <div className="min-w-0">
-            <h4 className="text-base font-semibold text-[#B08642] truncate">Research to Systems</h4>
-            <p className="text-xs text-gray-600 line-clamp-2">Getting research to run on real hardware: training pipelines, HPC, full-stack delivery</p>
+            <h4 className="text-base font-semibold text-[#B08642] truncate">Vision &amp; Medical AI</h4>
+            <p className="text-xs text-gray-600 line-clamp-2">Detection and segmentation under scarce labels and domain shift</p>
           </div>
         </motion.div>
       </div>
