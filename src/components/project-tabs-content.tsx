@@ -5,6 +5,7 @@ import ProjectGrid from "@/components/project-grid";
 import { Project } from "@/components/project-card";
 import { Tabs } from "@/components/ui/tabs";
 import { LinkPreview } from "@/components/ui/link-preview";
+import { rare26Project } from "@/components/projects/rare26";
 
 // 定义Tab类型
 type Tab = {
@@ -222,7 +223,7 @@ const projectsData: Project[] = [
             self-supervised) targets the Near-Miss placement bottleneck.
             Near-Miss failures fall from 31.0% under the pure-visual condition
             to 21.0% with the deployable 2D anchor, and reach 2.5% only under a
-            privileged 3D goal. No-Grasp failures stay in the same range across
+            privileged 3D goal. No-Grasp failures were not improved across
             all three conditions (15 / 15 / 24 per 200 episodes) — spatial
             grounding fixes placement, not object tracking. The two bottlenecks
             need different fixes.
@@ -282,6 +283,7 @@ const projectsData: Project[] = [
       </div>
     ),
   },
+  rare26Project,
   {
     id: "repose-image-translation",
     title: "Repose via Image Translation: 6D Pose & Synthetic Data",

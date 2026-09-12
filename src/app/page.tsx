@@ -5,7 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
-import { AiOutlineLinkedin, AiOutlineMail } from "react-icons/ai";
+import {
+  AiOutlineGithub,
+  AiOutlineLinkedin,
+  AiOutlineMail,
+} from "react-icons/ai";
 import { SiGooglescholar } from "react-icons/si";
 import { AutoTextEffect } from "@/components/ui/auto-text-effect";
 import { ShinyButton } from "@/components/magicui/shiny-button";
@@ -593,6 +597,18 @@ export default function Home() {
             <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
               <SiGooglescholar className="h-5 w-5 mr-2" />
               <span>Scholar</span>
+            </ShinyButton>
+          </Link>
+
+          {/* GitHub button */}
+          <Link
+            href="https://github.com/liyifreddy"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ShinyButton className="rounded-lg bg-black text-white hover:bg-gray-800 px-3 md:px-4 py-2">
+              <AiOutlineGithub className="h-5 w-5 mr-2" />
+              <span>GitHub</span>
             </ShinyButton>
           </Link>
         </motion.div>
@@ -1764,6 +1780,17 @@ export default function Home() {
                     className="text-gray-300 hover:text-[#D2A554] transition-colors"
                   >
                     Google Scholar
+                  </a>
+                </li>
+                <li className="flex items-center">
+                  <AiOutlineGithub className="mr-2 text-[#D2A554]" />
+                  <a
+                    href="https://github.com/liyifreddy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 hover:text-[#D2A554] transition-colors"
+                  >
+                    github.com/liyifreddy
                   </a>
                 </li>
                 <li className="flex items-center">
