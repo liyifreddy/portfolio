@@ -1,6 +1,6 @@
 # yili-dev.com
 
-![Yi Li — Embodied AI & Object-Centric Vision](public/og.png)
+[![Yi Li — Embodied AI & Object-Centric Vision](.github/readme-banner.webp)](https://yili-dev.com)
 
 Hi — I'm Yi Li. This repo is the source of my personal site, **https://yili-dev.com**.
 If you landed here from the site, the site itself is the better read.
