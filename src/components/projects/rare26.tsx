@@ -7,11 +7,11 @@ import { LinkPreview } from "@/components/ui/link-preview";
 /**
  * RARE26 — Early Barrett's Neoplasia Detection Challenge (EndoVis, MICCAI 2026)
  *
- * Content source: project doc `11_RARE26_材料弹药库` §1.1 / §1.2 / §三 and `00_事实档` §4.6.
- * Every number here is quoted from those documents. Do not add, round or re-derive numbers.
+ * Every number here is quoted verbatim from the project's own records.
+ * Do not add, round or re-derive numbers.
  *
- * Hard constraints (see `claude/34_个人主页_RARE26条目.md` §六):
- *  - no rank, no leaderboard score (0.0152 / 0.7700)
+ * Hard constraints:
+ *  - no rank, no leaderboard score
  *  - no rendered PDF link
  *  - "early neoplasia", never "precancerous lesion"
  *  - never "I trained a model" without the frozen-backbone qualifier
