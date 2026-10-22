@@ -55,7 +55,8 @@ const projectsData: Project[] = [
           State-of-the-art visuomotor policies such as ACT and Diffusion Policy
           achieve high success rates but train the vision backbone end to end,
           which costs GPU memory and demonstrations. With RGB observations and
-          1,000 demonstrations on PickCube-v1, the ManiSkill3 paper reports 98%
+          1,000 demonstrations on PickCube-v1, the ManiSkill3 paper reports best
+          success rates during training of 98%
           for ACT and 100% for Diffusion Policy, but 3% for its plain
           behavior-cloning baseline (Tao et al., arXiv:2410.00425, Table III);
           with 100 demonstrations ACT and Diffusion Policy drop to 28% and 76%.
@@ -216,12 +217,13 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-6">
           <li>
-            <strong>Structure beats capacity:</strong> with the policy, the
-            goal token and the rendering all held fixed and only the encoder
-            changed, object-centric slot grouping outperforms all DINO
-            baselines (+22.4pp), while a 4×4 patch grid with 16× the tokens of
-            global [CLS] gives no gain — the driver is representational
-            structure, not token count.
+            <strong>Structure beats capacity:</strong> with the policy, goal
+            token and rendering held fixed, SPOT reached 55.0% against 32.6%
+            for global [CLS] and 31.7% for the 4×4 patch baseline (+22.4pp
+            over global [CLS]), while the 4×4 grid, with 16× the tokens of
+            global [CLS], gives no gain — the driver is representational
+            structure, not token count. The 14×14 dense row is left out of
+            this comparison, since memory forced it to T=1, H=1.
           </li>
           <li>
             <strong>Explicit 2D spatial grounding</strong> (projected from a
@@ -286,7 +288,7 @@ const projectsData: Project[] = [
           </li>
           <li>
             <strong>Engineering under a small GPU:</strong> an end-to-end
-            ResNet18 encoder ran out of memory on the 11 GB card at once, so a
+            ResNet18 encoder immediately ran out of memory on the 11 GB card, so a
             frozen encoder was a hardware necessity; caching dense Theia
             features would have taken about 47 GB, while 7 SPOT slots take
             about 1.1 GB; replacing random shuffling (93 s per batch of random
@@ -651,7 +653,7 @@ const projectsData: Project[] = [
           <span className="font-semibold">explainability</span>. I integrated
           the other team members&apos; modules into the platform, built the
           frontend, ran the analysis and produced the results, and wrote much
-          of the core code. I integrated{" "}
+          of the core code, including the integration of{" "}
           <span className="font-semibold">BertViz</span> into UKP-SQuARE through{" "}
           <span className="font-semibold">Vue.js</span> and{" "}
           <span className="font-semibold">modelinference API</span> with{" "}
@@ -781,7 +783,8 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          A three-person project at MEC-Lab, most of which I did. We built
+          A three-person project at MEC-Lab, in which I carried out most of the
+          implementation and experiments. We built
           realistic out-of-distribution (OOD) augmentations for{" "}
           <span className="font-semibold">endoscopy</span> images — image
           attribute shifts and realistic artifacts — and measured how much a
@@ -1288,11 +1291,9 @@ const projectsData: Project[] = [
             hit rate inside two tolerance bands.
           </li>
           <li>
-            Pioneered an improved{" "}
-            <strong>Bootstrap-based prediction confidence algorithm</strong>,
-            providing process engineers with a reliability score (standard
-            deviation of resampled predictions) for every output, rather than
-            just a point estimate.
+            Added a <strong>bootstrap-based reliability score</strong>, using
+            the standard deviation of resampled predictions, so engineers get
+            a reliability signal alongside each point estimate.
           </li>
         </ul>
 
@@ -2395,14 +2396,14 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-bold mb-3 mt-6">dingo-pack</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Heavy-job slots on one machine: a heavy job waits until memory is
-            available and then runs under a memory cap; admission uses the
-            committed amount and is corrected from the measured peak after the
-            first 60 seconds.
+            Heavy-job slots on one machine: heavy jobs wait for a slot and
+            sufficient memory, accounting for running jobs&apos; unused
+            reservations, then run under memory limits.
           </li>
           <li>
-            A session roster to save and restore Claude Code sessions after a
-            crash, plus checks for leftover sessions.
+            A session roster that snapshots the live Claude Code sessions;
+            after a crash, <code>list</code> shows which sessions were lost
+            and <code>resume</code> reopens them.
           </li>
           <li>
             Written after the machine ran out of memory, the shared drive
@@ -2433,7 +2434,7 @@ const projectsData: Project[] = [
     organization: "Infinitas Comedy Club",
     timeframe: "October 2022 - February 2023",
     description:
-      "Founded and organized a Chinese stand-up comedy club in Germany, leading its establishment and growth through events and community building.",
+      "Founded and organized the first Chinese-language stand-up comedy club in Germany, leading its establishment and growth through events and community building.",
     highlights: [
       "Successfully organized 8 events including actor training sessions, script readings, online webinars, and open mics",
       "Attracted approximately 40-50 participants per event, providing a platform for both new and experienced performers",
@@ -2455,8 +2456,8 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          I founded and organized Infinitas Comedy, a Chinese stand-up comedy
-          club in Germany, and led its establishment and growth, organizing
+          I founded and organized Infinitas Comedy, the first Chinese-language
+          stand-up comedy club in Germany, and led its establishment and growth, organizing
           various events and building a community of enthusiasts and
           performers. I stepped back in February 2023; the club is still
           running.
@@ -2538,8 +2539,8 @@ const projectsData: Project[] = [
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Project Outcome</h3>
         <p className="mb-4">
-          Successfully established and grew a Chinese stand-up comedy club in
-          Germany, providing a platform for performers and building a strong
+          Successfully established and grew the first Chinese-language stand-up
+          comedy club in Germany, providing a platform for performers and building a strong
           community through effective marketing and collaboration.
         </p>
       </div>

@@ -984,6 +984,15 @@ export default function Home() {
                   className="text-[#D2A554] underline underline-offset-4 hover:text-[#E5BE73] transition-colors"
                 >
                   2607.09825
+                </a>{" "}
+                &middot; OpenReview:{" "}
+                <a
+                  href="https://openreview.net/forum?id=2HyzYL710J"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#D2A554] underline underline-offset-4 hover:text-[#E5BE73] transition-colors"
+                >
+                  2HyzYL710J
                 </a>
               </p>
             </motion.li>
