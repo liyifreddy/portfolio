@@ -1005,11 +1005,6 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="rounded-xl border border-white/10 bg-white/[0.03] p-6"
             >
-              <div className="mb-3 flex flex-wrap gap-2">
-                <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-semibold text-gray-300">
-                  6th of 7 authors
-                </span>
-              </div>
               <h3 className="text-lg md:text-xl font-bold leading-snug text-white">
                 E-ScootAR: Exploring Unimodal Warnings for E-Scooter Riders in
                 Augmented Reality

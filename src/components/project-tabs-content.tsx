@@ -896,7 +896,7 @@ const projectsData: Project[] = [
     description:
       "Evaluated technological safety measures for e-scooter riders using augmented reality notifications, vibrotactile feedback, and auditory signals.",
     highlights: [
-      "Published as CHI 2022 Extended Abstracts (Late-Breaking Work), 6th of 7 authors, evaluating AR, vibrotactile, and auditory warnings for preventing collisions with pedestrians",
+      "Published as CHI 2022 Extended Abstracts (Late-Breaking Work), evaluating AR, vibrotactile, and auditory warnings for preventing collisions with pedestrians",
       "Created visual warning system and virtual environment in Unity for Microsoft HoloLens 2",
       "Conducted outdoor experiments with 13 participants, analyzing reaction time and safety using Jamovi",
       "Found that AR and auditory warnings create a better feeling of safety than vibrotactile warnings",
