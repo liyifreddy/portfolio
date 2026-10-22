@@ -7,11 +7,11 @@ If you landed here from the site, the site itself is the better read.
 
 I did my M.Sc. in Computer Science at TU Darmstadt, on object-centric visual representations
 for robotic manipulation (first-author paper at the
-[RSS 2026 workshop *From Perception to Action*](https://arxiv.org/abs/2607.09825)), and I've
-spent four years doing applied AI in industry alongside and before that — mostly computer
-vision and optimisation on real production data at Merck.
+[RSS 2026 workshop *From Perception to Action*](https://arxiv.org/abs/2607.09825)). Alongside
+it I spent two years in industry as a working student at Merck KGaA — machine learning and
+delivery on real production data in semiconductor and chemical production.
 
-The site collects the work in one place: publications, seventeen research and industry
+The site collects the work in one place: publications, research and industry
 projects with the actual numbers attached, the timeline, and what I'm looking for next
 (PhD positions, industrial research, vision & medical AI).
 

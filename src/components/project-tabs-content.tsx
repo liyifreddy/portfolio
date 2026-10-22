@@ -24,12 +24,12 @@ const projectsData: Project[] = [
     supervisor:
       "Prof. Jan Peters, Prof. Liming Chen, Alexandre Chapin, Alap Kshirsagar",
     description:
-      "M.Sc. thesis, TU Darmstadt — submitted 23 March 2026, defended 17 April 2026, graded 1.3 (sehr gut). Investigated how frozen, self-supervised visual representations can be integrated into continuous robotic manipulation policies under standard hardware constraints (single RTX 2080 Ti).",
+      "M.Sc. thesis, TU Darmstadt — submitted 23 March 2026, defended 17 April 2026, graded 1.3 (sehr gut). Investigated how frozen, self-supervised visual representations can be integrated into continuous robotic manipulation policies under standard hardware constraints (single 11–12 GB GPU).",
     highlights: [
       "Structure beats capacity: object-centric slots generalize +22.4pp over the strongest DINO baseline (55.0% vs 32.6% for global [CLS]) under matched conditions, same policy, no fine-tuning",
-      "Reached 68.7 ± 4.2% SR on ManiSkill3 PickCube-v1, within 3pp of a privileged 3D-oracle bound, on a single RTX 2080 Ti with no encoder fine-tuning",
+      "On ManiSkill3 PickCube-v1, with a 2D spatial-goal anchor, exact calibration and native-resolution (224×224) rendering, the full system reached 68.7 ± 4.2% SR, within 3pp of a privileged 3D-oracle bound (71.7%), on a single 11–12 GB GPU with no encoder fine-tuning",
       "Adapted the SPOT encoder (frozen DINO ViT-B/16 + Slot Attention) as a structural bottleneck compressing dense features into object-centric slots",
-      "Failure taxonomy identified Near-Miss placement — not grasping — as the dominant failure mode under the pure-visual condition; a deployable 2D spatial anchor plus native-resolution rendering lifted success from 31.0% to 68.7%",
+      "Failure taxonomy identified Near-Miss placement — not grasping — as the dominant failure mode under the pure-visual condition; an explicit 2D spatial-goal token took success from 31.0% to 55.0% at the same calibration and resolution, and with exact calibration and native-resolution rendering the full system reached 68.7%",
       "Built an automated kinematic failure taxonomy separating spatial-precision (Near-Miss) from object-tracking (No-Grasp) failures; transfers across tasks",
       "Offline feature caching pipeline reduced per-epoch training from ~1-2 hours to ~1-2 minutes",
     ],
@@ -53,11 +53,12 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-bold mb-3">Overview & Problem Statement</h3>
         <p className="mb-4 leading-relaxed">
           State-of-the-art visuomotor policies such as ACT and Diffusion Policy
-          achieve high success rates but rely on end-to-end visual fine-tuning,
-          which requires high-end hardware (RTX 4090, 24 GB VRAM) and large
-          demonstration datasets. Frozen-encoder alternatives avoid this cost
-          but perform poorly without further architectural support (3% SR on
-          PickCube-v1 with standard BC).
+          achieve high success rates but train the vision backbone end to end,
+          which costs GPU memory and demonstrations. With RGB observations and
+          1,000 demonstrations on PickCube-v1, the ManiSkill3 paper reports 98%
+          for ACT and 100% for Diffusion Policy, but 3% for its plain
+          behavior-cloning baseline (Tao et al., arXiv:2410.00425, Table III);
+          with 100 demonstrations ACT and Diffusion Policy drop to 28% and 76%.
         </p>
         <p className="mb-6 leading-relaxed">
           This master's thesis investigates how frozen, self-supervised visual
@@ -69,7 +70,7 @@ const projectsData: Project[] = [
           bottleneck that compresses dense visual features into compact
           object-centric slot representations.{" "}
           <strong>
-            The full pipeline runs on a single RTX 2080 Ti (11 GB VRAM).
+            The full pipeline runs on a single 11–12 GB GPU.
           </strong>{" "}
           We identified and addressed three core bottlenecks: dimensionality and
           memory scaling of dense VFM features, task objective misalignment, and
@@ -83,7 +84,10 @@ const projectsData: Project[] = [
           1. Visual Perception (Frozen)
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
-          <li>Dual fixed-camera RGB setup (Base + Side camera, 224×224).</li>
+          <li>
+            Dual fixed-camera RGB setup (Base + Side camera); 128×128 for all
+            main experiments, 224×224 only for the full system.
+          </li>
           <li>
             Frozen SPOT encoder: DINO ViT-B/16 backbone + Slot Attention (K=7
             slots per camera).
@@ -212,10 +216,12 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-6">
           <li>
-            <strong>Structure beats capacity:</strong> object-centric slot
-            grouping outperforms all DINO baselines under matched token budgets
-            (+22.4pp), while a 16×-larger dense patch grid gives no gain — the
-            driver is representational structure, not token count.
+            <strong>Structure beats capacity:</strong> with the policy, the
+            goal token and the rendering all held fixed and only the encoder
+            changed, object-centric slot grouping outperforms all DINO
+            baselines (+22.4pp), while a 4×4 patch grid with 16× the tokens of
+            global [CLS] gives no gain — the driver is representational
+            structure, not token count.
           </li>
           <li>
             <strong>Explicit 2D spatial grounding</strong> (projected from a
@@ -253,7 +259,17 @@ const projectsData: Project[] = [
             separates grasping failures from Near-Miss placement errors, turning
             a binary success rate into evidence-driven diagnostics — and
             transfers unchanged to StackCube-v1, where it isolates occlusion as
-            the dominant bottleneck.
+            the dominant bottleneck. Run there, it reports No-Grasp at 72%: in
+            144 of 200 episodes the arm never picked up the first cube, from arm
+            self-occlusion of the fixed side camera.
+          </li>
+          <li>
+            <strong>A negative result that shaped the encoder choice:</strong>{" "}
+            before settling on SPOT, I wired the multi-teacher distilled
+            encoder Theia into Slot Attention three different ways on Pascal
+            VOC; none of them separated objects. Theia&apos;s translator is
+            optimized for semantic alignment across modalities, not for the 2D
+            patch structure Slot Attention relies on.
           </li>
         </ul>
 
@@ -264,8 +280,23 @@ const projectsData: Project[] = [
             PickCube-v1 and StackCube-v1.
           </li>
           <li>
-            <strong>Training:</strong> SLURM cluster (RTX 2080 Ti, 11 GB),
-            PyTorch, offline feature caching pipeline.
+            <strong>Training:</strong> student SLURM cluster, one 11–12 GB GPU
+            per job (RTX 2080 Ti or RTX 3080 Ti), PyTorch, offline feature
+            caching pipeline.
+          </li>
+          <li>
+            <strong>Engineering under a small GPU:</strong> an end-to-end
+            ResNet18 encoder ran out of memory on the 11 GB card at once, so a
+            frozen encoder was a hardware necessity; caching dense Theia
+            features would have taken about 47 GB, while 7 SPOT slots take
+            about 1.1 GB; replacing random shuffling (93 s per batch of random
+            disk reads) with chunk-level shuffling kept peak memory under 1 GB.
+          </li>
+          <li>
+            <strong>Getting the measurement right first:</strong> local replay
+            of the official expert demonstrations initially succeeded in about
+            10% of episodes; fixing three causes (50-step truncation, the
+            physics backend, HDF5 key ordering) brought it to 100%.
           </li>
           <li>
             <strong>Dataset:</strong> 1,000 expert demonstrations, ~77,000
@@ -294,7 +325,7 @@ const projectsData: Project[] = [
     description:
       "Architected an automated synthetic data generation pipeline on a SLURM cluster and evaluated generative image translation models for industrial 6D pose estimation.",
     highlights: [
-      "Generated over 36,000 physically-based rendering (PBR) images of YCB objects using BlenderProc",
+      "Generated 36,000+ physically-based rendering (PBR) images of YCB objects using BlenderProc",
       "Deployed conditional image translation models (CoCosNet-v2, DragGAN) to evaluate style-preserving transformations",
       "Utilized CosyPose to validate multi-view 6D pose estimation consistency across generated images",
       "Configured complex headless server environments via Docker with X11 forwarding on GPU-less login nodes",
@@ -317,12 +348,15 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-6 leading-relaxed">
-          This project aims to enhance the style of 6D pose estimation while
-          preserving its cues. I achieved this by generating physically-based
-          rendering (PBR) data of YCB objects using BlenderProc and modifying
-          CoCosNet-v2 for image translation and CosyPose for pose estimation
-          using PyTorch and OpenCV. The project was deployed on the Slurm
-          cluster of Fraunhofer IGD and used Docker to manage containers.
+          A two-person lab project (Yi Li and Jiayi Li) at Fraunhofer IGD. The
+          question: can a conditional image-translation model change the style
+          of a pose-annotated image while preserving its 6D pose cues? We
+          generated physically-based rendering (PBR) data of YCB objects with
+          BlenderProc, adapted CoCosNet-v2 for image translation and used
+          CosyPose for pose estimation, with PyTorch and OpenCV. The PBR data
+          was generated under my cluster account, and I wrote most of the final
+          report. The project ran on the Fraunhofer IGD SLURM cluster (A100),
+          with Docker managing the containers.
         </p>
 
         <h3 className="text-xl font-bold mb-4">Detailed Implementation</h3>
@@ -332,7 +366,7 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Generated <strong>over 36,000</strong> PBR data images for BOP YCB
+            Generated <strong>36,000+</strong> PBR data images for BOP YCB
             objects (drill, bowl, and mug) using BlenderProc. This included
             transformation matrices, depth maps, and masks from BopToolKit under
             different rendering textures, illumination conditions, angles, and
@@ -341,7 +375,8 @@ const projectsData: Project[] = [
           <li>
             Employed Blender 2.93 and BlenderProc2 to create datasets with image
             size 1280x1280, generating 10k training images and 2k validating
-            images per object.
+            images per object (10 textures for training; validation adds 5
+            unseen ones), about two days per object on one node.
           </li>
           <li>
             Utilized DaVinci Resolve 18 for chroma keying green screen videos to
@@ -395,8 +430,9 @@ const projectsData: Project[] = [
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
             Encountered issues with account access on the Slurm cluster, leading
-            to delays and necessitating the use of external ECS servers with
-            NVIDIA T4 GPUs.
+            to delays and, after access ended in August 2023, moving to a
+            self-paid preemptible cloud instance (NVIDIA T4, 16 GB); when the
+            instance was reclaimed mid-month, the data was regenerated.
           </li>
           <li>
             Faced complex infrastructure bottlenecks for headless server
@@ -438,17 +474,17 @@ const projectsData: Project[] = [
   },
   {
     id: "semantic-segmentation-diffusion",
-    title: "Semantic Segmentation Diffusion Models",
-    organization: "Graphisch-Interaktive Systeme (GRIS Lab)",
+    title: "Semantic Segmentation with Diffusion Models",
+    organization: "MEC-Lab / GRIS, TU Darmstadt",
     timeframe: "March 2023 - October 2023",
     supervisor: "Yannik Frisch",
     description:
-      "Improved semantic segmentation accuracy in medical images using diffusion models to generate high-quality synthetic data for augmenting.",
+      "Generating paired histology images and segmentation masks with latent diffusion, as synthetic training data for medical segmentation. A three-person lab practical in which each of us implemented and ran the full pipeline.",
     highlights: [
-      "Utilized MNIST-Extended and Breast Cancer Semantic Segmentation datasets for training and validation",
-      "Generated synthetic images and segmentation masks using VAE and LDM techniques to enhance training data",
-      "Implemented a VAE with segmentation decoder and transitioned to Latent Diffusion Models for computational efficiency",
-      "Developed data augmentation techniques and larger tiles to reduce overfitting and improve image quality",
+      "Built a VAE-with-segmentation-decoder baseline, then a Latent Diffusion Model with a denoising U-Net generating image and mask jointly, so a synthetic pair stays consistent instead of the two being sampled independently",
+      "Trained from scratch on the BCSS breast-cancer histology dataset, through the MNIST-E → BCSS generalization gap: a model producing clean toy samples had to hold up on high-resolution tissue with far more classes and far fewer examples each",
+      "Read the failure signal before changing the model: on BCSS the mask loss climbed while the reconstruction loss stayed flat, so the problem sat on the mask side",
+      "Result: structurally it worked (paired image and mask from one joint latent space), but sample quality was not yet good enough to train a segmentation model on",
     ],
     skills: [
       "Semantic Segmentation",
@@ -466,14 +502,16 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          This project aims to improve the accuracy of{" "}
-          <span className="font-semibold">semantic segmentation</span> in
-          medical images using{" "}
-          <span className="font-semibold">diffusion models</span>. The primary
-          focus was to generate high-quality synthetic data to augment small,
-          manually annotated training datasets. We explored various approaches,
-          including Variational Autoencoders (VAE) and Latent Diffusion Models
-          (LDM), to enhance the performance of segmentation tasks.
+          A three-person lab practical (Visual Computing Lab, TU Darmstadt) in
+          which each of us implemented and ran the full pipeline. The goal was
+          to generate paired images and masks for{" "}
+          <span className="font-semibold">semantic segmentation</span> of
+          medical images with{" "}
+          <span className="font-semibold">diffusion models</span>, as synthetic
+          data to augment small, manually annotated training sets. All models
+          were trained from scratch. Training a downstream segmentation model
+          on the synthetic data was the next step and was not reached in this
+          project.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -515,21 +553,29 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Initial experiments with VAE on the MNIST-E dataset showed promising
-            results but failed to generalize well to the BCSS dataset.
+            A VAE with a segmentation decoder, with an LDM on its latent space,
+            worked on MNIST-E but not on BCSS: the validation mask loss rose
+            from 0.4 to 1.7 while the reconstruction loss stayed around 0.2.
           </li>
           <li>
-            Implemented data augmentation techniques and larger tiles to reduce
-            overfitting, which improved image quality but not segmentation
-            accuracy.
+            Standard anti-overfitting steps (binary masks, larger tiles, data
+            augmentation) improved the image side; the mask side behaved the
+            same.
           </li>
           <li>
-            Integrated image and mask inputs into the VAE, significantly
-            improving reconstruction performance.
+            Encoding image and mask together in one VAE and running the LDM on
+            that joint latent space worked on BCSS: it generated paired images
+            and masks, with improved reconstruction of both.
           </li>
           <li>
-            Combined LDM with VAE outputs to further enhance image and mask
-            quality, achieving better alignment with ground truth data.
+            Two separate VAEs, one per side, with an LDM over both, produced
+            only noise — the same information split across two latent spaces
+            could not be generated, while one joint space could.
+          </li>
+          <li>
+            Sample quality was not yet usable: images skewed pink-purple, were
+            over-smoothed and lacked real tissue texture, and masks were
+            blockier than real ones.
           </li>
         </ul>
 
@@ -542,12 +588,9 @@ const projectsData: Project[] = [
             BCSS dataset due to differences in data complexity.
           </li>
           <li>
-            Overcame overfitting by experimenting with various data augmentation
-            techniques and larger image tiles.
-          </li>
-          <li>
-            Addressed the challenge of generating high-quality segmentation
-            masks by refining the model architecture and training procedures.
+            Standard anti-overfitting steps (data augmentation, larger image
+            tiles) did not fix the mask side; what worked was changing how the
+            mask enters the model — one joint latent space for image and mask.
           </li>
         </ul>
 
@@ -562,8 +605,8 @@ const projectsData: Project[] = [
             generated images and segmentation masks.
           </li>
           <li>
-            Investigate the integration of GAN-based approaches to further
-            refine the segmentation performance.
+            Train a downstream segmentation model on the synthetic pairs and
+            measure whether they help.
           </li>
         </ul>
       </div>
@@ -571,17 +614,17 @@ const projectsData: Project[] = [
   },
   {
     id: "square-explainability",
-    title: "SQuARE - Explainability Methods for QA",
-    organization: "Ubiquitous Knowledge Processing Lab (UKP Lab)",
+    title: "SQuARE — Behavioral Testing & Explainability for QA",
+    organization: "UKP Lab, TU Darmstadt (Prof. Iryna Gurevych)",
     timeframe: "October 2022 - February 2023",
     supervisor: "Haritz Puerto",
     description:
-      "Improved explainability of AI models in NLP by extending explainability methods on UKP-SQuARE platform for QA pipelines.",
+      "Behavioral testing and explainability for QA models on the UKP-SQuARE platform — a four-person lab project in which I integrated the team's modules into the platform, built the frontend, ran the analysis and wrote much of the core code.",
     highlights: [
-      "Integrated BertViz into UKP-SQuARE through Vue.js and modelinference API with Docker",
-      "Created a microservice to run CheckList for behavioral testing of QA models",
-      "Conducted Minimum Functionality Tests for unit testing capabilities like taxonomy and vocabulary",
-      "Tested BERT and RoBERTa-based QA models on Hugging Face for performance comparison",
+      "Built a Dockerized CheckList microservice for the UKP-SQuARE platform, running Minimum Functionality and NER Invariance tests against BERT/RoBERTa QA models — capability-level testing rather than a single aggregate score",
+      "Integrated BertViz attention visualization end to end, from the inference API through a Vue.js frontend, so behavior on a test suite and attention on a single question sit in the same place",
+      "Integrated the other team members' modules into the platform and produced the analysis and results",
+      "Code is in the open-source square-core repository (model-api-v3 branch)",
     ],
     skills: [
       "NLP",
@@ -601,10 +644,14 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          This project aims to improve the{" "}
-          <span className="font-semibold">explainability</span> of AI models in
-          NLP. We extended the explainability methods on UKP-SQuARE, a scalable
-          platform for QA pipelines. I integrated{" "}
+          A four-person lab project on UKP-SQuARE, the question-answering
+          platform of the UKP Lab at TU Darmstadt: analyzing and testing QA
+          models through{" "}
+          <span className="font-semibold">behavioral testing</span> and{" "}
+          <span className="font-semibold">explainability</span>. I integrated
+          the other team members&apos; modules into the platform, built the
+          frontend, ran the analysis and produced the results, and wrote much
+          of the core code. I integrated{" "}
           <span className="font-semibold">BertViz</span> into UKP-SQuARE through{" "}
           <span className="font-semibold">Vue.js</span> and{" "}
           <span className="font-semibold">modelinference API</span> with{" "}
@@ -707,21 +754,22 @@ const projectsData: Project[] = [
   },
   {
     id: "endoscopy-ood",
-    title: "Endoscopy OOD Augmentations",
+    title: "Out-of-Distribution Robustness for Endoscopy",
     organization: "Medical & Environmental Computing (MEC-Lab)",
     timeframe: "December 2022 - February 2023",
     supervisor: "Henry Krumb",
     description:
-      "Enhanced Out-of-Distribution (OOD) detection for endoscopy images by exploring different OOD augmentation methods and image attribute shifts.",
+      "Built realistic OOD augmentations (overlays, high-frequency noise transfer, lighting shifts) and trained a MobileNet on the Kvasir GI dataset, measuring the in-distribution → OOD accuracy drop (82.1% → 40.3%) — the same failure-under-shift question as the thesis, in another domain.",
     highlights: [
       "Implemented OOD augmentations by overlaying objects on endoscopy images with high-frequency noise extraction",
       "Applied random value and hue shifts to simulate different lighting conditions and anomalies",
-      "Trained a MobileNet classifier on the Kvasir dataset, observing significant performance drops in OOD scenarios",
+      "Trained a MobileNet classifier on the Kvasir dataset; accuracy fell from 82.1% in distribution to 40.3% under the OOD augmentations",
+      "A three-person project; I did most of the work, and the augmentations are part of MEC-Lab's open-source OOD framework FrOoDo",
       "Improved realism by aligning image lighting with object lighting and optimizing overlay positions",
     ],
     skills: [
       "Medical Image Processing",
-      "Out-of-Distribution Detection",
+      "Out-of-Distribution Robustness",
       "Data Augmentation",
       "OpenCV",
       "PyTorch",
@@ -733,11 +781,12 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          This project aims to enhance Out-of-Distribution (OOD) detection for{" "}
-          <span className="font-semibold">endoscopy</span> images by exploring
-          different OOD augmentation methods. We implemented various image
-          attribute shifts and realistic artifacts to evaluate and improve OOD
-          detection methods. The code can be found on{" "}
+          A three-person project at MEC-Lab, most of which I did. We built
+          realistic out-of-distribution (OOD) augmentations for{" "}
+          <span className="font-semibold">endoscopy</span> images — image
+          attribute shifts and realistic artifacts — and measured how much a
+          classifier loses under them. The augmentations are part of
+          MEC-Lab&apos;s open-source OOD framework FrOoDo; the code is on{" "}
           <LinkPreview
             url="https://github.com/MECLabTUDA/FrOoDo/tree/main/froodo/ood/augmentations/endoscopy"
             className="text-[#FD6142] hover:underline"
@@ -844,7 +893,7 @@ const projectsData: Project[] = [
     description:
       "Evaluated technological safety measures for e-scooter riders using augmented reality notifications, vibrotactile feedback, and auditory signals.",
     highlights: [
-      "Published in CHI'22, evaluating AR, vibrotactile, and auditory warnings for preventing collisions with pedestrians",
+      "Published as CHI 2022 Extended Abstracts (Late-Breaking Work), 6th of 7 authors, evaluating AR, vibrotactile, and auditory warnings for preventing collisions with pedestrians",
       "Created visual warning system and virtual environment in Unity for Microsoft HoloLens 2",
       "Conducted outdoor experiments with 13 participants, analyzing reaction time and safety using Jamovi",
       "Found that AR and auditory warnings create a better feeling of safety than vibrotactile warnings",
@@ -869,7 +918,7 @@ const projectsData: Project[] = [
             url="https://dl.acm.org/doi/10.1145/3491101.3519831"
             className="text-[#FD6142] hover:underline"
           >
-            Published in CHI'22
+            Published in CHI 2022 Extended Abstracts (Late-Breaking Work)
           </LinkPreview>
           , this project evaluates technological safety measures for{" "}
           <span className="font-semibold">e-scooter</span> riders. We augmented
@@ -989,7 +1038,7 @@ const projectsData: Project[] = [
       "Conducted molecular docking simulations using protein structures from the PDB database with AutoDock Tools and AutoDock Vina",
       "Optimized docking poses using the Lamarckian genetic algorithm and visualized results with PyMOL",
       "Contributed to statistical analysis using unpaired student t-test in GraphPad Prism",
-      "Research published in Ecotoxicology and Environmental Safety journal",
+      "Research published in Ecotoxicology and Environmental Safety (2020); I am the 5th author",
     ],
     skills: [
       "Molecular Docking",
@@ -1004,7 +1053,8 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          I collaborated with a team of biochemistry researchers to investigate
+          Coming from computer science, I worked with molecular biologists and
+          chemists, who ran the cell and molecular experiments, to investigate
           the regulation of calcium-mediated lysosomal exocytosis and its impact
           on cell invasion and migration in{" "}
           <span className="font-semibold">liver cancer</span>. I conducted{" "}
@@ -1113,11 +1163,10 @@ const projectsData: Project[] = [
       "Developed a comprehensive, data-driven AI solution to optimize the photoresist blending process in semiconductor production, overcoming extreme industrial constraints.",
     highlights: [
       "Presented to the global data science team at Merck Data Science Garage (January 2025)",
-      "Awarded the Surface Gernsheim Award 2024 (Efficiency Category) & Spot Award (MyImpact@Merck)",
       "Evolved from a 1-step baseline to a robust 2-step decoupled architecture enforcing chemical consistency",
-      "Automated an exhaustive model search pipeline rigorously testing over 50,000 combinations",
-      "Eliminated data leakage by correcting a flawed time-series split, the single largest driver of the accuracy gain",
-      "Engineered a custom, business-oriented evaluation metric balancing statistical fit with industrial tolerances",
+      "Searched 5,000+ pipeline configurations, judged by a three-stage evaluation (cross-validation → repeated random splits → independent test set)",
+      "Defined a composite evaluation metric with the chemistry engineers from the tolerances the process requires, and added a bootstrap-based reliability score",
+      "Top models reached 83–95% first-time-right in testing",
       "Developed a bilingual Streamlit web app with automated multi-source data ingestion and MLOps serialization",
     ],
     skills: [
@@ -1143,10 +1192,10 @@ const projectsData: Project[] = [
           production. Overcoming extreme industrial constraints of small
           datasets (~200 to 300+ samples), high-noise environments, and no GPU
           infrastructure, the project evolved from a baseline 1-step
-          proof-of-concept into a robust 2-step model architecture. This system
-          successfully replaced manual, experience-based judgments with
-          automated predictions, significantly enhancing production efficiency
-          and product quality.
+          proof-of-concept into a robust 2-step model architecture. Instead of
+          relying on experience alone, engineers get candidate configurations
+          together with a reliability signal, improving production
+          efficiency.
         </p>
 
         <h3 className="text-xl font-bold mb-4 mt-8">
@@ -1172,13 +1221,11 @@ const projectsData: Project[] = [
             manufacturing batches and KNN imputation for missing values.
           </li>
           <li>
-            Overcame low Signal-to-Noise Ratio (SNR) environments by correcting
-            the validation protocol,{" "}
-            <strong>
-              replacing a flawed time-series split with a randomized split
-            </strong>
-            . Eliminating this data leakage was the single largest driver of the
-            accuracy gain — larger than any change of algorithm.
+            Kept evaluation honest on a small, noisy dataset with a{" "}
+            <strong>three-stage protocol</strong>: cross-validated grid search,
+            then repeated random splits, then an independent test set — and
+            used the signal-to-noise ratio to judge what could be learned at
+            all, rather than over-tuning on a few hundred samples.
           </li>
         </ul>
 
@@ -1188,8 +1235,8 @@ const projectsData: Project[] = [
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
             Designed and executed an exhaustive, automated model search
-            pipeline, rigorously{" "}
-            <strong>testing over 50,000 combinations</strong> of preprocessing
+            pipeline, searching{" "}
+            <strong>5,000+ pipeline configurations</strong> of preprocessing
             steps, feature selections, and models to find the optimal
             configuration for limited data.
           </li>
@@ -1235,9 +1282,10 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Engineered a custom, business-oriented scoring system balancing MSE,
-            R², and strict industrial tolerance requirements{" "}
-            <code>(0.3*MSE + 0.3*R² + 0.2*Error0.7 + 0.2*Error1.5)</code>.
+            Defined a composite evaluation metric together with the chemistry
+            engineers, built from the tolerances the process requires, since no
+            standard metric matched it: it combines prediction error with the
+            hit rate inside two tolerance bands.
           </li>
           <li>
             Pioneered an improved{" "}
@@ -1270,23 +1318,19 @@ const projectsData: Project[] = [
         </h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-3 mb-4">
           <li>
-            <strong>Significantly Improved Prediction Accuracy:</strong>{" "}
-            Transformed baseline models with negative R² into highly reliable
-            predictors (R² of 0.60 for M-SEMI), achieving a{" "}
-            <strong>First-Time-Right (FTR) rate between 83% and 95%</strong> in
-            testing.
+            <strong>First-time-right:</strong> top models reached{" "}
+            <strong>83–95% first-time-right</strong> in testing.
           </li>
           <li>
             <strong>Data Strategy Revelation:</strong> Demonstrated that in
-            industrial AI, rigorous data preprocessing, feature engineering, and
-            proper validation splits (solving data leakage) are far more
+            industrial AI, rigorous data preprocessing, domain-driven feature
+            engineering, and a disciplined evaluation protocol are far more
             critical to success than algorithm complexity.
           </li>
           <li>
             <strong>Team Knowledge & Governance:</strong> Established a
-            standardized AI workflow and documentation framework, significantly
-            reducing onboarding time for new team members and paving the way for
-            scalable industrial AI applications within Merck.
+            standardized AI workflow and documentation framework, paving the
+            way for scalable industrial AI applications within Merck.
           </li>
         </ul>
       </div>
@@ -1296,17 +1340,18 @@ const projectsData: Project[] = [
     id: "merck-lab-reservation",
     title: "Full-Stack Laboratory Equipment Reservation System",
     organization: "Merck KGaA, Darmstadt",
-    timeframe: "April 2024 - Jan 2025",
+    timeframe: "May 2024 - September 2025",
     supervisor: "Hans-Martin Körber",
     description:
-      "Developed a complete full-stack web application replacing an outdated calendar system, featuring Litestream AWS S3 replication and Docker CI/CD.",
+      "Built and launched a company-wide full-stack lab-booking web app from scratch, replacing a Power App + Power Automate booking workflow, with Litestream replication to AWS S3 and Docker CI/CD.",
     highlights: [
-      "Built a full-stack application from scratch to replace an outdated calendar-based booking system",
+      "Built and launched a company-wide lab-booking web app from scratch, replacing a Power App + Power Automate booking workflow; planned for 50+ users",
+      "Booking logic: administrator approval by e-mail, first-come-first-served locking, automatic rejection on timeout, and reminders",
       "Developed a responsive Vue.js 3 + Vuetify frontend with custom theming and localization",
       "Built a high-performance FastAPI + Tortoise ORM backend",
       "Engineered database replication to AWS S3 using Litestream via Foundry",
       "Integrated corporate SSO authentication using Palantir Foundry Dev Tools",
-      "Configured Docker deployment on AWS EC2 with Azure DevOps CI/CD pipelines",
+      "Multi-stage Docker build; image pushed to AWS ECR and run on Merck's Uptimize App Service (AWS) / EC2, with Azure DevOps CI/CD",
     ],
     skills: [
       "Python",
@@ -1327,11 +1372,10 @@ const projectsData: Project[] = [
           Developed a comprehensive full-stack web application for laboratory
           equipment reservation,{" "}
           <strong>
-            replacing an outdated calendar-based booking system to solve real
-            organizational bottlenecks
+            replacing a Power App + Power Automate booking workflow
           </strong>
-          , optimizing laboratory resource management and improving equipment
-          utilization at Merck KGaA.
+          . I built it from scratch and launched it company-wide at Merck KGaA,
+          planned for more than 50 users.
         </p>
 
         <h3 className="text-xl font-bold mb-3 mt-6">Tech Stack</h3>
@@ -1372,8 +1416,10 @@ const projectsData: Project[] = [
             Built a high-performance backend API using FastAPI and Tortoise ORM.
           </li>
           <li>
-            Implemented complex reservation logic and device management
-            functionalities.
+            Implemented the reservation logic and device management: after a
+            booking, administrators are notified by e-mail to confirm;
+            first-come-first-served locking; automatic rejection on timeout;
+            reminders.
           </li>
         </ul>
 
@@ -1404,7 +1450,7 @@ const projectsData: Project[] = [
             <strong>
               Litestream for database replication to AWS S3 bucket on Foundry
             </strong>
-            , ensuring zero-data-loss durability in a stateless containerized
+            , keeping the data durable in a stateless containerized
             environment.
           </li>
         </ul>
@@ -1427,11 +1473,11 @@ const projectsData: Project[] = [
           <li>
             Created a multi-stage Dockerfile for optimized container builds.
           </li>
-          <li>Configured deployment on AWS EC2 using Docker containers.</li>
           <li>
-            Set up CI/CD pipelines with Azure DevOps for automated testing and
-            deployment.
+            Pushed the Docker image to AWS ECR and ran it on Merck&apos;s
+            Uptimize App Service (on AWS) / AWS EC2.
           </li>
+          <li>Set up CI/CD pipelines with Azure DevOps.</li>
         </ul>
       </div>
     ),
@@ -1439,18 +1485,18 @@ const projectsData: Project[] = [
   {
     id: "merck-pigment-production",
     title: "Pigment Production Optimization (FRED 2.0)",
-    organization: "Merck KGaA, Darmstadt",
-    timeframe: "October 2023 - November 2024",
+    organization: "Merck KGaA, Gernsheim",
+    timeframe: "October 2023 - March 2024",
     supervisor: "Michael Schleehahn",
     description:
-      "Award-winning project optimizing pigment manufacturing. Built asynchronous pipelines to extract fragmented legacy data and identified 'panic-driven' operator interventions.",
+      "Award-winning project optimizing pigment manufacturing. In a six-person project team I built the asynchronous pipelines that extract fragmented legacy data, and the analysis that separated meaningful operator interventions from 'panic-driven' ones.",
     highlights: [
-      "Won the Surface Gernsheim Award 2024 (Efficiency Category) for outstanding process optimization",
+      "The project team (six people) earned the Surface Gernsheim Award 2024 for efficiency",
       "Engineered an asynchronous Python pipeline to synchronize fragmented time-series data across legacy Aspen servers",
       "Navigated dozens of scattered database tables to accurately locate sensors and production phases per batch",
-      "Developed custom phase detection algorithms tailored to specific pigment types (Iriodin, Iriotec series)",
-      "Proved that reducing 'panic-driven' manual pH adjustments significantly improved yield stability",
-      "Provided data-driven evidence that existing sensor and control systems were inherently robust",
+      "Built phase-detection algorithms tuned per pigment class",
+      "The frequency, magnitude and timing of manual setpoint changes separated meaningful interventions from panic-driven ones — evidence that less unnecessary intervention meant steadier yield",
+      "Built the Aspen data retrieval tool: batching, async and concurrent requests, resumable runs — what previously took 4–5 hours now completes in about 40 minutes",
     ],
     skills: [
       "Python",
@@ -1466,14 +1512,14 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-4 leading-relaxed">
+          FRED 2.0 optimized pigment production at Merck in Gernsheim,
+          Germany: it improved production efficiency, saved costs, and made the
+          operators&apos; work easier.{" "}
           <strong>
-            Recognized with the Surface Gernsheim Award 2024 (Efficiency
-            Category)
-          </strong>
-          , this project (FRED 2.0) achieved significant efficiency improvements
-          and cost reduction in pigment production processes at Merck,
-          Gernsheim, Germany. The solution optimized the manufacturing of
-          various pigments, including the Iriodin and Iriotec series.
+            The six-person project team earned the Surface Gernsheim Award 2024
+            (Efficiency).
+          </strong>{" "}
+          My part was the data pipeline and the analysis.
         </p>
 
         <h3 className="text-xl font-bold mb-3 mt-6">
@@ -1495,6 +1541,13 @@ const projectsData: Project[] = [
             to translate chemical process logic into SQL/Python extraction
             logic.
           </li>
+          <li>
+            Built the <strong>Aspen data retrieval tool</strong> on this line
+            and later rebuilt it with FastAPI and a Streamlit front end:
+            batching, asynchronous and concurrent requests, resumable runs,
+            drag-and-drop Excel input and live progress in the browser. What
+            previously took 4–5 hours now completes in about 40 minutes.
+          </li>
         </ul>
 
         <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
@@ -1502,9 +1555,9 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Developed phase detection algorithms tailored to each pigment type's
-            unique production characteristics, automatically isolating the
-            specific phases targeted for optimization.
+            Developed phase-detection algorithms tuned per pigment class,
+            automatically isolating the specific phases targeted for
+            optimization.
           </li>
           <li>
             Analyzed manual setpoint adjustments—including frequency, magnitude,
@@ -1516,15 +1569,14 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-bold mb-3 mt-6">Business Impact</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Provided data-driven evidence that the underlying sensor and control
-            systems were inherently robust, and that excessive manual
-            intervention (e.g., reactive pH adjustments triggering multi-hour
-            stabilization cycles) was counterproductive.
+            The frequency, magnitude and timing of manual setpoint changes
+            separated meaningful interventions from panic-driven ones —
+            evidence that less unnecessary intervention meant steadier yield.
           </li>
           <li>
-            Demonstrated that targeted reduction of unnecessary interventions
-            directly improved yield stability, reduced production downtime, and
-            lowered operator burden, leading to significant cost savings.
+            The project improved production efficiency, saved costs and made
+            the operators&apos; work easier; the project team earned the
+            Surface Gernsheim Award 2024 for efficiency.
           </li>
         </ul>
       </div>
@@ -1560,11 +1612,11 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-6 leading-relaxed">
-          As part of the Data Sciences team at Merck KGaA, I worked on
+          As part of the Data Sciences team at Merck KGaA, we worked on
           optimizing a life science production process (specifically fluid bed
           processing of Parteck® excipients), applying machine learning and data
-          analysis techniques to enhance manufacturing efficiency and product
-          quality.
+          analysis techniques to the production parameters. This was a team
+          project; the points below describe what we did.
         </p>
 
         <h3 className="text-xl font-bold mb-4">
@@ -1663,6 +1715,117 @@ const projectsData: Project[] = [
     ),
   },
   {
+    id: "count-finance-website",
+    title: "Count Finance Website: Design, Build and Delivery",
+    organization: "Count Finance (freelance)",
+    timeframe: "July 2026 - September 2026",
+    description:
+      "Redesigned and rebuilt the public website of Count Finance, a UK personal-finance app company: design specification, front end, static site and deployment hand-off. The client signed it off and the site is live.",
+    highlights: [
+      "Replaced the client's previous Webflow site: I owned the design specification, page structure, features and engineering, from landing-page prototype to final hand-off",
+      "Final delivery: a static export of 16 pages (6 pages and 10 legal documents); an earlier round shipped a 12-question Money Type quiz, a triage page and 18 analytics events",
+      "Compliance built into the code: analytics tags load only after the visitor accepts, every figure carries its source next to it, and legal texts are reproduced verbatim from the client",
+      "Accessible by design: 375px baseline, intact at 360px, WCAG 1.4.10 reflow down to 320px, and reduced-motion support",
+      "Spec-driven development with coding agents: I wrote the specification and a staged build order; each stage was implemented by a coding agent and reviewed by me before commit",
+    ],
+    skills: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS 4",
+      "Framer Motion",
+      "Static Export",
+      "Cloudflare Workers",
+      "GA4",
+      "Accessibility",
+    ],
+    image: "/projects/count-finance.webp",
+    category: "corporate",
+    content: (
+      <div className="text-[#333333]">
+        <p className="mb-6 leading-relaxed">
+          A freelance project for{" "}
+          <LinkPreview
+            url="https://count-finance.com/"
+            className="text-[#FD6142] hover:underline"
+          >
+            Count Finance
+          </LinkPreview>
+          , a UK personal-finance app company: a full rebuild of their public
+          website, replacing the previous Webflow site. I did the design,
+          planning and feature definition and was responsible for the
+          engineering, from the first landing-page prototype in July 2026 to the
+          final delivery in September 2026, which the client signed off.
+        </p>
+
+        <h3 className="text-xl font-bold mb-3 mt-6">What I Delivered</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+          <li>
+            A design specification organizing the pages along an emotional
+            arc (Hope → Reality → Answer → Proof → Action), design tokens, a
+            design-system document, a data-visualization spec, a content and
+            compliance source table, an analytics plan, and deployment and
+            hand-over documentation.
+          </li>
+          <li>
+            The first delivery (August 2026): 14 pages, 9 legal documents
+            converted from PDF into pages, a 12-question Money Type quiz with 6
+            outcomes, a triage page sorting 11 answers into three groups, 18
+            analytics events and 37 components.
+          </li>
+          <li>
+            The final delivery (September 2026): 6 pages plus 10 legal
+            documents, 16 statically exported pages in all.
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-bold mb-3 mt-6">Engineering</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+          <li>
+            Next.js 16 (App Router, static export), React 19, TypeScript,
+            Tailwind CSS 4, Framer Motion and lucide-react; marked converts
+            the legal documents and sharp runs the image pipeline at build
+            time.
+          </li>
+          <li>
+            The five target charts are hand-written inline SVG with Framer
+            Motion, and the carousel is hand-written scroll-snap — no UI,
+            chart, carousel or cookie-consent libraries.
+          </li>
+          <li>
+            <strong>Compliance as code structure:</strong> financial promotion
+            is regulated, so the GA4 tag is not on the page until the visitor
+            clicks Accept; every figure has its source recorded next to it, so
+            changing a number is a compliance decision; internal notes are
+            stripped at build time; legal texts are reproduced verbatim.
+          </li>
+          <li>
+            <strong>Accessibility:</strong> designed at a 375px baseline,
+            intact at 360px, reflowing down to 320px per WCAG 1.4.10; under{" "}
+            <code>prefers-reduced-motion</code> animations go straight to their
+            final state.
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-bold mb-3 mt-6">How It Was Built and Handed Over</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+          <li>
+            Spec-driven development with coding agents: I wrote the
+            specification and a staged build order; each stage was implemented
+            in a fresh coding-agent session and reviewed by me before it was
+            committed, and the next stage waited for that review.
+          </li>
+          <li>
+            Hand-over to non-developers: a deployment guide with one action
+            per step for Cloudflare Workers static assets; the delivery listed
+            three pre-launch regulatory risks separately for the client to
+            confirm.
+          </li>
+        </ul>
+      </div>
+    ),
+  },
+  {
     id: "nmy-llm-assistant",
     title: "Voice-Interactive LLM Assistant",
     organization: "NMY Mixed Reality Studio",
@@ -1672,7 +1835,7 @@ const projectsData: Project[] = [
       "Built a knowledge-base voice assistant prototype (RAG) intended for enterprise VR/AR use, and delivered a pragmatic hardware-scalability assessment that concluded the engagement.",
     highlights: [
       "Built a voice-interactive chatbot using LLaMA 2, LangChain, and ChromaDB for knowledge base embedding",
-      "Implemented text-to-speech functionality using Bark to enable voice interaction in VR",
+      "Implemented text-to-speech functionality using Bark to enable voice interaction",
       "Developed and tested the pipeline locally on an NVIDIA 4070Ti GPU with 7B open-source models",
       "Identified critical scalability constraints: available hardware was insufficient for multi-user inference with TTS overhead",
       "Provided pragmatic architectural recommendations that led to a mutual agreement to conclude the engagement",
@@ -1684,7 +1847,6 @@ const projectsData: Project[] = [
       "ChromaDB",
       "Streamlit",
       "Bark TTS",
-      "VR/AR Architecture",
       "Strategic Planning",
     ],
     image: "/projects/llm.webp",
@@ -1822,7 +1984,7 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-6 leading-relaxed">
-          As the co-founder and product manager of a wellness industry startup,
+          As the co-founder and product lead of a wellness industry startup,
           I oversaw every step of the process from company registration to
           launching the initial apps. My responsibilities included market
           research, mobile app design, development, testing, and investor
@@ -1926,12 +2088,12 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
-            Met with investors and pitched the business plan, successfully{" "}
+            Met with investors and pitched the business plan,{" "}
             <strong>
-              negotiating and securing a ¥2,000,000 RMB angel investment at 20%
-              equity dilution with Shanghai-based VC (Youtang Capital)
+              negotiating a ¥2,000,000 RMB angel investment at 20% equity
+              dilution with Shanghai-based VC (Youtang Capital)
             </strong>
-            .
+            ; the investment arrived after I had left the company.
           </li>
           <li>
             Engaged with different managers in the wellness industry to explore
@@ -1974,9 +2136,9 @@ const projectsData: Project[] = [
   },
   {
     id: "ai-powered-portfolio",
-    title: "AI-Powered Portfolio: Creating a Modern Developer Identity",
+    title: "Personal Website: yili-dev.com",
     organization: "Personal Project",
-    timeframe: "February 2025 - March 2025",
+    timeframe: "February 2025 - March 2025, revised September 2026",
     supervisor: "",
     description:
       "Developed a comprehensive personal portfolio website that combines modern web development technologies with advanced AI image generation techniques.",
@@ -1984,7 +2146,8 @@ const projectsData: Project[] = [
       "Generated a personalized 3D Pixar-style avatar using Stable Diffusion 1.5 with ComfyUI workflow and IPAdapter",
       "Built the website using Next.js, Tailwind CSS, and Framer Motion for optimized performance and engaging animations",
       "Developed advanced UI architecture with BentoGrid pattern for flexible, modular component layout",
-      "Deployed the static website to Cloudflare Pages with automated CI/CD pipeline for efficient updates",
+      "Deployed the static website to Cloudflare Pages, which builds and publishes every push to main",
+      "Revised in September 2026: audited every claim against my own records, then fixed facts and wording, added a Publications section, and improved SEO and sharing previews",
     ],
     skills: [
       "Next.js",
@@ -2001,7 +2164,7 @@ const projectsData: Project[] = [
       "UI/UX Design",
     ],
     image: "/projects/portfolio.webp",
-    category: "corporate",
+    category: "personal",
     content: (
       <div>
         <p className="mb-4">
@@ -2011,7 +2174,11 @@ const projectsData: Project[] = [
           <span className="font-semibold">AI image generation techniques</span>{" "}
           to create a distinctive personal brand presence. The portfolio
           showcases both frontend development capabilities and expertise in
-          leveraging AI models for creative content generation.
+          leveraging AI models for creative content generation. I built it in
+          February–March 2025; in September 2026 I audited every fact on it
+          against my own records and revised it in batches — facts and
+          wording, positioning, a new Publications section, then SEO, sharing
+          previews and performance.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -2045,8 +2212,9 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Built the website using Next.js for optimized performance and
-            server-side rendering capabilities
+            Built the website with the Next.js App Router as a fully static
+            export; the content is static and typed, and nothing is fetched at
+            runtime
           </li>
           <li>
             Implemented responsive design principles using Tailwind CSS for
@@ -2066,10 +2234,6 @@ const projectsData: Project[] = [
             polished visual elements
           </li>
           <li>
-            Designed interactive data visualizations to showcase skills and
-            project metrics
-          </li>
-          <li>
             Implemented animated backgrounds (FlickeringGrid, BackgroundBeams)
             for visual interest
           </li>
@@ -2085,7 +2249,8 @@ const projectsData: Project[] = [
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>Established version control workflow using Git and GitHub</li>
           <li>
-            Configured CI/CD pipeline for automated testing and deployment
+            Connected the GitHub repository to Cloudflare Pages, which builds
+            and deploys every push to main
           </li>
           <li>
             Deployed the static website to Cloudflare Pages for global CDN
@@ -2141,12 +2306,11 @@ const projectsData: Project[] = [
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Future Enhancements</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
-          <li>Implement internationalization for multi-language support</li>
-          <li>Add a headless CMS for easier content management</li>
-          <li>Develop a blog section with technical articles</li>
           <li>
-            Integrate more interactive elements and user engagement features
+            Rebuild the Technical Arsenal screen around measurements from my
+            own projects
           </li>
+          <li>Add research notes and long-form project deep-dives</li>
         </ul>
         <p className="mt-6">
           Visit my{" "}
@@ -2170,12 +2334,106 @@ const projectsData: Project[] = [
     ),
   },
   {
+    id: "open-source-agent-tools",
+    title: "Open-Source Tools for Multi-Agent Research Runs",
+    organization: "Personal · open source (MIT)",
+    timeframe: "October 2026",
+    description:
+      "Two small open-source tools for running many AI coding agents on one machine and one git working tree — each written in response to a real incident.",
+    highlights: [
+      "wombat-gate: a commit queue for AI agents sharing one git repository — they wait their turn, and each commits only the paths it names; the repository's git configuration is left untouched",
+      "dingo-pack: heavy-job slots and memory limits for many agents on one machine — heavy jobs wait for memory and run under a memory cap — plus a session roster to restore agents after a crash",
+      "Each tool answers a real incident: agents sharing a working tree fought over git's index.lock and committed each other's staged files; the machine ran out of memory and took every session down with it",
+      "I set the requirements, the design and the review; the code was written with AI coding agents",
+    ],
+    skills: [
+      "Bash",
+      "Git",
+      "tmux",
+      "Linux / WSL",
+      "cgroups",
+      "Claude Code",
+      "Codex",
+      "Open Source",
+    ],
+    image: "/projects/open-source-tools.webp",
+    category: "personal",
+    content: (
+      <div className="text-[#333333]">
+        <p className="mb-6 leading-relaxed">
+          When one person runs a group of AI coding agents on a research
+          project, the first bottleneck is infrastructure: git writes, memory,
+          and starting and stopping sessions. I wrote each of these tools after
+          something actually went wrong — find the root cause first, then turn
+          the fix into a mechanism.
+        </p>
+
+        <h3 className="text-xl font-bold mb-3 mt-6">wombat-gate</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+          <li>
+            A commit queue for agents sharing one git repository: sessions
+            wait for the same local lock, and each commits only the paths it
+            names. It does not change the repository&apos;s git configuration.
+          </li>
+          <li>
+            Written after several sessions sharing one working tree fought
+            over git&apos;s <code>index.lock</code> and swept up files another
+            session had staged.
+          </li>
+          <li>
+            Public on{" "}
+            <LinkPreview
+              url="https://github.com/liyifreddy/wombat-gate"
+              className="text-[#FD6142] hover:underline"
+            >
+              GitHub
+            </LinkPreview>{" "}
+            under MIT; latest release v0.6.2.
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-bold mb-3 mt-6">dingo-pack</h3>
+        <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+          <li>
+            Heavy-job slots on one machine: a heavy job waits until memory is
+            available and then runs under a memory cap; admission uses the
+            committed amount and is corrected from the measured peak after the
+            first 60 seconds.
+          </li>
+          <li>
+            A session roster to save and restore Claude Code sessions after a
+            crash, plus checks for leftover sessions.
+          </li>
+          <li>
+            Written after the machine ran out of memory, the shared drive
+            dropped, and every session went down together.
+          </li>
+          <li>
+            Public on{" "}
+            <LinkPreview
+              url="https://github.com/liyifreddy/dingo-pack"
+              className="text-[#FD6142] hover:underline"
+            >
+              GitHub
+            </LinkPreview>{" "}
+            under MIT; latest release v0.1.1.
+          </li>
+        </ul>
+
+        <p className="mb-4 leading-relaxed">
+          I set the requirements, designed the tools and reviewed every change;
+          the code was written with AI coding agents.
+        </p>
+      </div>
+    ),
+  },
+  {
     id: "infinitas-comedy",
-    title: "Cofounder of Infinitas Comedy Club",
+    title: "Founder of Infinitas Comedy Club",
     organization: "Infinitas Comedy Club",
     timeframe: "October 2022 - February 2023",
     description:
-      "Co-founded and organized the first Chinese stand-up comedy club in Germany, leading its establishment and growth through events and community building.",
+      "Founded and organized a Chinese stand-up comedy club in Germany, leading its establishment and growth through events and community building.",
     highlights: [
       "Successfully organized 8 events including actor training sessions, script readings, online webinars, and open mics",
       "Attracted approximately 40-50 participants per event, providing a platform for both new and experienced performers",
@@ -2197,10 +2455,11 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          As the co-founder and organizer of Infinitas Comedy, the first Chinese
-          stand-up comedy club in Germany, I led the establishment and growth of
-          the club, organizing various events and building a strong community of
-          enthusiasts and performers.
+          I founded and organized Infinitas Comedy, a Chinese stand-up comedy
+          club in Germany, and led its establishment and growth, organizing
+          various events and building a community of enthusiasts and
+          performers. I stepped back in February 2023; the club is still
+          running.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -2279,9 +2538,9 @@ const projectsData: Project[] = [
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Project Outcome</h3>
         <p className="mb-4">
-          Successfully established and grew the first Chinese stand-up comedy
-          club in Germany, providing a platform for performers and building a
-          strong community through effective marketing and collaboration.
+          Successfully established and grew a Chinese stand-up comedy club in
+          Germany, providing a platform for performers and building a strong
+          community through effective marketing and collaboration.
         </p>
       </div>
     ),
@@ -2469,6 +2728,19 @@ export const projectTabs = [
         <ProjectGrid
           projects={projectsData.filter(
             (project) => project.category === "corporate",
+          )}
+        />
+      </div>
+    ),
+  },
+  {
+    title: "Personal & Open Source",
+    value: "personal",
+    content: (
+      <div className="w-full bg-[#A67C3D]/90 backdrop-blur-sm p-8 rounded-xl">
+        <ProjectGrid
+          projects={projectsData.filter(
+            (project) => project.category === "personal",
           )}
         />
       </div>

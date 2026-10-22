@@ -277,13 +277,13 @@ const SkillsVisual = () => {
       <div className="flex flex-wrap gap-1 justify-center">
         {[
           { name: "PyTorch", color: colors[0] },
-          { name: "Computer Vision", color: colors[1] },
-          { name: "Next.js", color: colors[2] },
-          { name: "AIGC", color: colors[3] },
-          { name: "Docker", color: colors[4] },
-          { name: "FastAPI", color: colors[5] },
-          { name: "Streamlit", color: colors[6] },
-          { name: "NLP", color: colors[7] },
+          { name: "Object-Centric", color: colors[1] },
+          { name: "Imitation Learning", color: colors[2] },
+          { name: "Medical Imaging", color: colors[3] },
+          { name: "Evaluation", color: colors[4] },
+          { name: "Docker", color: colors[5] },
+          { name: "FastAPI", color: colors[6] },
+          { name: "Streamlit", color: colors[7] },
         ].map((skill, i) => (
           <motion.div
             key={i}
@@ -480,7 +480,7 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
                   <SparklesText
-                    text="&lt;DL Engineer&gt;"
+                    text="&lt;Robot Learning&gt;"
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extralight text-black whitespace-nowrap"
                     sparklesCount={8}
                     colors={{ first: "#FFC353", second: "#E43C30" }}
@@ -640,15 +640,16 @@ export default function Home() {
                   description={
                     <div className="space-y-3 p-4 flex flex-col h-full justify-center">
                       <p className="text-base leading-relaxed">
-                        I'm a{" "}
+                        I'm an{" "}
                         <span className="text-black/70 font-semibold">
-                          deep learning engineer
-                        </span>{" "}
-                        and
-                        <span className="text-black/70 font-semibold">
-                          {" "}
                           AI researcher
                         </span>{" "}
+                        with an
+                        <span className="text-black/70 font-semibold">
+                          {" "}
+                          engineer&apos;s habits
+                        </span>
+                        ,
                         driven by a simple belief:
                       </p>
 
@@ -689,7 +690,7 @@ export default function Home() {
           </div>
         </div>
         <p className="text-base leading-relaxed text-gray-800">
-          Turning industrial data into production-ready AI. At Merck I raised first-time-right rates in photoresist blending and rebuilt a pigment-line pipeline that won the 2024 Surface Gernsheim Efficiency Award.
+          Turning industrial data into production-ready AI. At Merck, my photoresist-blending models reached 83–95% first-time-right in testing, and I built the data pipeline for FRED 2.0, whose project team earned the Surface Gernsheim Award 2024 for efficiency.
         </p>
       </div>
 
@@ -733,94 +734,36 @@ export default function Home() {
   description={
     <div className="grid grid-cols-2 gap-x-3 gap-y-10 overflow-y-auto h-[calc(100%-2rem)] p-3 my-10 mb-20">
       
-      {/* 1. AI & Vision */}
-      <div className="space-y-3">
-        <h3 className="text-lg font-bold mb-1 text-[#FD6142]">AI & Vision</h3>
-        
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#C19A49] rounded-full mr-2"></span>Deep Learning
-          </h4>
-          <p className="text-xs text-gray-400">PyTorch, Imitation Learning</p>
-        </div>
-
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#B08642] rounded-full mr-2"></span>CV & Robotics
-          </h4>
-          <p className="text-xs text-gray-400">Embodied AI, DINO, 6D Pose</p>
-        </div>
-
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#D2A554] rounded-full mr-2"></span>Generative AI
-          </h4>
-          <p className="text-xs text-gray-400">Diffusion Models, VAE, ComfyUI</p>
-        </div>
+      <div className="space-y-2">
+        <h3 className="text-lg font-bold mb-1 text-[#FD6142]">Robot Learning & Embodied AI</h3>
+        <h4 className="text-sm font-bold flex items-center">
+          <span className="inline-block w-2 h-2 bg-[#C19A49] rounded-full mr-2"></span>Object-Centric Representations
+        </h4>
+        <p className="text-xs text-gray-400">Imitation Learning, Behavior Cloning, Slot Attention, DINO ViT, Action Chunking, Multi-View Fusion, ManiSkill3 / SAPIEN</p>
       </div>
 
-      {/* 2. Development */}
-      <div className="space-y-3">
-        <h3 className="text-lg font-bold mb-1 text-[#FD6142]">Development</h3>
-
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#C8954D] rounded-full mr-2"></span>Frontend
-          </h4>
-          <p className="text-xs text-gray-400">Vue.js, Next.js, Tailwind CSS</p>
-        </div>
-
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#B7873D] rounded-full mr-2"></span>Backend
-          </h4>
-          <p className="text-xs text-gray-400">FastAPI, Python, RESTful APIs</p>
-        </div>
-
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#D7B672] rounded-full mr-2"></span>HPC & DevOps
-          </h4>
-          <p className="text-xs text-gray-400">SLURM, Docker, AWS, Linux</p>
-        </div>
+      <div className="space-y-2">
+        <h3 className="text-lg font-bold mb-1 text-[#FD6142]">Vision & Medical Imaging</h3>
+        <h4 className="text-sm font-bold flex items-center">
+          <span className="inline-block w-2 h-2 bg-[#B08642] rounded-full mr-2"></span>Low-Prevalence Detection
+        </h4>
+        <p className="text-xs text-gray-400">Semantic Segmentation, Diffusion Models, 6D Pose Estimation, OOD Robustness, Domain Shift, Synthetic Data</p>
       </div>
 
-      {/* 3. Data Science */}
-      <div className="space-y-3">
-        <h3 className="text-lg font-bold mb-1 text-[#FD6142]">Data Science</h3>
-
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#A67C3D] rounded-full mr-2"></span>Processing & ML
-          </h4>
-          <p className="text-xs text-gray-400">Pandas, XGBoost, Scikit-learn</p>
-        </div>
-
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#BF9146] rounded-full mr-2"></span>Interactive Viz
-          </h4>
-          <p className="text-xs text-gray-400">Streamlit, Plotly, BertViz</p>
-        </div>
+      <div className="space-y-2">
+        <h3 className="text-lg font-bold mb-1 text-[#FD6142]">Evaluation & Data</h3>
+        <h4 className="text-sm font-bold flex items-center">
+          <span className="inline-block w-2 h-2 bg-[#D2A554] rounded-full mr-2"></span>Pre-Registered Protocols
+        </h4>
+        <p className="text-xs text-gray-400">Failure Taxonomy, Paired Bootstrap, Nested Cross-Validation, Power Analysis, Label-Noise Sensitivity, Group-Leakage Control</p>
       </div>
 
-      {/* 4. Other Skills */}
-      <div className="space-y-3">
-        <h3 className="text-lg font-bold mb-1 text-[#FD6142]">Other Skills</h3>
-
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#BF9146] rounded-full mr-2"></span>NLP & XAI
-          </h4>
-          <p className="text-xs text-gray-400">LangChain, Hugging Face, XAI</p>
-        </div>
-
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center">
-            <span className="inline-block w-2 h-2 bg-[#C19A49] rounded-full mr-2"></span>Research Practice
-          </h4>
-          <p className="text-xs text-gray-400">Ablation design, failure taxonomies, reproducibility</p>
-        </div>
+      <div className="space-y-2">
+        <h3 className="text-lg font-bold mb-1 text-[#FD6142]">Engineering & Delivery</h3>
+        <h4 className="text-sm font-bold flex items-center">
+          <span className="inline-block w-2 h-2 bg-[#C8954D] rounded-full mr-2"></span>PyTorch
+        </h4>
+        <p className="text-xs text-gray-400">Docker (CPU-only inference), SLURM, FastAPI, AWS, Streamlit, Vue.js / Next.js, Reproducibility</p>
       </div>
 
     </div>
@@ -957,7 +900,7 @@ export default function Home() {
                   My Projects
                 </h2>
                 <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                  Building solutions that make a difference
+                  Research, industry and personal work, with the numbers attached
                 </p>
               </motion.div>
 
@@ -1055,15 +998,19 @@ export default function Home() {
             >
               <div className="mb-3 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-semibold text-gray-300">
-                  Co-author
+                  6th of 7 authors
                 </span>
               </div>
               <h3 className="text-lg md:text-xl font-bold leading-snug text-white">
                 E-ScootAR: Exploring Unimodal Warnings for E-Scooter Riders in
                 Augmented Reality
               </h3>
-              <p className="mt-2 text-sm text-gray-400">
-                ACM CHI 2022 Extended Abstracts &middot; DOI{" "}
+              <p className="mt-2 text-sm text-gray-300">
+                Andrii Matviienko, Florian Müller, Dominik Schön, Régis Fayard,
+                Salar Abaspur, Yi Li, Max Mühlhäuser
+              </p>
+              <p className="mt-1 text-sm text-gray-400">
+                CHI 2022 Extended Abstracts (Late-Breaking Work) &middot; DOI{" "}
                 <a
                   href="https://doi.org/10.1145/3491101.3519831"
                   target="_blank"
@@ -1085,7 +1032,7 @@ export default function Home() {
             >
               <div className="mb-3 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-semibold text-gray-300">
-                  Co-author
+                  5th author
                 </span>
               </div>
               <h3 className="text-lg md:text-xl font-bold leading-snug text-white">
@@ -1123,9 +1070,8 @@ export default function Home() {
                 Representation for Robotic Manipulation
               </h3>
               <p className="mt-2 text-sm text-gray-400">
-                M.Sc. thesis, TU Darmstadt, 2026 &middot; Reviewers: Prof. Jan
-                Peters, Prof. Liming Chen &middot; Supervisors: Alap Kshirsagar,
-                Alexandre Chapin
+                M.Sc. thesis, TU Darmstadt, 2026 &middot; Supervised by Prof. Jan
+                Peters, Prof. Liming Chen, Alexandre Chapin, Alap Kshirsagar
               </p>
               <p className="mt-1 text-sm text-gray-300">Grade 1.3 (sehr gut)</p>
             </motion.li>
@@ -1192,7 +1138,7 @@ export default function Home() {
                 My Journey
               </h2>
               <p className="text-xl text-gray-700 max-w-2xl mx-auto tracking-tight">
-                Code with Compassion, Automation for Liberation
+                Work and education, from Chongqing to Darmstadt
               </p>
             </motion.div>
             {/* 时间轴整体容器 - 将其改为两栏独立结构 */}
@@ -1235,12 +1181,12 @@ export default function Home() {
                     </p>
                     <div className="text-gray-800 my-4 space-y-3">
   <p className="leading-relaxed">
-    Applied machine learning and full-stack engineering to semiconductor and chemical manufacturing across four projects — earning two company awards and a reference letter signed by two Directors.
+    Applied machine learning and full-stack engineering to semiconductor and chemical manufacturing across four projects. Work reference (Arbeitszeugnis) signed by two Directors: &ldquo;far above-average&rdquo; at all times, &ldquo;extraordinarily satisfied&rdquo;.
   </p>
   
 
     <div>
-      <p className="font-bold text-[#8B4513]">🏆 Surface Gernsheim Award 2024 (Efficiency)</p>
+      <p className="font-bold text-[#8B4513]">🏆 Surface Gernsheim Award 2024 (Efficiency) · FRED 2.0 (team award)</p>
       <p className="font-bold text-[#8B4513]">🏆 Spot Award 2025 (MyImpact@Merck)</p>
     </div>
     <p className="text-gray-700 leading-relaxed">
@@ -1262,6 +1208,40 @@ export default function Home() {
                         loading="lazy" // 延迟加载
                       />
                     </div>
+                  </div>
+                </motion.div>
+
+                {/* Count Finance (freelance) */}
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="relative mb-24"
+                >
+                  <div className="absolute right-[-56px] top-8 w-4 h-4 bg-[#b97b2a] border-2 border-[#B08642] rounded-full z-10"></div>
+                  <div className="relative bg-white/20 backdrop-blur-sm p-6 rounded-lg shadow-sm text-right">
+                    {/* 渐变时间条 */}
+                    <div className="absolute top-0 right-0 h-1 w-full bg-gradient-to-r from-[#D7B672] to-[#B08642] rounded-t-lg"></div>
+
+                    <h4 className="text-lg font-bold text-[#B08642]">
+                      Freelance Web Developer
+                    </h4>
+                    <p className="text-gray-700 font-medium">
+                      Count Finance
+                    </p>
+                    <p className="text-gray-600 text-sm mb-4">
+                      Remote
+                    </p>
+                    <p className="font-semibold text-[#B08642]">
+                      Jul 2026 - Sep 2026
+                    </p>
+                    <p className="text-gray-800 my-4">
+                      Redesigned and rebuilt the public website of a UK
+                      personal-finance app company: design specification,
+                      front end, static site and deployment hand-off, with
+                      compliance built into the code. Signed off by the client
+                      and live at count-finance.com.
+                    </p>
                   </div>
                 </motion.div>
 
@@ -1323,7 +1303,7 @@ export default function Home() {
                     <div className="absolute top-0 right-0 h-1 w-full bg-gradient-to-r from-[#D7B672] to-[#B08642] rounded-t-lg"></div>
 
                     <h4 className="text-lg font-bold text-[#B08642]">
-                      Co-founder and Product Manager
+                      Co-founder &amp; Product Lead
                     </h4>
                     <p className="text-gray-700 font-medium">
                       Hangzhou BseTech Co., Ltd.
@@ -1335,9 +1315,9 @@ export default function Home() {
                       Oct 2015 - Jan 2016
                     </p>
                     <p className="text-gray-800 my-4">
-                      As the co-founder and product manager of a wellness
-                      industry startup, I explored every step of the process
-                      from company registration to launching the initial apps.
+                      As the co-founder and product lead of a wellness
+                      industry startup, I took the product from company
+                      registration to two apps launched on the App Store China.
                     </p>
                     <div className="flex justify-end mt-4">
                       <Image
@@ -1401,22 +1381,23 @@ export default function Home() {
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {[
-                          "Computer Vision",
-                          "Visual Computing",
+                          "Computer Vision I",
+                          "Visual Computing Lab",
                           "Robot Learning",
                           "Information Visualization and Visual Analytics",
-                          "Statistical ML",
+                          "Statistical Machine Learning",
                           "Probabilistic Graphical Models",
-                          "DL for Medical Imaging",
-                          "Continual ML",
-                          "NLP and the Web",
+                          "Deep Learning for Medical Imaging",
+                          "Continual Machine Learning",
+                          "Natural Language Processing and the Web",
                           "Foundations of Language Technology",
-                          "Deep Learning for NLP",
+                          "Deep Learning for Natural Language Processing",
                           "Deep Learning: Architectures & Methods",
-                          "Advanced Topics in CV and ML",
-                          "DL and Digital Humanities",
-                          "Advanced Practical Course Visual Computing",
-                          "Data Analysis for Natural Language",
+                          "Advanced Topics in Computer Vision and Machine Learning",
+                          "Deep Learning and Digital Humanities",
+                          "Advanced Visual Computing Lab",
+                          "Data Analysis Software Project for Natural Language",
+                          "Hands-On HCI",
                         ].map((course) => (
                           <span
                             key={course}
@@ -1453,7 +1434,7 @@ export default function Home() {
                           </LinkPreview>
                         </li>
                         <li>
-                          Advanced CV & ML (04/2022) -{" "}
+                          Advanced Topics in Computer Vision and Machine Learning (04/2022) -{" "}
                           <LinkPreview
                             url="https://docs.google.com/presentation/d/1YJKn43caKJz9pEj21JuPaxTIEz3L2qAk/edit?usp=sharing&ouid=114895168252372624309&rtpof=true&sd=true"
                             className="text-[#FD6142] hover:underline"
@@ -1462,7 +1443,7 @@ export default function Home() {
                           </LinkPreview>
                         </li>
                         <li>
-                          Deep Learning & Digital Humanities (01/2022) -{" "}
+                          Deep Learning and Digital Humanities (01/2022) -{" "}
                           <LinkPreview
                             url="https://docs.google.com/presentation/d/1bxJ6dXiRZGEm82bRIlimZ1Ct8X2NqZB7/edit?usp=sharing&ouid=114895168252372624309&rtpof=true&sd=true"
                             className="text-[#FD6142] hover:underline"
@@ -1499,46 +1480,17 @@ export default function Home() {
                     <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-l from-[#D7B672] to-[#B08642] rounded-t-lg"></div>
 
                     <h4 className="text-lg font-bold text-[#B08642]">
-                      B.Sc. Computer Science
+                      B.Sc. Computer Science and Technology
                     </h4>
                     <p className="text-gray-700 font-medium">
-                      Chongqing University of Post and Telecommunications
+                      Chongqing University of Posts and Telecommunications
                     </p>
                     <p className="text-gray-600 text-sm mb-4">
                       Chongqing, China
                     </p>
                     <p className="font-semibold text-[#B08642]">
-                      Sep 2012 - Jul 2016
+                      Sep 2012 - Jun 2016
                     </p>
-                    <p className="text-gray-800 my-4">
-                      Sino-Canadian joint program. Computer science
-                      fundamentals with early exploration of machine learning.
-                      Ranked 1st in the department in freshman year; awarded an
-                      RMB 8,000 scholarship for academic excellence.
-                    </p>
-
-                    {/* Campus activities */}
-                    <div className="mt-4">
-                      <p className="text-sm font-bold text-[#B08642] mb-2">
-                        Campus Activities:
-                      </p>
-                      <ul className="text-sm text-gray-800 list-disc pl-5 space-y-1">
-                        <li>
-                          Minister of Publicity Department, Students' Science
-                          and Technology Union (2013-2014)
-                        </li>
-                        <li>
-                          Trumpeter in the University's Orchestra, College
-                          Students Art Troupe (2012-2015)
-                        </li>
-                        <li>
-                          Product Designer for KuaiShou APP, Shortlisted in
-                          Chongqing Youth App Development Competition (2014)
-                        </li>
-                        <li>Campus Representative for Meituan (2014)</li>
-                      </ul>
-                    </div>
-
                     <div className="flex justify-start mt-4">
                       <Image
                         src="/cqupt.webp"
@@ -1580,73 +1532,45 @@ export default function Home() {
                 Technical Arsenal
               </h2>
               <p className="text-xl text-gray-300 max-w-2xl mx-auto tracking-tight">
-                Crafting solutions with precision tools and innovative
-                approaches
+                The tools I work with
               </p>
             </motion.div>
 
             {/* Bento网格 - 数据可视化仪表盘 */}
             <BentoGrid className="max-w-[100vw] mx-auto grid md:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 md:auto-rows-[minmax(260px,_auto)] gap-4">
-              {/* 1. 核心竞争力分析 */}
-              <BentoGridItem
-                title="Core Competencies"
-                description={<CoreCompetencyRadar />}
-                className="md:col-span-1 md:row-span-1 md:order-1 lg:order-1 overflow-hidden"
-              />
-
-              {/* 2. 项目复杂度vs影响力矩阵 */}
-              <BentoGridItem
-                title="Project Impact Matrix"
-                description={<ProjectComplexityImpactMatrix />}
-                className="md:col-span-2 md:row-span-1 md:order-3 lg:order-1 overflow-hidden"
-              />
-              {/* 3. 数据科学饼图 - 从原有组件保留但已修复 */}
-              <BentoGridItem
-                title="Data Science Expertise"
-                description={<DataSciencePieChart />}
-                className="md:col-span-1 md:row-span-1 md:order-2 lg:order-1  overflow-hidden"
-              />
-
-              {/* 4. 技术Logo网格 - 保留原有组件 */}
+              {/* 自评分、年限类图表已撤下（没有出处）；这一屏的图表重做留给改版 */}
+              {/* 技术Logo网格 */}
               <BentoGridItem
                 title="Tech Stack"
                 description={<TechLogoGrid />}
-                className="md:col-span-2 md:row-span-1 md:order-4 lg:order-1 overflow-hidden"
+                className="md:col-span-2 md:row-span-1 overflow-hidden"
               />
 
-              {/* 4. 知识图谱 */}
+              {/* 知识图谱 */}
               <BentoGridItem
                 title="Knowledge Graph"
                 description={<KnowledgeGraph />}
-                className="md:col-span-1 md:row-span-1 md:order-5 lg:order-1 overflow-hidden"
+                className="md:col-span-1 md:row-span-1 overflow-hidden"
               />
 
-              {/* 5. AI研究热力图 */}
+              {/* 语言 */}
               <BentoGridItem
-                title="AI Research Focus"
-                description={<AIResearchFocus />}
-                className="md:col-span-1 md:row-span-1 md:order-6 lg:order-1 overflow-hidden"
-              />
-
-              {/* 7. AI能力 - 从原有组件保留但已修复 */}
-              <BentoGridItem
-                title="AI Capabilities"
-                description={<AICapabilitiesChart />}
-                className="md:col-span-1 md:row-span-1 md:order-7 lg:order-1 overflow-hidden"
-              />
-
-              {/* 8. 专业领域经验 */}
-              <BentoGridItem
-                title="Professional Experience"
-                description={<ProfessionalExperience />}
-                className="md:col-span-2 md:row-span-1 md:order-9 lg:order-1 overflow-hidden"
-              />
-
-              {/* 9. 专业领域经验 */}
-              <BentoGridItem
-                title="Others"
-                description={<LanguageDesignSkills />}
-                className="md:col-span-1 md:row-span-1 md:order-8 lg:order-1 overflow-hidden"
+                title="Languages"
+                description={
+                  <ul className="h-full p-4 flex flex-col justify-center space-y-3 text-base text-black/80">
+                    <li>
+                      <span className="font-semibold">German</span> — telc C1
+                      Hochschule
+                    </li>
+                    <li>
+                      <span className="font-semibold">English</span> — fluent
+                    </li>
+                    <li>
+                      <span className="font-semibold">Chinese</span> — native
+                    </li>
+                  </ul>
+                }
+                className="md:col-span-1 md:row-span-1 overflow-hidden"
               />
             </BentoGrid>
           </div>

@@ -203,13 +203,6 @@ export const ProjectComplexityImpactMatrix = () => {
       category: "Productivity",
     },
     {
-      name: "Data Analysis Dashboard",
-      complexity: 50,
-      impact: 70,
-      time: 8,
-      category: "Productivity",
-    },
-    {
       name: "Lab Equipment System",
       complexity: 65,
       impact: 88,
@@ -278,20 +271,6 @@ export const ProjectComplexityImpactMatrix = () => {
     },
 
     // UX
-    {
-      name: "Human-Centered AI Tool",
-      complexity: 60,
-      impact: 82,
-      time: 10,
-      category: "UX",
-    },
-    {
-      name: "AR Safety Interface",
-      complexity: 72,
-      impact: 78,
-      time: 13,
-      category: "UX",
-    },
     {
       name: "E-ScootAR Warnings",
       complexity: 68,

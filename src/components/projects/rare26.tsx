@@ -22,7 +22,6 @@ export const rare26Project: Project = {
   title: "RARE26 — Early Barrett's Neoplasia Detection Challenge",
   organization: "EndoVis · MICCAI 2026 — solo entrant",
   timeframe: "July – September 2026",
-  supervisor: "Solo entrant · code and technical report public under MIT",
   description:
     "A solo challenge entry in medical imaging: a frozen backbone, a 4096-parameter read-out head, and 1835 pre-registered cross-center comparisons — 77% of which resolved nothing, and are published anyway.",
   highlights: [
@@ -31,7 +30,7 @@ export const rare26Project: Project = {
     "Made that negative credible: the adoption rule was written before each grid ran — both directions, paired bootstrap, a practical-significance threshold measured from a power curve rather than chosen, and never the argmax of a grid, since a nested search showed the inner loop's best cell was detectably worse on the fold it never saw in 9 of 22 cases",
     "The one change that survived scores each of the 49 spatial positions separately and pools the top 2% instead of averaging the feature map first, because averaging dilutes a small lesion — cross-center it cut residual false positives at 90% recall by 66.9% and 89.3%",
     "Kept the encoder frozen by design, not by budget: a provider-pretrained GI-endoscopy ResNet-50 used unchanged, with only a 4096-parameter closed-form shrinkage discriminant fitted on its 7×7 feature map — which is what made 1835 closed-form comparisons affordable on one laptop GPU",
-    "Delivered as a CPU-only container: 26.0 s end to end per 384-frame case on the evaluation hardware against a 600 s budget, reproduced offline with zero rank changes",
+    "Delivered as a CPU-only container: 26.0 s end to end per 384-frame case on the evaluation hardware against a 600 s budget; the platform's stored results matched a local run with zero rank changes",
   ],
   skills: [
     "PyTorch",
@@ -293,10 +292,12 @@ export const rare26Project: Project = {
             <tr className="border-b border-gray-200">
               <td className="py-2 px-4">Reproduction</td>
               <td className="py-2 px-4">
-                packaged image reloaded and run with the network disabled, then
-                compared frame by frame against the offline computation: maximum
-                per-image difference 4.917e-07, <strong>zero rank changes</strong>,
-                Spearman 1.0000
+                two separate checks. The packaged image, run with the network
+                disabled on the 16 official sample images, matched the offline
+                computation to a maximum per-image difference of 4.917e-07. The
+                results stored by the platform matched a local run to a maximum
+                difference of 1.31e-06, with <strong>zero rank changes</strong>{" "}
+                and Spearman 1.0000
               </td>
             </tr>
           </tbody>
@@ -325,8 +326,8 @@ export const rare26Project: Project = {
           </strong>
         </li>
         <li>
-          The final ranking is announced at MICCAI 2026 in October. Nothing on
-          this page is a final result.
+          The closed testing phase has ended. This page reports the method and
+          my own cross-center measurements, not the leaderboard.
         </li>
       </ul>
       <p className="mb-6 leading-relaxed">
@@ -346,7 +347,16 @@ export const rare26Project: Project = {
         >
           project repository
         </LinkPreview>
-        , together with the full technical report.
+        , together with the full technical report; the official four-page
+        method report was submitted to the challenge platform with the
+        closed-testing entry. The code is archived on Zenodo under the DOI{" "}
+        <LinkPreview
+          url="https://doi.org/10.5281/zenodo.22728882"
+          className="text-[#FD6142] hover:underline"
+        >
+          10.5281/zenodo.22728882
+        </LinkPreview>
+        .
       </p>
       <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
         <li>

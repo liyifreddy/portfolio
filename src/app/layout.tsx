@@ -46,7 +46,7 @@ const personJsonLd = {
   "@type": "Person",
   name: "Yi Li",
   url: "https://yili-dev.com",
-  jobTitle: "Deep Learning Engineer",
+  jobTitle: "AI Researcher",
   alumniOf: [
     {
       "@type": "CollegeOrUniversity",
@@ -54,7 +54,7 @@ const personJsonLd = {
     },
     {
       "@type": "CollegeOrUniversity",
-      name: "Chongqing University of Post and Telecommunications",
+      name: "Chongqing University of Posts and Telecommunications",
     },
   ],
   sameAs: [

@@ -26,7 +26,7 @@ export type Project = {
   highlights: string[];
   skills: string[];
   image: string;
-  category: "corporate" | "research" | "social";
+  category: "corporate" | "research" | "personal" | "social";
   content: React.ReactNode; // 详细内容
 };
 
