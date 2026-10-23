@@ -52,31 +52,20 @@ const projectsData: Project[] = [
       <div className="text-[#333333]">
         <h3 className="text-xl font-bold mb-3">Overview & Problem Statement</h3>
         <p className="mb-4 leading-relaxed">
-          State-of-the-art visuomotor policies such as ACT and Diffusion Policy
-          achieve high success rates but train the vision backbone end to end,
-          which costs GPU memory and demonstrations. With RGB observations and
-          1,000 demonstrations on PickCube-v1, the ManiSkill3 paper reports best
-          success rates during training of 98%
-          for ACT and 100% for Diffusion Policy, but 3% for its plain
-          behavior-cloning baseline (Tao et al., arXiv:2410.00425, Table III);
-          with 100 demonstrations ACT and Diffusion Policy drop to 28% and 76%.
+          I studied how frozen visual representations affect a manipulation
+          policy's generalization to object and goal placements unseen in
+          training. The experiments used behavior cloning from 1,000
+          motion-planner demonstrations in ManiSkill3, with PickCube-v1 as
+          the main task and StackCube-v1 as a cross-task check.
         </p>
         <p className="mb-6 leading-relaxed">
-          This master's thesis investigates how frozen, self-supervised visual
-          representations can be integrated into continuous robotic manipulation
-          policies under standard hardware constraints. Rather than fine-tuning
-          large vision backbones end-to-end, we adapt the{" "}
-          <strong>SPOT encoder</strong> — a self-supervised model combining a
-          frozen DINO ViT-B/16 backbone with Slot Attention — as a structural
-          bottleneck that compresses dense visual features into compact
-          object-centric slot representations.{" "}
-          <strong>
-            The full pipeline runs on a single 11–12 GB GPU.
-          </strong>{" "}
-          We identified and addressed three core bottlenecks: dimensionality and
-          memory scaling of dense VFM features, task objective misalignment, and
-          the "Last Millimeter" spatial bottleneck caused by the absence of
-          absolute 3D coordinates in 2D slot representations.
+          I conducted the thesis independently at TU Darmstadt and École
+          Centrale de Lyon. I integrated SPOT with its official COCO
+          weights, kept the encoder frozen and fed its object-centric slots
+          to a causal Transformer policy. The controlled experiments
+          separated representation structure, fusion, spatial grounding and
+          rendering resolution. Each training job used a single RTX 2080 Ti
+          or RTX 3080 Ti with 11–12 GB of memory.
         </p>
 
         <h3 className="text-xl font-bold mb-3">System Architecture</h3>
@@ -129,7 +118,8 @@ const projectsData: Project[] = [
             hidden dim 256).
           </li>
           <li>
-            <strong>Action Chunking:</strong> predicts H=10 step action chunks.
+            <strong>Action chunking:</strong> predicts 10 action steps and
+            executes the first, then replans at the next observation.
           </li>
           <li>
             <strong>Decoupled gripper:</strong> hard step function + separate
@@ -143,9 +133,13 @@ const projectsData: Project[] = [
 
         <h3 className="text-xl font-bold mb-3">Key Experiments and Results</h3>
         <p className="mb-3">
-          Evaluated on ManiSkill3 PickCube-v1 under a held-out-seed protocol
-          (train seeds 0–9,999, eval seeds ≥10,000), best checkpoint over
-          3×300 episodes:
+          The table combines two experiment axes: encoder choice under fixed
+          policy, goal token, 128×128 rendering and approximate calibration;
+          and spatial grounding and resolution with SPOT fixed. Stability
+          results are mean ± standard deviation over three independent
+          300-episode evaluations of the selected checkpoint. The dense DINO
+          row is a checkpoint-sweep result under a different
+          memory-constrained setup.
         </p>
 
         <div className="overflow-x-auto mb-6">
@@ -204,12 +198,11 @@ const projectsData: Project[] = [
         </div>
 
         <p className="mb-6 text-sm leading-relaxed text-gray-600">
-          Two caveats I report rather than exploit. The 14×14 dense row is not
-          evidence about token count: an 11 GB memory budget forced T=1 and
-          H=1, stripping the temporal context every other row keeps. The honest
-          token-count argument is the 4×4 grid — 16× the tokens of global
-          [CLS], statistically indistinguishable success rate. Token budget is
-          not what drives the gap; representational structure is.
+          The matched encoder comparison is SPOT against global DINO and the
+          4×4 patch grid. The grid uses 16 times as many tokens as global
+          DINO but gives similar success. Dense 14×14 features forced T=1
+          and H=1 on the 11 GB card, so that row does not isolate the effect
+          of token count.
         </p>
 
         <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
@@ -217,53 +210,51 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-6">
           <li>
-            <strong>Structure beats capacity:</strong> with the policy, goal
-            token and rendering held fixed, SPOT reached 55.0% against 32.6%
-            for global [CLS] and 31.7% for the 4×4 patch baseline (+22.4pp
-            over global [CLS]), while the 4×4 grid, with 16× the tokens of
-            global [CLS], gives no gain — the driver is representational
-            structure, not token count. The 14×14 dense row is left out of
-            this comparison, since memory forced it to T=1, H=1.
+            <strong>Frozen representations:</strong> with the policy, goal
+            token, rendering and calibration fixed, SPOT reached 55.0 ± 2.9%
+            success, global DINO 32.6 ± 1.5%, and DINO patches 31.7 ± 3.0%. In
+            this setting, grouping the image into object-centric slots helped
+            more than adding patch tokens.
           </li>
           <li>
-            <strong>Explicit 2D spatial grounding</strong> (projected from a
-            known 3D target, and therefore privileged rather than
-            self-supervised) targets the Near-Miss placement bottleneck.
-            Near-Miss failures fall from 31.0% under the pure-visual condition
-            to 21.0% with the deployable 2D anchor, and reach 2.5% only under a
-            privileged 3D goal. No-Grasp failures were not improved across
-            all three conditions (15 / 15 / 24 per 200 episodes) — spatial
-            grounding fixes placement, not object tracking. The two bottlenecks
-            need different fixes.
+            <strong>Failure diagnosis:</strong> the classifier reads action
+            variance, the grasp flag and TCP-to-goal distance, and assigns
+            Idle, No Grasp, Drop, Near Miss or Unknown without rendering
+            images. In separate 200-episode runs, Near Miss fell from 31% with
+            purely visual goal information to 21% with the 2D anchor and 2.5%
+            with a privileged 3D goal. No-Grasp failures were not improved.
+            The 2D projection still uses the known 3D target position.
           </li>
           <li>
-            <strong>Native 224×224 rendering</strong> removes an upsampling
-            artifact and adds a further +10pp, lifting the full system to 68.7%.
+            <strong>Calibration and resolution:</strong> with the 2D goal
+            token and SPOT fixed, exact calibration gave 58.7 ± 3.4% success
+            at 128×128. With the 2D anchor, exact calibration and native
+            224×224 rendering, the full system reached 68.7 ± 4.2% on one 11
+            GB GPU, versus 71.7 ± 4.1% for the privileged, non-deployable 3D
+            oracle.
           </li>
           <li>
-            <strong>Capacity does not transfer:</strong> token concatenation and
-            bidirectional cross-attention reach the same held-out SR, but
-            cross-attention shows a ~29pp train-to-test gap — its extra
-            parameters overfit the training trajectories rather than learning
-            genuine cross-modal structure.
+            <strong>Fusion and history:</strong> parameter-free concatenation
+            and bidirectional cross-attention both reached 31.0% held-out
+            success; cross-attention had a train-to-test gap of about 29
+            percentage points. Before the spatial-grounding fixes, T=5, 20 and
+            40 all gave 6.7% in 30-episode evaluations during training.
           </li>
           <li>
-            <strong>Generic transforms ignore physical semantics:</strong> one
-            global Z-score across the full 9-DoF action vector collapses
-            success to 0% — finger joints (σ ≈ 0.011) and arm joints (σ ≈ 0.21)
-            differ by roughly 100× in scale, so the normalization amplifies
-            gripper noise into the gradient. Restricting normalization to the 7
-            arm joints restores 31%.
+            <strong>Action normalization:</strong> global Z-score
+            normalization of the 9-DoF vector kept the gripper closed and gave
+            0.0% success. The finger-width standard deviation was about 0.0108
+            m, so normalization amplified that signal by approximately 100
+            times. Truncating the input to the 7 arm joints restored 31.0 ±
+            2.8%.
           </li>
           <li>
-            <strong>Kinematic Failure Taxonomy:</strong> an automated,
-            encoder-agnostic analysis across 200 episodes per configuration
-            separates grasping failures from Near-Miss placement errors, turning
-            a binary success rate into evidence-driven diagnostics — and
-            transfers unchanged to StackCube-v1, where it isolates occlusion as
-            the dominant bottleneck. Run there, it reports No-Grasp at 72%: in
-            144 of 200 episodes the arm never picked up the first cube, from arm
-            self-occlusion of the fixed side camera.
+            <strong>Cross-task check:</strong> the same classifier ran
+            unchanged on StackCube-v1. In a single 200-episode diagnostic run,
+            72% of episodes failed to grasp cube A. The fixed side camera was
+            occluded during approach, and the frozen encoder had no temporal
+            memory. The aligned policy reached 5.3 ± 2.2% in the separate
+            stability evaluation.
           </li>
           <li>
             <strong>A negative result that shaped the encoder choice:</strong>{" "}
@@ -309,8 +300,7 @@ const projectsData: Project[] = [
             stability test (300 episodes, 3 runs).
           </li>
           <li>
-            <strong>Codebase:</strong> Modular pipeline separating encoder,
-            token construction, policy, and evaluation.
+            <strong>Thesis and paper:</strong> the thesis was graded 1.3 (sehr gut). A condensed, reorganized version was accepted as a first-author, peer-reviewed poster at the RSS 2026 Workshop From Perception to Action (non-archival). <LinkPreview url="https://arxiv.org/abs/2607.09825" className="text-[#FD6142] hover:underline">Paper</LinkPreview> · <LinkPreview url="https://openreview.net/forum?id=2HyzYL710J" className="text-[#FD6142] hover:underline">OpenReview</LinkPreview>.
           </li>
         </ul>
       </div>
@@ -368,11 +358,9 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Generated <strong>36,000+</strong> PBR data images for BOP YCB
-            objects (drill, bowl, and mug) using BlenderProc. This included
-            transformation matrices, depth maps, and masks from BopToolKit under
-            different rendering textures, illumination conditions, angles, and
-            scales.
+            Generated 36,000+ physically based rendered images of three YCB
+            objects: drill, bowl and mug. BlenderProc supplied precise 6D pose
+            annotations for the synthetic data.
           </li>
           <li>
             Employed Blender 2.93 and BlenderProc2 to create datasets with image
@@ -381,8 +369,9 @@ const projectsData: Project[] = [
             unseen ones), about two days per object on one node.
           </li>
           <li>
-            Utilized DaVinci Resolve 18 for chroma keying green screen videos to
-            obtain real data for experimentation.
+            Chroma-keyed supervisor-provided BOP videos of 21 YCB objects in
+            DaVinci Resolve 18 to prepare the real-image side of the
+            experiments.
           </li>
         </ul>
 
@@ -395,21 +384,18 @@ const projectsData: Project[] = [
             reproducing results with the DeepFashion dataset.
           </li>
           <li>
-            Implemented a data loader to train the model with our generated
-            data, encountering and solving numerous issues related to
-            dependencies and environment setup.
+            Added a repose dataset mode and loader, with 3D arrows as a pose
+            prior. I resolved the environment dependencies to run Python 3.8,
+            CUDA 11.0 and batch size 4 on one GPU.
           </li>
           <li>
-            Explored other image translation models like PITI, Paint by Example,
-            and DragGAN, testing their capabilities in generating diverse poses
-            while maintaining style consistency.
+            Evaluated PITI and Paint by Example, and tried both the official
+            and an unofficial DragGAN implementation as alternative image-translation approaches.
           </li>
           <li>
-            <strong>Research Insight:</strong> Identified a key limitation:
-            human-centric generative models relying on OpenPose priors fail to
-            zero-shot transfer to rigid industrial objects lacking anatomical
-            keypoints — a finding with direct implications for industrial object
-            pose estimation pipelines.
+            In these experiments, human-centric models relying on OpenPose
+            priors did not transfer zero-shot to rigid objects without
+            anatomical keypoints. This was a qualitative finding.
           </li>
         </ul>
 
@@ -418,13 +404,14 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
-            Utilized CosyPose, which leverages multi-view 6D object pose
-            estimation, to validate the outcomes of the image translation
-            models.
+            Configured CosyPose for multi-view 6D pose estimation. A working
+            pose-estimation setup was one of the completed outputs, alongside
+            the PBR dataset and the DeepFashion reproduction.
           </li>
           <li>
-            Addressed challenges in maintaining geometric consistency and style
-            during pose estimation through iterative debugging and testing.
+            The experiments exposed mismatched Blender and matplotlib
+            coordinate systems and an incorrect interpretation of the pose
+            prior. These had to be separated from the model-transfer question.
           </li>
         </ul>
 
@@ -447,28 +434,27 @@ const projectsData: Project[] = [
             across SLURM partitions.
           </li>
           <li>
-            Dealt with the inherent complexity of integrating image translation
-            and pose estimation models, requiring a deep understanding of both
-            domains and significant debugging efforts.
+            The model weights and pose priors were built around human bodies.
+            Rigid objects required a different way of expressing pose;
+            reproducing the human-image results alone did not establish
+            transfer.
           </li>
         </ul>
 
-        <h3 className="text-xl font-bold mb-4">Future Work</h3>
+        <h3 className="text-xl font-bold mb-4">Results and Scope</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Develop a suitable approach for encoding pose information of
-            objects, enabling the adaptation of CoCosNet-v2 from human datasets
-            to object datasets.
+            Completed the pose-annotated synthetic dataset, the CoCosNet-v2
+            reproduction on DeepFashion and a working CosyPose setup.
           </li>
           <li>
-            Experiment with StyleGAN-based models and novel approaches like
-            Pivotal Tuning Inversion (PTI) to enhance style control and accuracy
-            in pose estimation.
+            Both team members contributed throughout; I generated the PBR data
+            under my cluster account and wrote most of the final report.
           </li>
           <li>
-            Investigate the integration of image translation and pose estimation
-            models, focusing on defining loss functions and feature fusion
-            techniques.
+            The transfer result is qualitative. It identifies a limitation of
+            the tested human-centric priors rather than a measured improvement
+            in pose accuracy.
           </li>
         </ul>
       </div>
@@ -523,13 +509,14 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">1. Data Generation</h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Utilized the MNIST-Extended (MNIST-E) and Breast Cancer Semantic
-            Segmentation (BCSS) datasets for training and validation.
+            Started with MNIST-Extended as a toy problem, then moved to BCSS
+            breast-cancer histology. The BCSS masks distinguish tumor, stroma,
+            lymphocyte-rich tissue, necrosis or debris, and remaining tissue.
           </li>
           <li>
-            Generated synthetic images and segmentation masks using VAE and LDM
-            techniques, aiming to improve the diversity and quality of training
-            data.
+            The intended output was a corresponding image–mask pair. This made
+            the way the mask entered the generative model a central
+            experimental variable.
           </li>
         </ul>
 
@@ -540,13 +527,14 @@ const projectsData: Project[] = [
             experiments on the MNIST-E dataset.
           </li>
           <li>
-            Transitioned to Latent Diffusion Models (LDM) to leverage their
-            computational efficiency and flexibility in encoding different types
-            of conditions.
+            Ran latent diffusion over the VAE representation and compared a
+            separate segmentation decoder, a shared image–mask latent space
+            and two independently encoded latent spaces.
           </li>
           <li>
-            Developed a denoising U-Net within the LDM framework to enhance the
-            quality of generated images and masks.
+            In the shared-latent route, one denoising U-Net generated the
+            image and mask jointly. The pair came from the same denoising
+            process.
           </li>
         </ul>
 
@@ -586,13 +574,15 @@ const projectsData: Project[] = [
         </h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Faced difficulties in generalizing models trained on MNIST-E to the
-            BCSS dataset due to differences in data complexity.
+            The toy-to-histology transition exposed a specific failure:
+            reconstruction loss stayed near 0.2 while validation mask loss
+            rose from 0.4 to 1.7. I used the two curves to isolate the mask
+            branch.
           </li>
           <li>
-            Standard anti-overfitting steps (data augmentation, larger image
-            tiles) did not fix the mask side; what worked was changing how the
-            mask enters the model — one joint latent space for image and mask.
+            Binary masks, larger tiles and augmentation improved the image
+            side but left the mask behavior unchanged. Sharing the latent
+            space produced paired samples; separate VAEs produced noise.
           </li>
         </ul>
 
@@ -688,28 +678,30 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Integrated BertViz into SQuARE to provide interactive visualizations
-            of attention mechanisms in Transformer models.
+            Integrated BertViz from the model-inference API through the Vue.js
+            frontend, so a user could inspect attention on an individual
+            question alongside results from a behavioral test suite.
           </li>
           <li>
-            Implemented both backend and frontend components using Vue.js and
-            Docker, ensuring seamless integration with existing QA pipelines.
+            Connected the other team members' modules to UKP-SQuARE,
+            implemented frontend interactions and wrote much of the core code.
+            Docker packaged the CheckList service with the platform.
           </li>
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">2. Behavioral Testing</h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Developed a microservice to run CheckList, enabling comprehensive
-            behavioral testing of QA models.
+            Built a Dockerized CheckList microservice to test BERT- and
+            RoBERTa-based question-answering models by capability.
           </li>
           <li>
             Conducted Minimum Functionality Tests for unit testing capabilities
             like taxonomy and vocabulary.
           </li>
           <li>
-            Evaluated model robustness using Invariance (INV) tests, focusing on
-            Named Entity Recognition (NER) and other critical aspects.
+            Ran named-entity Invariance tests to check whether a model
+            maintained the expected behavior after an input change.
           </li>
         </ul>
 
@@ -720,35 +712,40 @@ const projectsData: Project[] = [
             Face.
           </li>
           <li>
-            Conducted detailed evaluations using CheckList to compare model
-            performance against expected behavioral outcomes.
+            Analyzed which input categories each model handled correctly and
+            where it failed, making the test outcome more specific than an
+            aggregate model score.
           </li>
         </ul>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Achievements</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Successfully integrated explainability methods into SQuARE,
-            enhancing the interpretability and trustworthiness of QA models.
+            Delivered the integration in a four-person research project at UKP
+            Lab, supervised by Haritz Puerto.
           </li>
           <li>
-            Improved the platform's ability to visualize and understand model
-            decisions through BertViz.
+            BertViz made attention available in the same frontend as
+            behavioral results. Attention was an inspection aid for individual
+            questions.
           </li>
           <li>
-            Conducted extensive behavioral testing to ensure model robustness
-            and reliability.
+            The tests exposed capability-specific errors in the evaluated QA
+            models; they provided evidence about those behaviors rather than a
+            guarantee of reliability.
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
+        <h3 className="text-xl font-semibold mb-2 mt-6">What the Project Shows</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
-            Automate behavioral tests to streamline model evaluation processes.
+            The engineering work joined a model API, a test microservice and a
+            Vue.js interface in an existing research platform.
           </li>
           <li>
-            Explore contrastive explanations to provide deeper insights into
-            model decisions and improve interpretability.
+            My contribution covered integration, frontend work, analysis and
+            much of the core implementation. The linked model-api-v3 branch
+            contains the project code.
           </li>
         </ul>
       </div>
@@ -828,14 +825,12 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Trained a MobileNet classifier on the{" "}
-            <span className="font-semibold">Kvasir</span> dataset to detect
-            gastrointestinal diseases.
+            Trained a MobileNet classifier on Kvasir, a gastrointestinal
+            endoscopy image classification dataset.
           </li>
           <li>
-            Evaluated the model's performance on both in-distribution (IN) and
-            OOD data, observing a significant drop in accuracy for OOD data (IN:
-            82.1%, OOD: 40.3%).
+            Measured accuracy on the original and augmented data: 82.1% in
+            distribution and 40.3% under the constructed OOD conditions.
           </li>
         </ul>
 
@@ -859,29 +854,32 @@ const projectsData: Project[] = [
         </h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            The experiment demonstrated a significant performance drop in OOD
-            scenarios, highlighting the necessity of OOD detection in endoscopy.
+            These constructed shifts substantially reduced classification
+            accuracy. The result measures robustness to the tested
+            augmentations and does not establish performance on unseen
+            clinical data.
           </li>
           <li>
-            Provided qualitative assessments showing misclassifications where
-            humans could still perceive the correct classes, further emphasizing
-            the need for robust OOD detection methods.
+            Qualitative inspection found images that the model misclassified
+            even though a human could still recognize the correct category.
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
+        <h3 className="text-xl font-semibold mb-2 mt-6">Contribution and Scope</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
-            Enhance the physical realism of augmented images through
-            physically-based rendering techniques.
+            This was a three-person research project supervised by Henry Krumb
+            at MEC-Lab. Everyone contributed; I carried out most of the
+            implementation and experiments.
           </li>
           <li>
-            Increase the diversity and quantity of samples and renderings to
-            improve model training and evaluation.
+            The OpenCV augmentations were incorporated into FrOoDo, MEC-Lab's
+            open-source OOD framework, at the code link above.
           </li>
           <li>
-            Develop advanced methods for detecting and handling OOD scenarios in
-            medical imaging applications.
+            The project combined a controlled image perturbation with a
+            before-and-after classification measurement. It examined
+            robustness without changing the task to segmentation.
           </li>
         </ul>
       </div>
@@ -945,25 +943,24 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">1. Warning Systems</h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Developed three different warning assistants: audio, vibrotactile,
-            and visual warnings via AR glasses (Microsoft HoloLens 2).
+            The team compared three unimodal warnings: audio, vibration on the
+            handlebar, and a visual warning displayed in Microsoft HoloLens 2.
           </li>
           <li>
-            Implemented the AR warning system using Unity to create a virtual
-            city environment displayed in AR glasses.
+            I built the visual warning and the Unity virtual urban environment
+            shown through HoloLens 2.
           </li>
           <li>
-            Integrated vibration motors on the e-scooter's handlebar, controlled
-            by a NodeMCU ESP8266 micro-controller, to deliver vibrotactile
-            feedback.
+            Teammates implemented the vibration motors and reaction-time
+            button using the Arduino IDE and a NodeMCU ESP8266.
           </li>
         </ul>
 
         <h4 className="text-lg font-medium mb-2 mt-4">2. Experiment Setup</h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Conducted experiments on a spacious outdoor track, ensuring safety
-            by restricting speed and supervising the trials.
+            I co-ran the controlled outdoor study with the team. The 13
+            participants rode on a supervised track with restricted speed.
           </li>
           <li>
             Participants wore AR glasses and rode e-scooters through virtual
@@ -981,9 +978,8 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Analyzed reaction time and accident rate using repeated measures
-            ANOVA, finding significant differences between AR, audio, and
-            vibrotactile warnings.
+            We analyzed the study with repeated-measures ANOVA in Jamovi,
+            comparing the same participants across warning modalities.
           </li>
           <li>
             AR and audio warnings significantly reduced reaction time compared
@@ -997,33 +993,33 @@ const projectsData: Project[] = [
         </ul>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
-          Challenges and Solutions
+          Study Design
         </h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Addressed issues with the reliability of vibration signals by using
-            high-quality vibration devices and ensuring proper synchronization
-            with warning signals.
+            The virtual urban scene let the team present traffic scenarios
+            while participants rode on a supervised outdoor track.
           </li>
           <li>
-            Improved the realism of virtual traffic scenarios to better simulate
-            real-world conditions without endangering participants.
+            Button presses supplied reaction-time measurements, while Likert-scale responses captured perceived safety and warning perception.
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
+        <h3 className="text-xl font-semibold mb-2 mt-6">Publication and Scope</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
-            Expand the study to include more participants and diverse traffic
-            scenarios, such as interactions with pedestrians and cyclists.
+            The work led to a peer-reviewed short paper and poster in CHI 2022
+            Extended Abstracts (Late-Breaking Work), DOI
+            10.1145/3491101.3519831.
           </li>
           <li>
-            Investigate the impact of different traffic densities on the
-            effectiveness of warning systems.
+            The study found faster reactions to AR and audio than to
+            vibration, with no significant difference between AR and audio.
           </li>
           <li>
-            Explore combinations of different warning modalities to further
-            enhance safety and user experience.
+            The result applies to this 13-participant controlled study. My
+            implementation contribution was the AR visual warning and Unity
+            environment.
           </li>
         </ul>
       </div>
@@ -1065,8 +1061,7 @@ const projectsData: Project[] = [
           using protein structures from the{" "}
           <span className="font-semibold">PDB</span> database and{" "}
           <span className="font-semibold">AutoDock</span> Tools and AutoDock
-          Vina. I optimized docking poses using the Lamarckian genetic algorithm
-          and visualized the docking results with{" "}
+          Vina. I visualized the docking results with{" "}
           <span className="font-semibold">PyMOL</span>. I contributed to{" "}
           <span className="font-semibold">statistical analysis</span> by using
           unpaired student t-test in GraphPad Prism.{" "}
@@ -1076,7 +1071,8 @@ const projectsData: Project[] = [
           >
             The paper is published
           </LinkPreview>{" "}
-          on Ecotoxicology and Environmental Safety.
+          in Ecotoxicology and Environmental Safety (2020); I am the 5th
+          author.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -1092,12 +1088,12 @@ const projectsData: Project[] = [
             and the TRPML1 protein.
           </li>
           <li>
-            Used AutoDock Tools and AutoDock Vina to perform molecular docking,
-            applying the Lamarckian genetic algorithm for optimization.
+            Prepared protein structures from PDB with AutoDock Tools and ran
+            TBBPA–TRPML1 molecular docking with AutoDock Vina.
           </li>
           <li>
-            Visualized docking results and protein-ligand interactions using
-            PyMOL, identifying key binding sites and interaction patterns.
+            Used PyMOL to visualize the docking poses and protein–ligand
+            interactions for discussion with the experimental team.
           </li>
         </ul>
 
@@ -1125,32 +1121,36 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Worked with a multidisciplinary team to design and execute
-            experiments.
+            The molecular biologists and chemists conducted the cell and
+            molecular experiments; I contributed the computational docking and
+            statistical analysis.
           </li>
           <li>
-            Contributed to discussions on experimental design, data
-            interpretation, and manuscript preparation.
+            Used the experimental protein measurements in the statistical
+            analysis, including intracellular and extracellular CTSB and CTSD.
           </li>
           <li>
-            Coordinated with experts in molecular docking and bioinformatics to
-            refine simulation protocols and validate results.
+            The docking and statistical work formed part of a broader
+            experimental investigation of calcium-mediated lysosomal
+            exocytosis in liver cancer.
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2 mt-6">Future Work</h3>
+        <h3 className="text-xl font-semibold mb-2 mt-6">Publication and Contribution</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-0 ">
           <li>
-            Extend molecular docking studies to other potential protein targets
-            involved in lysosomal exocytosis.
+            The resulting paper appeared in Ecotoxicology and Environmental
+            Safety in 2020. I am the 5th author.
           </li>
           <li>
-            Investigate the in vivo effects of TBBPA on liver cancer progression
-            using animal models.
+            The paper links TBBPA, calcium-mediated lysosomal exocytosis, and
+            invasion and migration in hepatocellular carcinoma; the DOI link
+            above leads to the publication.
           </li>
           <li>
-            Explore the development of inhibitors to counteract the
-            pro-metastatic effects of TBBPA in liver cancer.
+            My role was computational: molecular docking, visualization and
+            statistical analysis, working with colleagues who performed the
+            biological experiments.
           </li>
         </ul>
       </div>
@@ -1188,17 +1188,14 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-6 leading-relaxed">
-          Presented at the{" "}
-          <strong>Merck Data Science Garage (January 2025)</strong> to the
-          global data science team. Developed a comprehensive, data-driven AI
-          solution to optimize the photoresist blending process in semiconductor
-          production. Overcoming extreme industrial constraints of small
-          datasets (~200 to 300+ samples), high-noise environments, and no GPU
-          infrastructure, the project evolved from a baseline 1-step
-          proof-of-concept into a robust 2-step model architecture. Instead of
-          relying on experience alone, engineers get candidate configurations
-          together with a reliability signal, improving production
-          efficiency.
+          I developed the data pipeline, models and application for a
+          semiconductor-production engineering team in Hsinchu, Taiwan. The
+          dataset grew from
+          149 samples with 71 features to more than 300 samples, and all
+          modeling ran on a laptop without a GPU. I worked with chemical
+          engineers to define features, physical constraints and a metric
+          based on process tolerances. The application was presented at
+          Merck's global Data Science Garage in January 2025.
         </p>
 
         <h3 className="text-xl font-bold mb-4 mt-8">
@@ -1210,38 +1207,32 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Developed a robust data pipeline to integrate highly unstructured
-            industrial data, including{" "}
-            <strong>
-              Palantir Foundry databases, Excel logs, and automated PDF
-              extractions via Python PDF-Miner
-            </strong>
-            .
+            Integrated data held in Palantir Foundry with uploaded Excel
+            records and automated PDF extraction, so engineers could supply
+            the information needed for a blending prediction.
           </li>
           <li>
-            Addressed significant data quality issues and distribution shifts by
-            implementing weighted average aggregations for duplicate
-            manufacturing batches and KNN imputation for missing values.
+            Used scikit-learn pipelines to compare missing-value imputation,
+            scaling, feature selection and regression. The inputs represented
+            different physical quantities, so scaling alone could not make
+            them interchangeable.
           </li>
           <li>
-            Kept evaluation honest on a small, noisy dataset with a{" "}
-            <strong>three-stage protocol</strong>: cross-validated grid search,
-            then repeated random splits, then an independent test set — and
-            used the signal-to-noise ratio to judge what could be learned at
-            all, rather than over-tuning on a few hundred samples.
+            Evaluated configurations in three stages: 5-fold grid search, 10
+            random splits and an independent test set. Signal-to-noise
+            analysis and drift checks helped assess what the small dataset
+            could support.
           </li>
         </ul>
 
         <h4 className="text-lg font-semibold mb-2 mt-4 text-[#816334]">
-          2. Advanced ML & 2-Step Architecture Evolution
+          2. Pipeline Search and Two-Step Prediction
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Designed and executed an exhaustive, automated model search
-            pipeline, searching{" "}
-            <strong>5,000+ pipeline configurations</strong> of preprocessing
-            steps, feature selections, and models to find the optimal
-            configuration for limited data.
+            Searched 704 configurations in September 2024 and 4,320 from late
+            2024 to January 2025, totaling 5,000+ pipeline configurations. A
+            later search in July 2025 evaluated another 360.
           </li>
           <li>
             Evolved the system architecture from a standard 1-step model to a
@@ -1251,10 +1242,9 @@ const projectsData: Project[] = [
             chemical ratio consistency.
           </li>
           <li>
-            Evaluated a wide range of algorithms, ultimately proving that
-            well-tuned traditional models (Gradient Boosting, Ridge, Random
-            Forest) outperformed highly complex models in this specific
-            small-sample industrial context.
+            Compared regression and boosting candidates, including AdaBoost,
+            XGBoost and LightGBM. The July 2025 search selected KNNImputer,
+            StandardScaler, Select10Best and GradientBoosting.
           </li>
         </ul>
 
@@ -1263,20 +1253,14 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Conquered the "curse of dimensionality" on small datasets by
-            aggressively reducing 60+ initial features to an optimal set of 5-10
-            features using SelectKBest, Lasso, and mutual information
-            regression.
+            Reduced 60+ features to 5–10 using domain knowledge and feature
+            selection experiments, including SelectKBest and Lasso.
           </li>
           <li>
-            Collaborated deeply with chemical experts to engineer
-            domain-specific features based on physical constraints (e.g., mass
-            conservation, stoichiometric ratios), proving that{" "}
-            <strong>
-              domain knowledge integration yields higher accuracy than blind
-              automated extraction
-            </strong>
-            .
+            Engineered features with chemical engineers using physical
+            relationships such as mass conservation and stoichiometry. Their
+            process knowledge identified useful inputs that generic
+            transformations could not supply.
           </li>
         </ul>
 
@@ -1291,9 +1275,9 @@ const projectsData: Project[] = [
             hit rate inside two tolerance bands.
           </li>
           <li>
-            Added a <strong>bootstrap-based reliability score</strong>, using
-            the standard deviation of resampled predictions, so engineers get
-            a reliability signal alongside each point estimate.
+            Attached a reliability score to each prediction. I initially used
+            bootstrap resampling, then used the standard deviation of 50
+            predictions with noise-perturbed inputs.
           </li>
         </ul>
 
@@ -1308,9 +1292,9 @@ const projectsData: Project[] = [
             interpret model predictions visually (Plotly).
           </li>
           <li>
-            Implemented MLOps best practices, including model weight persistence
-            via Joblib (saving the entire preprocessing and prediction pipeline
-            state), ensuring reproducibility and seamless future updates.
+            Delivered the preprocessing and prediction pipeline together with
+            the Streamlit interface, connecting model inputs and results to
+            the engineers' existing Foundry data workflow.
           </li>
         </ul>
 
@@ -1319,19 +1303,19 @@ const projectsData: Project[] = [
         </h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-3 mb-4">
           <li>
-            <strong>First-time-right:</strong> top models reached{" "}
-            <strong>83–95% first-time-right</strong> in testing.
+            <strong>First-time-right:</strong> top models reached 83–95%
+            first-time-right in testing.
           </li>
           <li>
-            <strong>Data Strategy Revelation:</strong> Demonstrated that in
-            industrial AI, rigorous data preprocessing, domain-driven feature
-            engineering, and a disciplined evaluation protocol are far more
-            critical to success than algorithm complexity.
+            <strong>Process knowledge:</strong> the two-step architecture,
+            feature selection and tolerance-based metric each encoded
+            information supplied by engineers.
           </li>
           <li>
-            <strong>Team Knowledge & Governance:</strong> Established a
-            standardized AI workflow and documentation framework, paving the
-            way for scalable industrial AI applications within Merck.
+            <strong>Delivery:</strong> the bilingual application was in use
+            by the engineering team in Taiwan when I left in September
+            2025, providing predictions and reliability signals in their
+            workflow.
           </li>
         </ul>
       </div>
@@ -1346,7 +1330,7 @@ const projectsData: Project[] = [
     description:
       "Built and launched a company-wide full-stack lab-booking web app from scratch, replacing a Power App + Power Automate booking workflow, with Litestream replication to AWS S3 and Docker CI/CD.",
     highlights: [
-      "Built and launched a company-wide lab-booking web app from scratch, replacing a Power App + Power Automate booking workflow; planned for 50+ users",
+      "Built and launched a company-wide lab-booking web app from scratch, replacing a Power App + Power Automate booking workflow",
       "Booking logic: administrator approval by e-mail, first-come-first-served locking, automatic rejection on timeout, and reminders",
       "Developed a responsive Vue.js 3 + Vuetify frontend with custom theming and localization",
       "Built a high-performance FastAPI + Tortoise ORM backend",
@@ -1370,13 +1354,10 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-4 leading-relaxed">
-          Developed a comprehensive full-stack web application for laboratory
-          equipment reservation,{" "}
-          <strong>
-            replacing a Power App + Power Automate booking workflow
-          </strong>
-          . I built it from scratch and launched it company-wide at Merck KGaA,
-          planned for more than 50 users.
+          I built and launched an internal laboratory equipment booking
+          application from scratch, replacing a Power App + Power Automate
+          workflow. Users can search for equipment and request a time slot;
+          administrators confirm bookings through email notifications.
         </p>
 
         <h3 className="text-xl font-bold mb-3 mt-6">Tech Stack</h3>
@@ -1414,7 +1395,8 @@ const projectsData: Project[] = [
             custom theming and localization.
           </li>
           <li>
-            Built a high-performance backend API using FastAPI and Tortoise ORM.
+            Built the FastAPI backend with Tortoise ORM to store equipment and
+            booking records in SQLite.
           </li>
           <li>
             Implemented the reservation logic and device management: after a
@@ -1429,13 +1411,17 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Created an interactive calendar view for reservation scheduling.
+            Created an interactive calendar for viewing equipment availability
+            and requesting time slots.
           </li>
           <li>
             Developed custom components for device browsing, search, and
             reservation management.
           </li>
-          <li>Implemented light and dark themes and multi-language support.</li>
+          <li>
+            Implemented English and German interfaces, light and dark themes,
+            and Pinia state management.
+          </li>
         </ul>
 
         <h4 className="text-lg font-semibold mb-2 text-[#816334]">
@@ -1447,12 +1433,9 @@ const projectsData: Project[] = [
             database operations.
           </li>
           <li>
-            Implemented{" "}
-            <strong>
-              Litestream for database replication to AWS S3 bucket on Foundry
-            </strong>
-            , keeping the data durable in a stateless containerized
-            environment.
+            Replicated SQLite data with Litestream to the S3 storage behind
+            Foundry, keeping booking records durable across container
+            restarts.
           </li>
         </ul>
 
@@ -1462,8 +1445,7 @@ const projectsData: Project[] = [
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>Integrated SSO authentication using Foundry Dev Tools.</li>
           <li>
-            Implemented secure token-based authentication flow and user
-            management system.
+            Implemented JWT token-based authentication alongside Foundry SSO.
           </li>
         </ul>
 
@@ -1531,9 +1513,8 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Engineered an asynchronous Python pipeline to extract and
-            synchronize fragmented time-series sensor data from legacy Aspen
-            database servers.
+            Built an asynchronous Python pipeline to retrieve fragmented time-series sensor data from legacy Aspen servers, with batch, phase
+            and time-window information needed for the analysis.
           </li>
           <li>
             The core data challenge was navigating dozens of scattered tables to
@@ -1543,11 +1524,11 @@ const projectsData: Project[] = [
             logic.
           </li>
           <li>
-            Built the <strong>Aspen data retrieval tool</strong> on this line
-            and later rebuilt it with FastAPI and a Streamlit front end:
-            batching, asynchronous and concurrent requests, resumable runs,
-            drag-and-drop Excel input and live progress in the browser. What
-            previously took 4–5 hours now completes in about 40 minutes.
+            Built the Aspen data-retrieval tool, then rebuilt the pipeline
+            with FastAPI in March 2025. Batching, concurrent requests and
+            resumable runs reduced retrieval from 4–5 hours to about 40
+            minutes; a Streamlit interface accepted Excel input and showed
+            live progress.
           </li>
         </ul>
 
@@ -1613,11 +1594,10 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-6 leading-relaxed">
-          As part of the Data Sciences team at Merck KGaA, we worked on
-          optimizing a life science production process (specifically fluid bed
-          processing of Parteck® excipients), applying machine learning and data
-          analysis techniques to the production parameters. This was a team
-          project; the points below describe what we did.
+          In a team project at Merck, we analyzed and modeled production
+          parameters for a pharmaceutical-excipient fluid-bed process. The
+          work combined regression experiments with NGBoost predictions and
+          calibrated intervals. The points below describe the team's work.
         </p>
 
         <h3 className="text-xl font-bold mb-4">
@@ -1657,34 +1637,27 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Developed and compared multiple regression models (Linear
-            Regression, Random Forest, Gradient Boosting, SVR, Neural Networks,
-            PLS Regression) to predict and optimize process outcomes.
+            Compared regression models for the process data, including linear
+            regression, random forests, gradient boosting, SVR, neural
+            networks and PLS regression.
           </li>
           <li>
-            Implemented ensemble methods and <strong>NGBoost</strong> for
-            improved accuracy and uncertainty quantification—providing
-            calibrated confidence intervals that enabled process engineers to
-            assess{" "}
-            <strong>
-              when to trust automated recommendations and when manual oversight
-              is warranted
-            </strong>
-            .
+            Used NGBoost to produce predictions with calibrated intervals,
+            expressing uncertainty alongside the predicted process outcome.
           </li>
         </ul>
 
         <h4 className="text-lg font-semibold mb-2 text-[#816334]">
-          4. Model Evaluation and Process Optimization
+          4. Model Evaluation and Process Analysis
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Evaluated models using various metrics to ensure accurate prediction
-            of critical quality attributes.
+            Compared predicted and observed process outcomes to evaluate the
+            regression models.
           </li>
           <li>
-            Optimized model hyperparameters and provided data-driven insights
-            for process improvements.
+            Examined how preprocessing and model choices affected the
+            predictions used in process analysis.
           </li>
         </ul>
 
@@ -1775,8 +1748,10 @@ const projectsData: Project[] = [
             analytics events and 37 components.
           </li>
           <li>
-            The final delivery (September 2026): 6 pages plus 10 legal
-            documents, 16 statically exported pages in all.
+            The final delivery, signed off on September 14, 2026, contained 6
+            pages and 10 legal documents, producing 16 statically exported
+            pages. The scope changed through several rounds of client
+            feedback.
           </li>
         </ul>
 
@@ -1817,10 +1792,11 @@ const projectsData: Project[] = [
             committed, and the next stage waited for that review.
           </li>
           <li>
-            Hand-over to non-developers: a deployment guide with one action
-            per step for Cloudflare Workers static assets; the delivery listed
-            three pre-launch regulatory risks separately for the client to
-            confirm.
+            Delivered two archives, one with the built static site and one
+            with the source, plus a step-by-step guide for Cloudflare Workers
+            static assets. The client handled final deployment. The earlier
+            handover separately listed three pre-launch issues for the client
+            to confirm.
           </li>
         </ul>
       </div>
@@ -1855,11 +1831,12 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-6 leading-relaxed">
-          During my time at NMY Mixed Reality Studio, I collaborated with VR/AR
-          developers to build a voice-interactive assistant using large language
-          models (LLMs) for enterprise users. The assistant was designed to
-          answer questions based on a vector knowledge base specific to the
-          company's business knowledge using Chroma.
+          As a working student at NMY Mixed Reality Studio, I worked with
+          the VR/AR developers and independently built a knowledge-base
+          voice-assistant prototype. The retrieval-augmented generation
+          pipeline used LangChain and ChromaDB, with a Streamlit interface
+          and Bark speech synthesis. I also assessed whether the available
+          local hardware could support the intended use.
         </p>
 
         <h3 className="text-xl font-bold mb-4">
@@ -1871,13 +1848,12 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Proposed a virtual scene where users can interact with an assistant
-            to acquire information conversationally.
+            Defined the prototype around questions answered from a fixed
+            company knowledge base.
           </li>
           <li>
-            Expanded the project blueprint to include a virtual character
-            capable of processing comprehensive information and responding with
-            both verbal and physical actions.
+            Evaluated the language-model and speech components before
+            expanding the planned VR/AR integration.
           </li>
         </ul>
 
@@ -1890,13 +1866,13 @@ const projectsData: Project[] = [
             create a chatbot with a fixed knowledge base.
           </li>
           <li>
-            Experimented with Vicuna 7b and LLaMA 2 7b models, integrating them
-            with LangChain to achieve Knowledge Base Embedding.
+            Tested Llama 2 7B and Vicuna 7B with LangChain and ChromaDB for
+            retrieval from the knowledge base.
           </li>
           <li>
-            Developed and tested the chatbot on a system with an{" "}
-            <strong>NVIDIA 4070ti GPU</strong>, which limited us to running 7b
-            models.
+            Developed and tested on a single NVIDIA RTX 4070 Ti. Model
+            inference and Bark text-to-speech had to share the available
+            compute.
           </li>
           <li>
             Implemented text-to-speech functionality using <strong>Bark</strong>{" "}
@@ -1909,50 +1885,33 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
-            Provided strategic suggestions for the project architecture,
-            focusing on AI components and their potential integration into VR/AR
-            applications.
+            Assessed the compute required for local language-model inference
+            alongside speech synthesis.
           </li>
           <li>
-            Outlined the necessary steps for defining features, estimating
-            workloads, and determining critical functions for the development
-            process.
+            Reported that the available hardware struggled even with one user
+            and could not support the intended concurrent use.
           </li>
           <li>
-            Suggested the team configuration for future development, emphasizing
-            the need for expertise in robotics, VR development, and AI-boost
-            frameworks.
+            Discussed those hardware limits with the studio's VR/AR developers
+            as part of the feasibility assessment.
           </li>
         </ul>
 
         <h3 className="text-xl font-bold mb-4">Challenges and Insights</h3>
         <p className="mb-4 leading-relaxed">
-          I recognized that providing a local LLM-based assistant for enterprise
-          users required more computational resources than we had available. An
-          NVIDIA 4070ti and 7b models were insufficient, especially when
-          combined with the additional load of text-to-speech conversion using
-          Bark. The VR/AR devices' computational limitations further compounded
-          the issue.
+          The prototype ran, but local inference together with Bark exceeded
+          the compute available for the intended service. This made hardware
+          feasibility a central outcome of the project.
         </p>
         <p className="mb-4 leading-relaxed">
-          Given the current computational constraints, it was challenging to
-          serve even a single user effectively, let alone multiple users
-          simultaneously, which is essential for a viable enterprise solution.
-          This situation raised concerns about the scalability and profitability
-          of the solution,{" "}
-          <strong>
-            as it seemed to turn into a hardware-selling model benefiting GPU
-            manufacturers like NVIDIA rather than a sustainable software
-            service.
-          </strong>
+          The assessment covered the combined workload rather than language-model inference in isolation. Even serving a single user was
+          difficult on the available machine.
         </p>
         <p className="mb-4 leading-relaxed">
-          <strong>Career Insight:</strong> Applying pragmatic technical
-          judgment, I identified these fundamental scalability constraints
-          early. This transparent architectural assessment led to a mutual
-          agreement to conclude the engagement, underscoring my focus on
-          delivering technically feasible and commercially sound AI solutions
-          rather than chasing unscalable hype.
+          I delivered the prototype and reported the constraints to the
+          team. The project required more compute than the studio could
+          provide, and both sides agreed to end the engagement.
         </p>
       </div>
     ),
@@ -1964,9 +1923,9 @@ const projectsData: Project[] = [
     timeframe: "October 2015 - January 2016",
     supervisor: "Bancheng Zhou",
     description:
-      "Led product strategy from 0 to 1, successfully negotiating a ¥2M angel investment and launching two consumer and B2B mobile apps on the App Store.",
+      "Led product strategy from company registration to the launch of consumer and business-owner apps on the App Store.",
     highlights: [
-      "Negotiated a ¥2M angel investment at 20% equity dilution with Shanghai-based VC (Youtang Capital)",
+      "The team negotiated an angel investment; the funds arrived after I left",
       "Led product strategy from company registration to dual App Store launches",
       "Independently designed information architecture, UX/UI flows, and prototypes",
       "Coordinated cross-functional execution across technical, design, and marketing teams",
@@ -1985,11 +1944,11 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-6 leading-relaxed">
-          As the co-founder and product lead of a wellness industry startup,
-          I oversaw every step of the process from company registration to
-          launching the initial apps. My responsibilities included market
-          research, mobile app design, development, testing, and investor
-          outreach.
+          I co-founded BseTech and led the product work in a team spanning
+          engineering, design and marketing. From company registration to
+          App Store launch, I planned the consumer and business-owner apps,
+          defined their information architecture and user flows, built
+          prototypes and coordinated delivery across the team.
         </p>
 
         <h3 className="text-xl font-bold mb-4">Detailed Implementation</h3>
@@ -2004,8 +1963,9 @@ const projectsData: Project[] = [
             wellness industry in Hangzhou.
           </li>
           <li>
-            Planned user-end and to-B-end apps, designed the information
-            architecture and user experience, and created prototypes.
+            Planned two connected products: Treat for consumers and Treat for
+            Business Owner for merchants, including information architecture,
+            user flows and prototypes.
           </li>
           <li>
             Coordinated development progress among technical, design, and other
@@ -2018,8 +1978,8 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-4">
           <li>
-            Designed the mobile apps and managed the development process,
-            ensuring a seamless user experience.
+            Managed product design and coordinated implementation with the
+            engineering and design team.
           </li>
           <li>
             Created detailed prototypes and wireframes to visualize the apps'
@@ -2089,12 +2049,8 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-1 mb-6">
           <li>
-            Met with investors and pitched the business plan,{" "}
-            <strong>
-              negotiating a ¥2,000,000 RMB angel investment at 20% equity
-              dilution with Shanghai-based VC (Youtang Capital)
-            </strong>
-            ; the investment arrived after I had left the company.
+            The team negotiated an angel investment. The funds arrived after I
+            had left the company.
           </li>
           <li>
             Engaged with different managers in the wellness industry to explore
@@ -2108,10 +2064,9 @@ const projectsData: Project[] = [
 
         <h3 className="text-xl font-bold mb-2">Project Outcome</h3>
         <p className="mb-6 leading-relaxed">
-          The Treat app and Treat for Business Owner app were launched on the
-          App Store China in January 2016. Despite initial success, the project
-          was terminated later that year due to market challenges and strategic
-          pivots.
+          Treat and Treat for Business Owner launched on the App Store in
+          China in January 2016. The project ended a few months after my
+          departure.
         </p>
 
         <div className="bg-[#fbf3e5]/60 p-5 rounded-lg border-l-4 border-[#C19A49]">
@@ -2119,18 +2074,10 @@ const projectsData: Project[] = [
             Key Insight & Career Pivot
           </h4>
           <p className="text-sm md:text-base leading-relaxed text-[#333333]">
-            This journey proved my ability to transform a technical concept into
-            a commercial entity and handle high-level investor negotiations.
-            However, successfully pushing the project to a multi-million
-            valuation during its funding window made me realize that{" "}
-            <strong>
-              the future moats of tech businesses will not lie in basic app
-              functionality, but in the depth of their core algorithms and AI
-              capabilities
-            </strong>
-            . This foundational insight directly drove my decision to exit and
-            pivot towards deep learning and advanced computer vision research.
-          </p>
+          After taking the product through launch and the funding stage, I
+          wanted to work more directly on the algorithms behind a technology
+          product. I left to focus on deep learning and computer vision.
+        </p>
         </div>
       </div>
     ),
@@ -2169,17 +2116,11 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          This project combines modern{" "}
-          <span className="font-semibold">web development technologies</span>{" "}
-          with advanced{" "}
-          <span className="font-semibold">AI image generation techniques</span>{" "}
-          to create a distinctive personal brand presence. The portfolio
-          showcases both frontend development capabilities and expertise in
-          leveraging AI models for creative content generation. I built it in
-          February–March 2025; in September 2026 I audited every fact on it
-          against my own records and revised it in batches — facts and
-          wording, positioning, a new Publications section, then SEO, sharing
-          previews and performance.
+          I built and maintain this portfolio independently. It uses
+          Next.js, React, TypeScript and Tailwind CSS as a static site on
+          Cloudflare Pages. I created the first version in February–March
+          2025; in September 2026 I audited the facts, wording and SEO, then
+          revised the site in four documented batches.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -2199,12 +2140,12 @@ const projectsData: Project[] = [
             consistent facial characteristics
           </li>
           <li>
-            Applied custom LoRA models from Civitai to enhance stylistic
-            qualities and visual coherence
+            Used an existing LoRA from Civitai to control the visual style of
+            the generated character.
           </li>
           <li>
-            Created a visual identity that bridges professional presentation
-            with creative personality
+            Combined the generated character with the site's visual design;
+            the image workflow used existing models and adapters.
           </li>
         </ul>
 
@@ -2213,9 +2154,9 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Built the website with the Next.js App Router as a fully static
-            export; the content is static and typed, and nothing is fetched at
-            runtime
+            Built with Next.js 14.2.24 and React 18 using the App Router and
+            static export. Project content is typed and bundled at build time,
+            with no data fetching at runtime.
           </li>
           <li>
             Implemented responsive design principles using Tailwind CSS for
@@ -2227,8 +2168,8 @@ const projectsData: Project[] = [
             and continuous micro-interactions
           </li>
           <li>
-            Developed advanced UI architecture using BentoGrid pattern for
-            flexible, modular component layout
+            Used a BentoGrid layout for the About section and reusable cards
+            and modal dialogs for project details.
           </li>
           <li>
             Integrated UI component libraries (Magic UI, Aceternity UI) for
@@ -2280,8 +2221,8 @@ const projectsData: Project[] = [
             and conditional rendering
           </li>
           <li>
-            Implemented progressive enhancement strategy for different device
-            capabilities
+            Kept the content in the static export so it could be served
+            without an application backend.
           </li>
           <li>
             Developed a modular component structure with abstracted
@@ -2299,10 +2240,10 @@ const projectsData: Project[] = [
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Outcome</h3>
         <p className="mb-4">
-          The project resulted in a distinctive personal brand presence that
-          effectively communicates technical capabilities and creative approach.
-          The website serves as both a portfolio showcase and a practical
-          demonstration of frontend development and AI application skills.
+          The site brings together research, industrial delivery,
+          publications and personal projects. I maintain the content
+          alongside the frontend; the September 2026 revision added
+          Publications and the dedicated RARE26 presentation.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Future Enhancements</h3>
@@ -2362,11 +2303,10 @@ const projectsData: Project[] = [
     content: (
       <div className="text-[#333333]">
         <p className="mb-6 leading-relaxed">
-          When one person runs a group of AI coding agents on a research
-          project, the first bottleneck is infrastructure: git writes, memory,
-          and starting and stopping sessions. I wrote each of these tools after
-          something actually went wrong — find the root cause first, then turn
-          the fix into a mechanism.
+          I built two open-source tools after concurrent research sessions
+          caused problems with Git writes and local memory. I defined the
+          requirements, designed the behavior and reviewed the
+          implementations produced with coding agents.
         </p>
 
         <h3 className="text-xl font-bold mb-3 mt-6">wombat-gate</h3>
@@ -2396,14 +2336,11 @@ const projectsData: Project[] = [
         <h3 className="text-xl font-bold mb-3 mt-6">dingo-pack</h3>
         <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
           <li>
-            Heavy-job slots on one machine: heavy jobs wait for a slot and
-            sufficient memory, accounting for running jobs&apos; unused
-            reservations, then run under memory limits.
+            Schedules heavy jobs on a single machine. Jobs wait for a slot and
+            available memory, then run with memory limits.
           </li>
           <li>
-            A session roster that snapshots the live Claude Code sessions;
-            after a crash, <code>list</code> shows which sessions were lost
-            and <code>resume</code> reopens them.
+            The public release is v0.1.1. Later memory-accounting and session-registry extensions belong to my local versions.
           </li>
           <li>
             Written after the machine ran out of memory, the shared drive
@@ -2422,8 +2359,10 @@ const projectsData: Project[] = [
         </ul>
 
         <p className="mb-4 leading-relaxed">
-          I set the requirements, designed the tools and reviewed every change;
-          the code was written with AI coding agents.
+          Both tools came from specific failures: Git contention and
+          accidental staging overlap for wombat-gate, and an out-of-memory
+          crash for dingo-pack. Each turns the operational fix into a
+          repeatable safeguard.
         </p>
       </div>
     ),
@@ -2456,11 +2395,11 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          I founded and organized Infinitas Comedy, the first Chinese-language
-          stand-up comedy club in Germany, and led its establishment and growth, organizing
-          various events and building a community of enthusiasts and
-          performers. I stepped back in February 2023; the club is still
-          running.
+          I founded Germany's first Chinese-language stand-up comedy club
+          and ran it with a small group of partners. Between October 2022
+          and February 2023, I organized performer workshops, script
+          readings, online talks and open mics. I stepped back after
+          February 2023; the club continues to operate.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -2470,8 +2409,8 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">1. Event Organization</h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Successfully organized 8 events, including actor training sessions,
-            script reading meetings, online webinars, and open mics.
+            Organized 8 events spanning performer training, script readings,
+            online talks and open mics.
           </li>
           <li>
             Attracted approximately 40-50 participants per event, providing a
@@ -2482,16 +2421,16 @@ const projectsData: Project[] = [
         <h4 className="text-lg font-medium mb-2 mt-4">2. Community Building</h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Established connections with leaders of Chinese stand-up comedy
-            clubs in New York, Paris, London, Tokyo, and Silicon Valley.
+            Reached out to Chinese-language comedy clubs in New York, Paris,
+            London, Tokyo and Silicon Valley.
           </li>
           <li>
-            Built the club from scratch with their help, finding free venues and
-            equipment to provide opportunities for practice and performance.
+            Found free venues and equipment so newcomers had a place to
+            rehearse and perform.
           </li>
           <li>
-            Led members from beginners to more experienced performers, fostering
-            growth and transformation within the community.
+            Helped newcomers prepare material and get on stage, with
+            opportunities to discuss scripts before performing.
           </li>
         </ul>
 
@@ -2500,8 +2439,8 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Created social media accounts on multiple platforms, building a fan
-            base and attracting a large audience and enthusiasts to perform.
+            Set up the club's social media accounts to announce events and
+            reach performers and audiences.
           </li>
           <li>
             Designed the club's logo, initial performance posters, and tickets
@@ -2514,12 +2453,12 @@ const projectsData: Project[] = [
         </h4>
         <ul className="list-disc pl-5 md:pl-8 space-y-0  mb-4">
           <li>
-            Networked with industry leaders and other comedy clubs to gain
-            insights and support for the club's development.
+            Met people from a Chinese comedy club in Silicon Valley and
+            contacted clubs in other cities to learn from their experience.
           </li>
           <li>
-            Organized collaborative events and exchanges to provide members with
-            broader exposure and learning opportunities.
+            Ran the club with partners while handling event organization, its
+            visual identity and audience-feedback process.
           </li>
         </ul>
 
@@ -2539,9 +2478,10 @@ const projectsData: Project[] = [
 
         <h3 className="text-xl font-semibold mb-2 mt-6">Project Outcome</h3>
         <p className="mb-4">
-          Successfully established and grew the first Chinese-language stand-up
-          comedy club in Germany, providing a platform for performers and building a strong
-          community through effective marketing and collaboration.
+          The club held 8 events with about 40–50 attendees each during my
+          involvement. My work covered organizing the events, designing the
+          logo, posters and tickets, and gathering audience feedback for
+          performers.
         </p>
       </div>
     ),
@@ -2575,12 +2515,11 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          As a volunteer for the VÜCD, I have participated in numerous projects
-          to promote cultural exchange between Chinese and German communities. I
-          initiated and participated in the creation of Infinitas Youth, a youth
-          organization focused on cultural and artistic activities. I
-          established the organization's mission and values, and designed all
-          visual identities, logos, and posters.
+          As VÜCD's volunteer Head of Media, I helped plan cultural events,
+          sponsorship proposals and publicity in Frankfurt. I also founded
+          Infinitas Youth, defined its mission and values, and designed its
+          visual identity. I remain listed in the association role, although
+          I have been less active over the past one to two years.
         </p>
 
         <h3 className="text-xl font-semibold mb-2 mt-6">
@@ -2600,9 +2539,8 @@ const projectsData: Project[] = [
             traditional cultural experiences.
           </li>
           <li>
-            Designed and organized the Infinitas Youth Arena, an experimental
-            theater project, which included indoor concerts, Eastern aesthetic
-            salons, dance parties, and more.
+            Created Infinitas Youth Arena within the youth initiative and
+            organized its nonprofit indoor concert series.
           </li>
         </ul>
 
@@ -2622,8 +2560,8 @@ const projectsData: Project[] = [
             Managed targeted advertising on Meta platforms to promote events.
           </li>
           <li>
-            Used Figma, Photoshop, and Stable Diffusion generative AI to create
-            posters and promotional brochures.
+            Used Stable Diffusion and Figma to create event posters and
+            promotional brochures.
           </li>
         </ul>
 
@@ -2645,8 +2583,7 @@ const projectsData: Project[] = [
             musicians and venues.
           </li>
           <li>
-            Successfully organized 5 concerts, each attracting approximately 80
-            attendees.
+            Organized 5 nonprofit concerts with 80+ attendees each.
           </li>
         </ul>
 
@@ -2657,18 +2594,18 @@ const projectsData: Project[] = [
             content to enhance participant engagement and experience.
           </li>
           <li>
-            Developed a detailed sponsorship plan, including exhibition booths,
-            and expanded sponsorship formats to secure sufficient funding for
-            the event.
+            Developed the Chinafest 2023 sponsorship plan, including
+            exhibition booths and additional sponsorship formats.
           </li>
           <li>
             Used Stable Diffusion generative AI and Figma to create posters and
             promotional brochures.
           </li>
           <li>
-            Chinafest 2023 was held at Roßmarkt in Frankfurt, attracting over
-            100,000 participants over three days, with participation and
-            sponsorship from more than 20 companies and organizations.
+            The organizers reported 100,000+ visits over the three days of
+            Chinafest 2023 at Roßmarkt, with participation and sponsorship
+            from 20+ companies and institutions. These figures describe the
+            event as a whole.
           </li>
         </ul>
 
@@ -2681,8 +2618,8 @@ const projectsData: Project[] = [
             various fields in Germany.
           </li>
           <li>
-            Produced content that discussed diverse life experiences,
-            philosophies, and inspirational stories.
+            My media work included planning and filming the interview series
+            alongside the initiative's event publicity.
           </li>
         </ul>
 

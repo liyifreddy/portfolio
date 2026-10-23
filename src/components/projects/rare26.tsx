@@ -51,71 +51,74 @@ export const rare26Project: Project = {
   category: "research",
   content: (
     <div className="text-[#333333]">
-      <h3 className="text-xl font-bold mb-3">The Task, and What Decided Everything Else</h3>
+      <h3 className="text-xl font-bold mb-3">
+        Task and Data
+      </h3>
       <p className="mb-4 leading-relaxed">
-        Detect <strong>early neoplasia</strong> in Barrett&apos;s esophagus from
-        endoscopy frames, at low prevalence. The ranking metric is not AUC — it is{" "}
-        <strong>positive predictive value at 90% recall, with prevalence fixed at 1%</strong>.
-        The public training set has 3,095 images, 158 of them positive, from two
-        Dutch centres. I had one laptop GPU and no team.
+        I entered RARE26 alone to detect early neoplasia in Barrett's
+        esophagus from endoscopy images. The training data contained 3,095
+        images, including 158 positives, from two retrospective Dutch centers
+        without a standardized acquisition protocol. The challenge test data
+        came from 12 centers and included prospective collection. The scoring
+        metric was positive predictive value at 90% recall, with prevalence
+        fixed at 1%.
       </p>
       <p className="mb-4 leading-relaxed">
-        I did not fine-tune the backbone. I froze a ResNet-50 pretrained on five
-        million GI-endoscopy images and put all of the work in the layer above it:
-        a closed-form shrinkage discriminant, <strong>4,096 parameters, 16 KB</strong>.
-        That was not a concession to compute. Because the backbone never changes,
-        every ablation collapses into one closed-form computation on cached
-        features — and that is what made <strong>1,835 comparisons</strong>, each
-        run in both cross-centre directions, each with a paired bootstrap,
-        possible at all.
+        I kept the provider-pretrained ResNet-50 / GastroNet-5M DINOv1
+        backbone frozen and fitted a closed-form shrinkage Gaussian
+        discriminant with 4,096 learned parameters, about 16 KB. Cached
+        features made repeated readout comparisons feasible on my laptop GPU.
+        Dataset and weight agreements required local processing, so the
+        experiments ran on an RTX 4060 Laptop GPU with 8 GB of memory.
       </p>
       <p className="mb-6 leading-relaxed">
-        The adoption rule was written before the grids ran. 1,415 of those 1,835
-        comparisons (77%) established no improvement, and I published them too.
-        Exactly one change passed.
-      </p>
-
-      <h3 className="text-xl font-bold mb-3">Build the Ruler Before the Model</h3>
-      <p className="mb-4 leading-relaxed">
-        The first thing I did was not pick a model. It was to write the ranking
-        metric out as an identity —{" "}
-        <code className="px-1 rounded bg-[#C19A49]/15">
-          PPV = 0.9π / [0.9π + (1 − spec)(1 − π)]
-        </code>
-        , with π = 0.01 — and three things follow immediately.
-      </p>
-      <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
-        <li>
-          PPV is a <strong>strictly increasing function of specificity</strong>,
-          so the two can never point in opposite directions. They can only differ
-          in noise.
-        </li>
-        <li>
-          The threshold at 90% recall is a <strong>single order statistic</strong>{" "}
-          — the (n<sub>pos</sub> − ⌈0.9·n<sub>pos</sub>⌉ + 1)-th lowest positive
-          score. That is the 7th lowest when the test side holds 61 positives, the
-          10th when it holds 97.
-        </li>
-        <li>
-          Once that threshold is fixed, at 1% prevalence the value is decided
-          entirely by <strong>how many negatives sit above it</strong> — by the far
-          tail of the negative distribution, not by the bulk of the scores.
-        </li>
-      </ul>
-      <p className="mb-4 leading-relaxed">
-        Measured rather than argued: in one cross-centre direction, specificity at
-        90% recall is decided by <strong>6 false positives out of 719 negatives</strong>.
-        One image is worth 0.0014 of specificity.
-      </p>
-      <p className="mb-6 leading-relaxed">
-        A useful corollary fell out of the same identity: the metric is invariant
-        to any monotone transform, so the logistic squash at the end of the
-        pipeline <em>cannot</em> change the score. That became one of the
-        self-checks rather than something to worry about.
+        Before each grid, I specified the rule for adopting a change. Across
+        16 experiment families and 1,835 cross-center comparisons, one change
+        was adopted. Of the comparisons, 1,415 (77%) established no
+        difference: 734 ruled out a practically meaningful AUROC difference
+        and 681 remained inconclusive.
       </p>
 
       <h3 className="text-xl font-bold mb-3">
-        The Scoring Metric and Its Usual Proxy Disagree — Measured Both Ways
+        Evaluation Protocol
+      </h3>
+      <p className="mb-4 leading-relaxed">
+        I evaluated both cross-center directions: train on center 1 and test
+        on center 2, then reverse them. Center 1 contributed 2,279 images with
+        61 positives; center 2 contributed 816 images with 97 positives. The
+        protocol combined paired uncertainty estimates with a threshold for
+        practical relevance.
+      </p>
+      <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
+        <li>
+        Compared configurations with a paired bootstrap in both directions,
+        resampling positive and negative pseudo-case groups rather than
+        treating every image as independent.
+      </li>
+        <li>
+        Derived a practical threshold of |ΔAUROC| = 0.0165 from a power curve
+        on these data, and wrote the adoption criteria before each
+        experimental grid.
+      </li>
+        <li>
+        Used nested evaluation to check model selection. In 9 of 22 cases, the
+        inner loop's best configuration performed detectably worse on unseen
+        folds.
+      </li>
+      </ul>
+      <p className="mb-4 leading-relaxed">
+        The scoring metric depends strongly on the negative tail at high
+        recall. In one cross-center baseline, 6 false positives among 719
+        negatives determined specificity at 90% recall.
+      </p>
+      <p className="mb-6 leading-relaxed">
+        The public repository includes a scorer reproducing the official
+        procedure: interpolate precision at recall 0.9 after resampling
+        positives to 1% prevalence, repeat 1,000 times and take the median.
+      </p>
+
+      <h3 className="text-xl font-bold mb-3">
+        AUROC and the Scoring Metric
       </h3>
       <div className="overflow-x-auto mb-4">
         <table className="w-full text-left border-collapse min-w-[400px]">
@@ -130,9 +133,15 @@ export const rare26Project: Project = {
           </thead>
           <tbody>
             <tr className="border-b border-gray-200">
-              <td className="py-2 px-4">5% of training labels flipped</td>
-              <td className="py-2 px-4 text-right">−30.5% to −46.0%</td>
-              <td className="py-2 px-4 text-right">−0.3% to −2.5%</td>
+              <td className="py-2 px-4">
+        Per-position scoring, top-2% pooling (train c1)
+      </td>
+              <td className="py-2 px-4 text-right">
+        0.1045 → 0.5214
+      </td>
+              <td className="py-2 px-4 text-right">
+        +0.0163 (practical threshold 0.0165)
+      </td>
             </tr>
             <tr className="border-b border-gray-200 bg-[#fbf3e5]/50">
               <td className="py-2 px-4">
@@ -149,105 +158,71 @@ export const rare26Project: Project = {
         </table>
       </div>
       <p className="mb-4 leading-relaxed">
-        The first row is a ratio of about <strong>19× to 106×</strong>, measured
-        across four curves — two cross-centre directions by two flip models. The
-        second row is the more convincing half, because it counts against me: a
-        change that AUROC calls a non-event takes 69% off the metric that actually
-        scores the submission, and specificity at 90% sensitivity from 0.9917 to
-        0.9527.
+        The adopted change moved the scoring metric substantially while its
+        AUROC gain sat just below the practical threshold. In the later
+        multi-scale comparison, AUROC changed by −0.0048 while the scoring
+        metric fell by 69%.
       </p>
       <p className="mb-4 leading-relaxed">
-        At scale: in the largest grid, <strong>86 of 474 cells</strong> have the
-        two metrics pointing in incompatible directions — roughly one comparison
-        in five. A protocol reporting only one ruler would present about a fifth
-        of its comparisons as settled when they are not.
+        For equal-weight multi-scale pooling in the train-c1 direction, false
+        positives rose from 6 to 34 and specificity at 90% recall fell from
+        0.9917 to 0.9527. This experiment was run after submission and the
+        change was not adopted.
       </p>
       <p className="mb-6 leading-relaxed">
-        <strong>The half that has to be said with it:</strong> the ranking
-        metric&apos;s own noise is large enough that it cannot referee either. All
-        six of those paired intervals contain zero, and the baseline&apos;s own
-        interval is [0.1199, 0.7657]. Neither ruler is safe — AUROC hides
-        threshold damage, the ranking metric is too noisy to see it — which is why
-        both are reported side by side throughout. For context, Menon et al.
-        (ICML 2015) proved that under class-conditional label noise the corrupted
-        AUC is a positive affine transform of the clean AUC, leaving any
-        scorer&apos;s induced ranking unchanged; they also marked the boundary,
-        that metrics optimised by thresholding class probabilities need the noise
-        rate or base rate to place the threshold. Precision at fixed recall is
-        exactly such a metric, and they did not analyse it. This measures the
-        magnitude.
+        These measurements concern internal cross-center validation. They show
+        why I reported AUROC and the challenge metric together: a small change
+        in one can coexist with a large change in the other. The two-center
+        validation cannot reproduce the full shift to the challenge's
+        12-center test set.
       </p>
 
-      <h3 className="text-xl font-bold mb-3">The One Change That Survived</h3>
+      <h3 className="text-xl font-bold mb-3">
+        The Adopted Readout
+      </h3>
       <p className="mb-4 leading-relaxed">
-        Do not average the 49 spatial positions of the feature map before scoring.
-        Score each position separately and pool the top 2%. When the lesion is
-        small, averaging first dilutes it into 48 positions of healthy tissue.
-        Cross-centre it cut residual false positives at 90% recall by{" "}
-        <strong>66.9% and 89.3%</strong>, and on an independent dataset the
-        highest-scoring cell fell inside the five-expert consensus lesion{" "}
-        <strong>78.0%</strong> of the time against 16.7% by chance.
+        I scored each of the 49 spatial positions separately and pooled the
+        top 2%, rather than averaging the feature map before scoring.
+        Cross-center residual false positives at 90% recall fell by 66.9% when
+        training on c2 and by 89.3% when training on c1.
       </p>
       <p className="mb-6 leading-relaxed">
-        One detail I would rather state than be asked: in one of the two
-        directions this change is a detectable improvement that{" "}
-        <strong>misses my own practical-significance threshold by 0.0002</strong>{" "}
-        on the AUROC scale (+0.0163 against 0.0165) — while on the metric that
-        actually scores the submission, that same direction goes up fivefold
-        (0.1045 → 0.5214). I adopted it because the pre-registered rule asks for a
-        detectable improvement in both directions, not for clearing an AUROC
-        threshold. That is the argument of the whole report, happening to my own
-        result.
+        The AUROC gains were +0.0486 and +0.0163 respectively. The latter is
+        close to the practical threshold of 0.0165, but the pre-specified
+        adoption rule required a detectable improvement in both directions.
+        The change met that rule.
       </p>
 
-      <h3 className="text-xl font-bold mb-3">The Errors Are Published Too</h3>
+      <h3 className="text-xl font-bold mb-3">
+        Experiment Coverage and Results
+      </h3>
       <p className="mb-4 leading-relaxed">
-        The repository carries a page called{" "}
-        <code className="px-1 rounded bg-[#C19A49]/15">
-          docs/05_what_we_got_wrong.md
-        </code>
-        . It lists the errors that change how someone should read the numbers —
-        not a changelog. Three of them:
+        The 1,835 comparisons covered 11 pretrained backbones, 7 readout
+        heads, one-class and discriminant scoring, multiple-instance pooling,
+        fusion, test-time augmentation and four robustness modules. The
+        published results include the rule used to classify each comparison.
       </p>
       <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
         <li>
-          <strong>
-            The grouping script in the repository does not reproduce the grouping
-            the results were computed with, and nobody had checked.
-          </strong>{" "}
-          Two code paths resize images differently, which put 34 of the 3,095
-          images (1.1%) into different groups. Before touching the script I re-ran
-          the one conclusion the project depends on under both groupings; it holds
-          under both. Then I fixed the script.
-        </li>
+        734 comparisons ruled out a practically meaningful AUROC difference in
+        both directions. This conclusion concerns AUROC and does not establish
+        equivalence on the challenge scoring metric.
+      </li>
         <li>
-          <strong>
-            65 comparisons in the largest grid are a configuration against itself.
-          </strong>{" "}
-          Two options on the pooling axis reduce to the baseline operator on a 7×7
-          grid, so the paired difference is identically zero. All 65 landed in
-          &ldquo;could not separate&rdquo;. I did not change the published numbers,
-          because applying a rule inconsistently across families is worse than
-          saying so out loud.
-        </li>
+        681 comparisons were inconclusive. Together with the 734 above, they
+        make up the 1,415 comparisons that established no difference.
+      </li>
         <li>
-          <strong>
-            Section 1 of the report stated the threshold&apos;s ordinal position
-            backwards, and had done since the day it was written.
-          </strong>{" "}
-          No number is affected — the scorer reads an interpolated
-          precision–recall curve and never indexes the sorted positives. That is
-          also exactly why no gate caught it: every gate in this repository
-          compares one computed quantity against another, and this was a sentence
-          with no computed quantity behind it.
-        </li>
+        61 cells cleared the practical AUROC threshold in both directions
+        against their own references: 60 used ViT backbones and one used
+        out-of-domain CNN weights. None used the delivered backbone.
+      </li>
       </ul>
       <p className="mb-6 leading-relaxed">
-        One more that belongs here rather than in a footnote: the 49 positions of
-        the feature map are <strong>not independent</strong>. Treating them as
-        samples when estimating the covariance is a deliberate part of the design,
-        but any argument of the form &ldquo;the effective sample size is 49 ×
-        n&rdquo; is wrong, by roughly a factor of five.
+        Within these experiments, no tested alternative configuration
+        detectably outperformed the submitted configuration in both
+        cross-center directions. The full comparison set and classification
+        rules are linked below.
       </p>
 
       <h3 className="text-xl font-bold mb-3">What Was Delivered</h3>
@@ -277,40 +252,42 @@ export const rare26Project: Project = {
             <tr className="border-b border-gray-200">
               <td className="py-2 px-4">Read-out</td>
               <td className="py-2 px-4">
-                layer4 map, 7×7×2048, no global average pooling; signed power
-                transform, then the top 2% of the 49 positions
-              </td>
+        layer4 features, 7×7×2048; signed power transform, per-position
+        discriminant scoring and top-2% pooling. The shrinkage coefficient was
+        selected with 8 repetitions of grouped 5-fold cross-validation.
+      </td>
             </tr>
             <tr className="border-b border-gray-200 bg-[#fbf3e5]/50">
               <td className="py-2 px-4">Submission</td>
               <td className="py-2 px-4">
-                CPU-only container — one case is 384 frames with a 600 s budget;
-                26.0 s end to end on the evaluation hardware (2 vCPU, 16 GB, no
-                GPU), 15.8 s on a laptop CPU, peak memory 2–3 GB
-              </td>
+        CPU-only Docker container; one case contains 384 frames with a 600 s
+        budget. End-to-end wall time, including startup and model loading:
+        26.0 s on evaluation hardware and 15.8 s on a laptop CPU. Peak CPU
+        memory: 2–3 GB.
+      </td>
             </tr>
             <tr className="border-b border-gray-200">
               <td className="py-2 px-4">Reproduction</td>
               <td className="py-2 px-4">
-                two separate checks. The packaged image, run with the network
-                disabled on the 16 official sample images, matched the offline
-                computation to a maximum per-image difference of 4.917e-07. The
-                results stored by the platform matched a local run to a maximum
-                difference of 1.31e-06, with <strong>zero rank changes</strong>{" "}
-                and Spearman 1.0000
-              </td>
+        Two separate checks: offline computation versus the container on 16
+        official sample images, maximum absolute difference 4.917e-07;
+        platform-stored results versus a local run, maximum difference
+        1.31e-06 and Spearman 1.0000. The container also ran with network
+        access disabled.
+      </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <h3 className="text-xl font-bold mb-3">What This Is Not</h3>
+      <h3 className="text-xl font-bold mb-3">
+        Scope of the Results
+      </h3>
       <ul className="list-disc pl-5 md:pl-8 space-y-2 mb-4">
         <li>
-          Research software. It is <strong>not a medical device</strong>, it has
-          not been clinically validated, and it has not been tested in any
-          clinical workflow.
-        </li>
+        This is a challenge research system. The measurements here cover the
+        cross-center experiments and container checks described above.
+      </li>
         <li>
           The backbone weights are provider-pretrained and covered by a separate
           data use agreement that forbids redistribution. The repository contains
@@ -318,29 +295,25 @@ export const rare26Project: Project = {
           redistributed.
         </li>
         <li>
-          Every interval reported here is in-domain. The training set is two
-          retrospective Dutch centres; the challenge evaluates on twelve centres
-          including prospective collection.{" "}
-          <strong>
-            The shift we can validate is not the shift we are evaluated on.
-          </strong>
-        </li>
+        The training centers were retrospective and the test set included
+        prospective data from 12 centers. The internal validation measures a
+        narrower distribution shift than the final challenge evaluation.
+      </li>
         <li>
-          The closed testing phase has ended. This page reports the method and
-          my own cross-center measurements, not the leaderboard.
-        </li>
+        The closed testing phase has ended. This page describes the method,
+        internal cross-center measurements and software delivery.
+      </li>
       </ul>
       <p className="mb-6 leading-relaxed">
-        As far as I know, no public code or weights existed in this area before —
-        the eleven teams in the previous edition&apos;s challenge paper list no
-        repository between them. Publishing was also a condition of entry: the
-        challenge rules require every participant to release their code under the
-        MIT licence.
+        The challenge required MIT-licensed code as a condition of entry. I
+        released the code and full method report, archived the software on
+        Zenodo and submitted the official four-page method form with the
+        closed-testing entry.
       </p>
 
       <h3 className="text-xl font-bold mb-3">Code, Report and Figures</h3>
       <p className="mb-4 leading-relaxed">
-        Everything below is public under the MIT licence in the{" "}
+        Everything below is public under the MIT license in the{" "}
         <LinkPreview
           url="https://github.com/liyifreddy/rare26-frozen-readout"
           className="text-[#FD6142] hover:underline"
