@@ -467,7 +467,7 @@ const projectsData: Project[] = [
     timeframe: "March 2023 - October 2023",
     supervisor: "Yannik Frisch",
     description:
-      "Generating paired histology images and segmentation masks with latent diffusion, as synthetic training data for medical segmentation. A three-person lab practical in which each of us implemented and ran the full pipeline.",
+      "Generating paired histology images and segmentation masks with latent diffusion, as synthetic training data for medical segmentation. A three-person lab project in which each of us implemented and ran the full pipeline.",
     highlights: [
       "Built a VAE-with-segmentation-decoder baseline, then a Latent Diffusion Model with a denoising U-Net generating image and mask jointly, so a synthetic pair stays consistent instead of the two being sampled independently",
       "Trained from scratch on the BCSS breast-cancer histology dataset, through the MNIST-E → BCSS generalization gap: a model producing clean toy samples had to hold up on high-resolution tissue with far more classes and far fewer examples each",
@@ -490,7 +490,7 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          A three-person lab practical (Visual Computing Lab, TU Darmstadt) in
+          A three-person lab project (Visual Computing Lab, TU Darmstadt) in
           which each of us implemented and ran the full pipeline. The goal was
           to generate paired images and masks for{" "}
           <span className="font-semibold">semantic segmentation</span> of
@@ -763,7 +763,7 @@ const projectsData: Project[] = [
       "Implemented OOD augmentations by overlaying objects on endoscopy images with high-frequency noise extraction",
       "Applied random value and hue shifts to simulate different lighting conditions and anomalies",
       "Trained a MobileNet classifier on the Kvasir dataset; accuracy fell from 82.1% in distribution to 40.3% under the OOD augmentations",
-      "A three-person project; I did most of the work, and the augmentations are part of MEC-Lab's open-source OOD framework FrOoDo",
+      "A three-person project; the augmentations are part of MEC-Lab's open-source OOD framework FrOoDo",
       "Improved realism by aligning image lighting with object lighting and optimizing overlay positions",
     ],
     skills: [
@@ -780,8 +780,7 @@ const projectsData: Project[] = [
     content: (
       <div>
         <p className="mb-4">
-          A three-person project at MEC-Lab, in which I carried out most of the
-          implementation and experiments. We built
+          A three-person project at MEC-Lab. We built
           realistic out-of-distribution (OOD) augmentations for{" "}
           <span className="font-semibold">endoscopy</span> images — image
           attribute shifts and realistic artifacts — and measured how much a
